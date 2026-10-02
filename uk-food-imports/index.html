@@ -101,6 +101,32 @@ footer a{color:var(--ink)}
 .chip{font-size:.78rem;padding:2px 9px;border-radius:999px;border:1px solid var(--rule);color:var(--ink2)}
 .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .clear{border:0;background:none;color:var(--ink2);font:inherit;text-decoration:underline;cursor:pointer;padding:0 4px}
+.wmap{touch-action:none;cursor:grab;background:var(--card);border:1px solid var(--rule);border-radius:12px}
+.wmap.drag{cursor:grabbing}
+.wmap path.c{vector-effect:non-scaling-stroke}
+.wmap .arc{vector-effect:non-scaling-stroke}
+.wmap .flow{fill:none;stroke:#FFFFFF;stroke-linecap:round;stroke-dasharray:1.5 11;vector-effect:non-scaling-stroke;pointer-events:none;animation:flow 1.6s linear infinite;opacity:.9}
+@keyframes fadein{from{opacity:0}to{opacity:.55}}
+@keyframes flow{to{stroke-dashoffset:-25}}
+.wmap .draw{animation:draw 1s ease-out both}
+@keyframes draw{from{stroke-dashoffset:var(--len)}to{stroke-dashoffset:0}}
+.wmap .ring{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;animation:ring 1.8s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes ring{from{opacity:.8;transform:scale(.4)}to{opacity:0;transform:scale(2.2)}}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:34px;height:34px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;font-size:1.1rem;cursor:pointer}
+.zhint{position:absolute;left:12px;bottom:10px;font-size:.78rem;color:var(--ink3);background:var(--card);padding:2px 8px;border-radius:6px}
+.tour{background:var(--ink);color:var(--paper);border-radius:12px;padding:18px 20px;margin:0 0 18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 20px;align-items:center}
+.tour h3{font-family:var(--serif);font-size:1.35rem;margin:0 0 4px;font-weight:600;color:var(--paper)}
+.tour p{margin:0;color:var(--paper);opacity:.88;max-width:68ch}
+.tour .nav{display:flex;gap:8px;align-items:center}
+.tour button{border:1px solid rgba(255,255,255,.4);background:none;color:var(--paper);border-radius:8px;padding:7px 14px;font:inherit;cursor:pointer}
+.tour button.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.dots{display:flex;gap:6px;grid-column:1/-1}
+.dots i{width:22px;height:4px;border-radius:2px;background:rgba(255,255,255,.3)}
+.dots i.on{background:var(--paper)}
+@media (max-width:640px){.tour{grid-template-columns:minmax(0,1fr)}}
+.summ b{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.wmap .flow,.wmap .draw,.wmap .ring{animation:none}}
 </style>
 </head>
 <body>
@@ -119,7 +145,8 @@ footer a{color:var(--ink)}
 
 <section aria-labelledby="ex">
 <h2 id="ex">Where does your food come from?</h2>
-<p class="sub">Search for a food, or pick a food type. The map shows where the UK gets it, coloured by the risk you choose. Lines show the biggest suppliers.</p>
+<p class="sub">Search for a food, or pick a food type. The map shows where the UK gets it, coloured by the risk you choose. Lines show the biggest suppliers. Drag to move the map, use the buttons or Ctrl and scroll to zoom, or double-click a country to zoom in on it.</p>
+<div class="tour" id="tour" aria-live="polite"><div><h3 id="tt"></h3><p id="tx"></p></div><div class="nav"><button id="tprev" type="button">Back</button><button id="tnext" class="primary" type="button">Next finding</button></div><div class="dots" id="tdots"></div></div>
 <div class="controls">
 <span><label for="q">Search a food</label> <input class="search" id="q" list="plist" placeholder="Avocados"><datalist id="plist"></datalist><button class="clear" id="qclear" type="button">Clear</button></span>
 <label id="grpl">or food type <select id="grp"></select></label>
@@ -131,14 +158,16 @@ footer a{color:var(--ink)}
 <option value="fl">River flooding</option>
 <option value="d">Deforestation</option>
 </select></label>
+<button class="play" id="fplay" type="button">Play the future</button>
 <span id="fut" class="controls" style="margin:0">
 <span class="seg" role="group" aria-label="Year" id="yrs"><button data-y="now" aria-pressed="true">Today</button><button data-y="2030" aria-pressed="false">2030</button><button data-y="2050" aria-pressed="false">2050</button><button data-y="2080" aria-pressed="false">2080</button></span>
 <span class="seg" role="group" aria-label="Scenario" id="scs"><button data-s="opt" aria-pressed="false">Optimistic</button><button data-s="bau" aria-pressed="true">Business as usual</button><button data-s="pes" aria-pressed="false">Pessimistic</button></span>
 </span>
+<span class="note" id="futnote" style="margin:0;display:none">Future projections are only published for water stress, so this lens shows today.</span>
 </div>
 <div class="summ" id="summ" aria-live="polite"></div>
 <div class="explore2">
-<div class="wmapwrap"><svg class="wmap" id="map" role="group" aria-label="World map of UK food suppliers"></svg><div class="tip" id="tip"></div></div>
+<div class="wmapwrap"><svg class="wmap" id="map" role="group" aria-label="World map of UK food suppliers"></svg><div class="zoom"><button id="zin" aria-label="Zoom in" type="button">+</button><button id="zout" aria-label="Zoom out" type="button">−</button><button id="zreset" aria-label="Reset view" type="button">⤢</button></div><span class="zhint">Drag to move. Ctrl and scroll to zoom.</span><div class="tip" id="tip"></div></div>
 <div class="legend" id="legend"></div>
 <div class="panel" aria-live="polite">
 <label class="find">Find a country <select id="pick"></select></label>
@@ -214,13 +243,42 @@ const gsel=document.getElementById("grp");
 const dl=document.getElementById("plist");P.slice().sort((a,b)=>a.n.localeCompare(b.n)).forEach(p=>{const o=document.createElement("option");o.value=p.n;dl.appendChild(o)});
 const map=document.getElementById("map"),tip=document.getElementById("tip"),NS="http://www.w3.org/2000/svg";
 map.setAttribute("viewBox","0 0 "+WG.w+" "+WG.h);
+const vp=document.createElementNS(NS,"g");map.appendChild(vp);
 const arcs=document.createElementNS(NS,"g"),pathEl={};
+let view={k:1,x:0,y:0},moved=false;
+function applyView(){vp.setAttribute("transform","translate("+view.x+","+view.y+") scale("+view.k+")")}
+function clampView(v){const k=Math.max(1,Math.min(14,v.k)),mx=0,mnx=WG.w-WG.w*k,mny=WG.h-WG.h*k;return{k,x:Math.min(mx,Math.max(mnx,v.x)),y:Math.min(0,Math.max(mny,v.y))}}
+let anim=null;const reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function animateTo(t,dur){t=clampView(t);if(anim)cancelAnimationFrame(anim);if(reduce||!dur){view=t;applyView();return}
+const s0={...view},t0=performance.now(),ease=u=>u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;
+const step=n=>{const u=Math.min(1,(n-t0)/dur),e=ease(u);view={k:s0.k+(t.k-s0.k)*e,x:s0.x+(t.x-s0.x)*e,y:s0.y+(t.y-s0.y)*e};applyView();if(u<1)anim=requestAnimationFrame(step)};anim=requestAnimationFrame(step)}
+function svgPt(cx,cy){const r=map.getBoundingClientRect();return[(cx-r.left)/r.width*WG.w,(cy-r.top)/r.height*WG.h]}
+function zoomAt(px,py,f,dur){const k=Math.max(1,Math.min(14,view.k*f)),r=k/view.k;animateTo({k,x:px-(px-view.x)*r,y:py-(py-view.y)*r},dur)}
+function zoomToBox(b,dur){if(!b)return animateTo({k:1,x:0,y:0},dur);const pad=40,k=Math.max(1,Math.min(10,Math.min(WG.w/(b.width+pad*2),WG.h/(b.height+pad*2))));
+animateTo({k,x:WG.w/2-(b.x+b.width/2)*k,y:WG.h/2-(b.y+b.height/2)*k},dur)}
+function boxOf(list){let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9,ok=false;list.forEach(i=>{const p=pathEl[i];if(!p)return;const b=p.getBBox();if(b.width>WG.w*.6)return;ok=true;x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height)});
+if(WG.uk&&ok){x0=Math.min(x0,WG.uk[0]);y0=Math.min(y0,WG.uk[1]);x1=Math.max(x1,WG.uk[0]);y1=Math.max(y1,WG.uk[1])}return ok?{x:x0,y:y0,width:x1-x0,height:y1-y0}:null}
 for(const iso in WG.p){const p=document.createElementNS(NS,"path");p.setAttribute("d",WG.p[iso].d);p.setAttribute("class","c");
 if(C[iso]){p.setAttribute("tabindex","0");p.setAttribute("role","button");
-p.addEventListener("click",()=>{st.sel=iso;draw()});p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();st.sel=iso;draw()}})}
+p.addEventListener("click",()=>{if(moved)return;st.sel=iso;draw()});p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();st.sel=iso;draw()}})}
+p.addEventListener("dblclick",e=>{e.preventDefault();zoomToBox(boxOf([iso]),700)});
 p.addEventListener("mousemove",e=>{const r=map.parentNode.getBoundingClientRect();tip.style.left=(e.clientX-r.left)+"px";tip.style.top=(e.clientY-r.top)+"px";tip.textContent=tipText(iso);tip.style.display="block"});
-p.addEventListener("mouseleave",()=>tip.style.display="none");map.appendChild(p);pathEl[iso]=p}
-map.appendChild(arcs);
+p.addEventListener("mouseleave",()=>tip.style.display="none");vp.appendChild(p);pathEl[iso]=p}
+vp.appendChild(arcs);
+const ptrs=new Map();let dragStart=null,pinch0=null;
+map.addEventListener("pointerdown",e=>{map.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,[e.clientX,e.clientY]);moved=false;if(anim)cancelAnimationFrame(anim);
+if(ptrs.size===1)dragStart={cx:e.clientX,cy:e.clientY,x:view.x,y:view.y};
+if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch0={d:Math.hypot(a[0]-b[0],a[1]-b[1]),k:view.k,x:view.x,y:view.y,m:svgPt((a[0]+b[0])/2,(a[1]+b[1])/2)}}});
+map.addEventListener("pointermove",e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+if(ptrs.size===2&&pinch0){const [a,b]=[...ptrs.values()],d=Math.hypot(a[0]-b[0],a[1]-b[1]),k=Math.max(1,Math.min(14,pinch0.k*d/pinch0.d)),r=k/pinch0.k;view=clampView({k,x:pinch0.m[0]-(pinch0.m[0]-pinch0.x)*r,y:pinch0.m[1]-(pinch0.m[1]-pinch0.y)*r});applyView();moved=true;return}
+if(dragStart){const r=map.getBoundingClientRect(),dx=(e.clientX-dragStart.cx)/r.width*WG.w,dy=(e.clientY-dragStart.cy)/r.height*WG.h;if(Math.abs(e.clientX-dragStart.cx)+Math.abs(e.clientY-dragStart.cy)>4){moved=true;map.classList.add("drag");tip.style.display="none"}
+if(moved){view=clampView({k:view.k,x:dragStart.x+dx,y:dragStart.y+dy});applyView()}}});
+const endPtr=e=>{ptrs.delete(e.pointerId);if(ptrs.size<2)pinch0=null;if(!ptrs.size){dragStart=null;map.classList.remove("drag");setTimeout(()=>moved=false,0)}};
+map.addEventListener("pointerup",endPtr);map.addEventListener("pointercancel",endPtr);
+map.addEventListener("wheel",e=>{if(!(e.ctrlKey||e.metaKey))return;e.preventDefault();const [px,py]=svgPt(e.clientX,e.clientY);zoomAt(px,py,e.deltaY<0?1.25:0.8,0)},{passive:false});
+document.getElementById("zin").onclick=()=>zoomAt(WG.w/2,WG.h/2,1.6,350);
+document.getElementById("zout").onclick=()=>zoomAt(WG.w/2,WG.h/2,1/1.6,350);
+document.getElementById("zreset").onclick=()=>animateTo({k:1,x:0,y:0},500);
 function rlabel(iso){const r=risk(iso);if(r===null)return"no data";if(st.lens==="d")return r?nf.format(r)+" ha deforestation risk":"no deforestation risk recorded";return LAB[st.lens][r].toLowerCase()+" "+({w:"water stress",dr:"drought risk",fl:"flood risk"})[st.lens]}
 function tipText(iso){const c=C[iso];if(!c)return"No UK food imports recorded";const v=sv(iso);return c.n+": "+(v?money(v):"none sent to the UK")+", "+rlabel(iso)}
 const pick=document.getElementById("pick");isos().sort((a,b)=>C[a].n.localeCompare(C[b].n)).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=C[k].n;pick.appendChild(o)});
@@ -228,7 +286,10 @@ pick.onchange=()=>{st.sel=pick.value;draw()};
 function topList(){return isos().map(k=>[k,sv(k)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1])}
 function drawArcs(){arcs.innerHTML="";const list=topList().slice(0,15),mx=list.length?list[0][1]:1,[ux,uy]=WG.uk;
 list.forEach(([k,v])=>{const p=WG.p[k];if(!p)return;const dx=ux-p.x,dy=uy-p.y,dist=Math.hypot(dx,dy);if(dist<8)return;
-const a=document.createElementNS(NS,"path");a.setAttribute("d","M"+p.x+","+p.y+" Q"+((p.x+ux)/2-dy*0.22)+","+((p.y+uy)/2+dx*0.22-dist*0.12)+" "+ux+","+uy);a.setAttribute("class","arc");a.setAttribute("stroke-width",(0.8+5*Math.sqrt(v/mx)).toFixed(1));arcs.appendChild(a)});
+const d="M"+p.x+","+p.y+" Q"+((p.x+ux)/2-dy*0.22)+","+((p.y+uy)/2+dx*0.22-dist*0.12)+" "+ux+","+uy,w=(0.8+5*Math.sqrt(v/mx));
+const a=document.createElementNS(NS,"path");a.setAttribute("d",d);a.setAttribute("class","arc");a.setAttribute("stroke-width",w.toFixed(1));a.style.animation=reduce?"":"fadein .6s ease-out both";arcs.appendChild(a);
+const f=document.createElementNS(NS,"path");f.setAttribute("d",d);f.setAttribute("class","flow");f.setAttribute("stroke-width",Math.max(1.2,w*.55).toFixed(1));f.style.animationDuration=(1.2+dist/400).toFixed(2)+"s";arcs.appendChild(f)});
+const sp=WG.p[st.sel];if(sp){const ring=document.createElementNS(NS,"circle");ring.setAttribute("cx",sp.x);ring.setAttribute("cy",sp.y);ring.setAttribute("r",9/view.k*1.2);ring.setAttribute("class","ring");ring.setAttribute("stroke-width","2");arcs.appendChild(ring)}
 const dot=document.createElementNS(NS,"circle");dot.setAttribute("cx",ux);dot.setAttribute("cy",uy);dot.setAttribute("r",4);dot.setAttribute("fill","var(--ink)");arcs.appendChild(dot)}
 function legend(){const L=document.getElementById("legend"),R=RAMP[st.lens];
 if(st.lens==="d"){L.innerHTML=["None","Under 10 ha","10 to 100","100 to 1,000","Over 1,000 ha"].map((l,i)=>'<i style="background:'+R[i]+'"></i>'+l).join(" ")+' <i style="background:'+NOD+'"></i>No data';return}
@@ -237,14 +298,20 @@ function shareWhere(test){const T=total();if(!T)return 0;return isos().reduce((a
 function deforSel(){if(st.q!==null){const f=P[st.q].f;return f?[Object.values(FAM[f]||{}).reduce((a,b)=>a+b,0),f]:[null,null]}
 if(st.g==="all")return[isos().reduce((a,k)=>a+(C[k].d||0),0),null];
 const fams=new Set(P.filter(p=>p.g===st.g&&p.f).map(p=>p.f));let s=0;fams.forEach(f=>s+=Object.values(FAM[f]||{}).reduce((a,b)=>a+b,0));return[s,null]}
+function moneyParts(k){const d=k*1000;return d>=1e9?[d/1e9,1,"$"," billion"]:d>=1e6?[d/1e6,0,"$"," million"]:[d/1e3,0,"$"," thousand"]}
+const N=(v,dec,pre,suf)=>'<span class="cu" data-to="'+v+'" data-dec="'+dec+'" data-pre="'+pre+'" data-suf="'+suf+'">'+pre+(+v).toFixed(dec)+suf+'</span>';
+const lastNums={};
+function countUp(root){root.querySelectorAll(".cu").forEach((el,i)=>{const to=+el.dataset.to,dec=+el.dataset.dec,pre=el.dataset.pre,suf=el.dataset.suf,key=root.id+i,from=lastNums[key]!==undefined?lastNums[key]:0;lastNums[key]=to;
+if(reduce||from===to){el.textContent=pre+(dec?to.toFixed(dec):nf.format(Math.round(to)))+suf;return}const t0=performance.now(),D=700;
+const st_=n=>{const u=Math.min(1,(n-t0)/D),e=1-Math.pow(1-u,3),v=from+(to-from)*e;el.textContent=pre+(dec?v.toFixed(dec):nf.format(Math.round(v)))+suf;if(u<1)requestAnimationFrame(st_)};requestAnimationFrame(st_)})}
 function summary(){const T=total(),tl=topList(),top=tl[0],nm=st.q!==null?P[st.q].n:(st.g==="all"?"All food":GN[st.g]);
-const conc=top?top[1]/T*100:0,wn=shareWhere(c=>c.w>=3),wf=shareWhere(c=>wcat(c,fy(),fs())>=3),dr=shareWhere(c=>c.dr>=3),[dh,fam]=deforSel();
-document.getElementById("summ").innerHTML=
-'<div><b>'+money(T)+'</b><span>'+nm+', UK imports 2024</span></div>'+
-'<div><b>'+(top?Math.round(conc)+'%':'–')+'</b><span>from the biggest supplier'+(top?', '+C[top[0]].n:'')+'</span></div>'+
-'<div><b>'+Math.round(wn)+'% → '+Math.round(wf)+'%</b><span>from water-stressed countries, today and '+futLabel()+'</span></div>'+
-'<div><b>'+Math.round(dr)+'%</b><span>from drought-risk countries</span></div>'+
-'<div><b>'+(dh===null?'None linked':nf.format(dh)+' ha')+'</b><span>deforestation risk, 2023'+(fam?' (whole '+fam.toLowerCase()+' crop)':'')+'</span></div>'}
+const conc=top?top[1]/T*100:0,wn=shareWhere(c=>c.w>=3),wf=shareWhere(c=>wcat(c,fy(),fs())>=3),dr=shareWhere(c=>c.dr>=3),[dh,fam]=deforSel(),mp=moneyParts(T);
+const el=document.getElementById("summ");
+el.innerHTML='<div><b>'+N(mp[0],mp[1],mp[2],mp[3])+'</b><span>'+nm+', UK imports 2024</span></div>'+
+'<div><b>'+(top?N(Math.round(conc),0,"","%"):'–')+'</b><span>from the biggest supplier'+(top?', '+C[top[0]].n:'')+'</span></div>'+
+'<div><b>'+N(Math.round(wn),0,"","%")+' → '+N(Math.round(wf),0,"","%")+'</b><span>from water-stressed countries, today and '+futLabel()+'</span></div>'+
+'<div><b>'+N(Math.round(dr),0,"","%")+'</b><span>from drought-risk countries</span></div>'+
+'<div><b>'+(dh===null?'None linked':N(Math.round(dh),0,""," ha"))+'</b><span>deforestation risk, 2023'+(fam?' (whole '+fam.toLowerCase()+' crop)':'')+'</span></div>';countUp(el)}
 function panel(){const c=C[st.sel],v=sv(st.sel),T=total();
 document.getElementById("pname").textContent=c.n;
 document.getElementById("pval").textContent=v?money(v):"None";
@@ -264,8 +331,8 @@ function types(){const rows=Object.keys(GN).filter(g=>g!=="oth").map(g=>{let t=0
 document.getElementById("tylab").textContent=futLabel();
 document.getElementById("types").innerHTML=rows.map(([g,a,b])=>'<div class="grow"><span>'+GN[g]+'</span><div class="track"><span style="width:'+a+'%;background:'+RAMP.w[3]+'"></span><i style="left:'+b+'%"></i></div><b>'+Math.round(a)+'% → '+Math.round(b)+'%</b></div>').join("")+'<div class="legend"><i style="background:'+RAMP.w[3]+'"></i>Today <span style="display:inline-block;width:2px;height:12px;background:var(--ink);margin:0 6px 0 10px"></span>'+futLabel()+'</div>'}
 function draw(){for(const iso in pathEl){pathEl[iso].style.fill=fill(iso);pathEl[iso].classList.toggle("sel",iso===st.sel)}
-const sp=pathEl[st.sel];if(sp)map.insertBefore(sp,arcs);pick.value=st.sel;
-const fut=document.getElementById("fut");fut.style.display=st.lens==="w"?"inline-flex":"none";
+const spe=pathEl[st.sel];if(spe)vp.insertBefore(spe,arcs);pick.value=st.sel;
+const fut=document.getElementById("fut");fut.style.display=st.lens==="w"?"inline-flex":"none";document.getElementById("futnote").style.display=st.lens==="w"?"none":"inline";
 document.querySelectorAll("#scs button").forEach(b=>b.disabled=st.yr==="now");
 document.getElementById("grpl").style.opacity=st.q!==null?.45:1;
 drawArcs();legend();summary();panel();types()}
@@ -293,5 +360,30 @@ const sx=i=>pl+i*(W-pl-pr)/(ys.length-1),sy=v=>pt+(mx-v)/mx*(H-pt-pb);let h="";
 for(let g=0;g<=mx;g+=10000)h+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+sy(g)+'" y2="'+sy(g)+'" stroke="var(--rule)"/><text x="'+(pl-8)+'" y="'+(sy(g)+4)+'" text-anchor="end">'+nf.format(g)+'</text>';
 ys.forEach((y,i)=>{if(y%3===2||i===ys.length-1)h+='<text x="'+sx(i)+'" y="'+(H-8)+'" text-anchor="middle">'+y+'</text>'});
 h+='<polyline points="'+vs.map((v,i)=>sx(i)+","+sy(v)).join(" ")+'" fill="none" stroke="'+RAMP.d[3]+'" stroke-width="2.5"/>';s.innerHTML=h})();
+
+(function(){const btn=document.getElementById("fplay");let t=null;const seq=["now","2030","2050","2080"];
+function setYr(y){st.yr=y;document.querySelectorAll("#yrs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.y===y));draw()}
+btn.onclick=()=>{if(t){clearInterval(t);t=null;btn.textContent="Play the future";return}
+if(st.lens!=="w"){st.lens="w";document.getElementById("lens").value="w"}let i=0;setYr(seq[0]);btn.textContent="Pause";
+t=setInterval(()=>{i++;if(i>=seq.length){clearInterval(t);t=null;btn.textContent="Play the future";return}setYr(seq[i])},1400)};window._setYr=setYr})();
+(function(){const S=[
+{t:"Olive oil is the most exposed food we import",x:"99% of UK olive oil imports come from water-stressed countries, and 93% from drought-risk countries. Two-thirds comes from Spain alone.",q:"Olive oil",lens:"w",yr:"now",sel:"ESP",z:["ESP","ITA","GRC","PRT"]},
+{t:"Lettuce: one country, one risk",x:"88% of the UK's imported lettuce and chicory comes from Spain, where water stress on irrigated farmland is extremely high.",q:"Lettuce and chicory",lens:"w",yr:"now",sel:"ESP",z:["ESP","PRT","FRA","MAR"]},
+{t:"Avocados come a long way, from dry places",x:"Peru, Israel and South Africa supply 61% of UK avocado imports. 83% of the total comes from water-stressed countries.",q:"Avocados",lens:"w",yr:"now",sel:"PER",z:["PER","ISR","ZAF","CHL","COL"]},
+{t:"Cocoa: three risks at once",x:"82% of UK cocoa bean imports come from Côte d'Ivoire. 95% come from drought-risk countries, and cocoa carries more deforestation risk than any other UK food import.",q:"Cocoa beans",lens:"d",yr:"now",sel:"CIV",z:["CIV","GHA","LBR","NGA","CMR"]},
+{t:"Brazilian beef and South American soy",x:"Beef from Brazil accounts for about a fifth of the deforestation risk linked to UK food imports. Soy from Paraguay, Brazil and Argentina adds more.",q:null,g:"all",lens:"d",yr:"now",sel:"BRA",z:["BRA","PRY","ARG","BOL"]},
+{t:"Not everything is at risk",x:"None of the UK's imported bananas come from water-stressed countries. Colombia and Costa Rica supply nearly half.",q:"Bananas",lens:"w",yr:"now",sel:"COL",z:["COL","CRI","DOM","ECU","PAN"]},
+{t:"The future: the risk is already here",x:"By 2080 under the pessimistic scenario, water stress worsens in suppliers such as Türkiye, Kenya and Canada. But the UK's overall exposure only rises from 37% to about 39%, because its main suppliers are already in the top bands.",q:null,g:"all",lens:"w",yr:"2080",sc:"pes",sel:"KEN",z:null}];
+let i=-1;const T=document.getElementById("tt"),X=document.getElementById("tx"),dots=document.getElementById("tdots"),nx=document.getElementById("tnext"),pv=document.getElementById("tprev");
+dots.innerHTML=S.map(()=>"<i></i>").join("");
+function intro(){T.textContent="Take the tour: "+S.length+" findings";X.textContent="Step through what the data shows, or explore the map yourself below.";nx.textContent="Start the tour";pv.style.visibility="hidden";dots.querySelectorAll("i").forEach(d=>d.classList.remove("on"))}
+function go(n){i=n;const s=S[i];T.textContent=s.t;X.textContent=s.x;nx.textContent=i===S.length-1?"Back to start":"Next finding";pv.style.visibility="visible";
+dots.querySelectorAll("i").forEach((d,j)=>d.classList.toggle("on",j<=i));
+st.lens=s.lens;document.getElementById("lens").value=s.lens;if(s.g){st.g=s.g;gsel.value=s.g}
+st.sc=s.sc||"bau";document.querySelectorAll("#scs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.s===st.sc));
+st.yr=s.yr;document.querySelectorAll("#yrs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.y===st.yr));
+st.sel=s.sel;setQ(s.q?PI[s.q]:null);st.sel=s.sel;draw();zoomToBox(s.z?boxOf(s.z):null,900)}
+nx.onclick=()=>{if(i>=S.length-1){i=-1;intro();setQ(null);animateTo({k:1,x:0,y:0},600);return}go(i+1)};
+pv.onclick=()=>{if(i<=0){i=-1;intro();return}go(i-1)};intro()})();
 </script>
 </body></html>
