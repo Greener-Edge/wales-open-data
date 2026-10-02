@@ -127,19 +127,37 @@ footer a{color:var(--ink)}
 @media (max-width:640px){.tour{grid-template-columns:minmax(0,1fr)}}
 .summ b{font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.wmap .flow,.wmap .draw,.wmap .ring{animation:none}}
-.bubwrap{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:12px;overflow-x:auto;overflow-y:hidden}
+.bubwrap{position:relative;background:linear-gradient(var(--card),var(--card));border:1px solid var(--rule);border-radius:14px;overflow-x:auto;overflow-y:hidden}
 @media (max-width:760px){.bub{min-width:760px}}
 .bub{width:100%;height:auto;display:block}
 .bub .node{cursor:pointer}
-.bub .node circle.core{transition:fill .4s,opacity .3s,stroke .2s;stroke:var(--card);stroke-width:1}
-.bub .node:hover circle.core,.bub .node:focus-visible circle.core{stroke:var(--ink);stroke-width:2}
-.bub .node:focus{outline:none}
+.bub .node circle.core{transition:opacity .3s}
+.bub .node:hover circle.core,.bub .node:focus-visible circle.core{stroke:var(--ink)!important;stroke-width:2}
+.bub .node:focus,.bub .gnode:focus{outline:none}
+.bub .gnode{cursor:zoom-in}
+.bub .gnode:hover > circle,.bub .gnode:focus-visible > circle{stroke-width:2.2}
 .bub .seg{transition:opacity .3s}
-.bub text.lb{pointer-events:none;font-size:11px;font-weight:600;text-anchor:middle}
-.bub text.gl{font-family:var(--serif);font-size:15px;font-weight:600;fill:var(--ink);text-anchor:middle;transition:opacity .5s}
-.bub .ax{transition:opacity .6s}
+.bub text.lb{pointer-events:none;font-family:var(--sans)}
+.bub text.lb2{font-size:12px;font-weight:600;fill:var(--ink);pointer-events:none}
+.bub text.gl{font-family:var(--serif);font-size:15px;font-weight:600;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round}
+.bub text.gs{font-size:12px;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:3px}
 .bub .ax text{font-size:12px;fill:var(--ink3)}
 .bub .ax .ql{font-family:var(--serif);font-size:15px;font-weight:600;fill:var(--ink2)}
+.crumb{position:absolute;left:14px;top:12px;display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--ink2);pointer-events:none}
+.crumb button{pointer-events:auto}
+.crumbbtn{border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;cursor:pointer}
+.bcard{position:absolute;right:14px;top:14px;width:260px;max-width:calc(100% - 28px);background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.bcard h4{font-family:var(--serif);font-size:1.15rem;margin:0 0 2px;line-height:1.2}
+.bcard .ck{font-size:.75rem;margin:0 0 4px;font-weight:600}
+.bcard .cv{margin:0 0 10px;color:var(--ink2);font-size:.9rem}
+.bcard .cs{margin:6px 0 0;font-size:.84rem;color:var(--ink2)}
+.bcard .cx{position:absolute;right:8px;top:6px;border:0;background:none;font-size:1.3rem;color:var(--ink3);cursor:pointer}
+.bcard .cgo{margin-top:12px;width:100%;border:0;background:var(--ink);color:var(--paper);border-radius:8px;padding:8px;font:inherit;cursor:pointer}
+.cb{display:grid;grid-template-columns:108px 1fr 38px;gap:8px;align-items:center;font-size:.8rem;color:var(--ink2);margin:4px 0}
+.cbt{height:7px;background:var(--rule);border-radius:4px;overflow:hidden}.cbt i{display:block;height:100%;border-radius:4px}
+.cb b{text-align:right;color:var(--ink)}
+.gkeys{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.8rem;color:var(--ink2);margin:10px 0 0}
+.gkeys span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px;background:var(--c)}
 .rkeys{display:inline-flex;flex-wrap:wrap;gap:6px}
 .rkey{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px 5px 9px;font:inherit;font-size:.88rem;cursor:pointer}
 .rkey i{width:12px;height:12px;border-radius:50%;background:var(--c)}
@@ -205,14 +223,15 @@ footer a{color:var(--ink)}
 
 <section aria-labelledby="mr">
 <h2 id="mr">The UK's biggest food imports, by risk</h2>
-<p class="sub">Each bubble is one of the UK's 70 biggest food imports, sized by what the UK spends on it. The ring shows which of four risks it faces, and the darker the bubble, the more risks. Select a risk to highlight it, or sort the bubbles by exposure.</p>
+<p class="sub">Each bubble is one of the UK's 70 biggest food imports, sized by what the UK spends on it. The ring shows which of four risks it faces, and the stronger the colour, the more risks. Select a food group to zoom in, select a food for its details, or sort everything by exposure.</p>
 <div class="controls">
 <div class="seg" role="group" aria-label="Layout" id="bmode"><button data-v="cluster" aria-pressed="true">Group by food type</button><button data-v="matrix" aria-pressed="false">Sort by risk</button></div>
 <span class="rkeys" id="rkeys" role="group" aria-label="Highlight a risk"></span>
-<span class="legend" id="rscale" style="margin:0">Risks faced: <i style="background:#EEF1EE;border:1px solid var(--rule)"></i>0 <i style="background:#D7DDD8"></i>1 <i style="background:#A7B2AD"></i>2 <i style="background:#5E6E6B"></i>3 <i style="background:#1F2E30"></i>4</span>
+
 </div>
 <div class="bubwrap"><svg id="bub" class="bub" viewBox="0 0 960 640" role="img" aria-label="Bubble chart of UK food imports by risk"></svg><div class="tip" id="btip"></div></div>
-<p class="note">A risk is flagged when over half of a food comes from water-stressed countries, over half from drought-risk countries, over half from its single biggest supplier, or when its crop carries more than 500 ha of deforestation risk. Select a bubble to open that food on the map. On a phone, swipe the chart sideways to see it all.</p>
+<div class="gkeys" id="gkeys"></div>
+<p class="note">A risk is flagged when over half of a food comes from water-stressed countries, over half from drought-risk countries, over half from its single biggest supplier, or when its crop carries more than 500 ha of deforestation risk. Press Escape or select the background to zoom back out. On a phone, swipe the chart sideways to see it all.</p>
 </section>
 
 <section aria-labelledby="ty">
@@ -372,74 +391,107 @@ document.querySelectorAll("#yrs button").forEach(b=>b.onclick=()=>{st.yr=b.datas
 document.querySelectorAll("#scs button").forEach(b=>b.onclick=()=>{st.sc=b.dataset.s;document.querySelectorAll("#scs button").forEach(x=>x.setAttribute("aria-pressed",x===b));draw()});
 (function(){const q=readHash();document.getElementById("lens").value=st.lens;gsel.value=st.g;document.querySelectorAll("#yrs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.y===st.yr));document.querySelectorAll("#scs button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.s===st.sc));if(q&&PI[q]!==undefined){const keep=st.sel;st.q=PI[q];qi.value=q;if(!P[st.q].c[keep]){const t=topList();if(t.length)st.sel=t[0][0]}}})();
 draw();
-(function(){if(typeof d3==="undefined")return;
+(function(){if(typeof d3==="undefined"){document.getElementById("bub").outerHTML='<p class="note" style="padding:20px">The chart library could not load on this network.</p>';return}
 const SHORT={"Food preparations n.e.c.":"Food preparations","Chocolate products nes":"Chocolate","Cheese from whole cow milk":"Cheese","Poultry meat preparations":"Poultry products","Other non-alcoholic caloric beverages":"Soft drinks","Meat of chickens, fresh or chilled":"Chicken","Meat of cattle boneless, fresh or chilled":"Beef","Potatoes, frozen":"Frozen potatoes","Sugar confectionery":"Sweets","Sausages and similar products of meat, offal or blood of pig":"Sausages","Cake of soya beans":"Soy feed","Pig meat, cuts, salted, dried or smoked (bacon and ham)":"Bacon and ham","Fruit prepared n.e.c.":"Prepared fruit","Maize (corn)":"Maize","Coffee, green":"Coffee beans","Meat of pig boneless, fresh or chilled":"Pork","Cocoa butter, fat and oil":"Cocoa butter","Coffee, decaffeinated or roasted":"Roasted coffee","Pig meat preparations":"Pork products","Chillies and peppers, green (Capsicum spp. and Pimenta spp.)":"Peppers","Coffee extracts":"Instant coffee","Vegetables preserved nes (o/t vinegar)":"Preserved veg","Ice cream and other edible ice":"Ice cream","Beer of barley, malted":"Beer","Uncooked pasta, not stuffed or otherwise prepared":"Pasta","Yoghurt, with additives":"Yoghurt","Meat of pig with the bone, fresh or chilled":"Pork, bone-in","Mixes and doughs for the preparation of bakers' wares":"Doughs","Tangerines, mandarins, clementines":"Easy peelers","Meat of sheep, fresh or chilled":"Lamb","Vegetables frozen":"Frozen veg","Tomatoes, peeled (o/t vinegar)":"Tinned tomatoes","Rape or colza seed":"Rapeseed","Paste of tomatoes":"Tomato paste","Butter of cow milk":"Butter","Tea leaves":"Tea","Rice, milled":"Rice","Food preparations of flour, meal or malt extract":"Flour preparations","Cucumbers and gherkins":"Cucumbers","Onions and shallots, dry (excluding dehydrated)":"Onions","Cauliflowers and broccoli":"Cauliflower, broccoli","Beef and veal preparations nes":"Beef products","Mushrooms and truffles":"Mushrooms","Juice of fruits n.e.c.":"Fruit juice","Raw cane or beet sugar (centrifugal only)":"Raw sugar","Mangoes, guavas and mangosteens":"Mangoes","Green corn (maize)":"Sweetcorn","Sunflower-seed oil, crude":"Sunflower oil","Cider and other fermented beverages":"Cider","Lettuce and chicory":"Lettuce","Husked rice":"Brown rice"};
 const SP="Undenatured ethyl alcohol";const short=n=>SHORT[n]||(n.startsWith(SP)?"Spirits":n.split(",")[0]);
-const RK=[["w","Water stress","#3F84AE"],["dr","Drought","#C08A2E"],["c","One main supplier","#7F77DD"],["d","Deforestation","#B5462E"]];
-const FILL=["#EEF1EE","#D7DDD8","#A7B2AD","#5E6E6B","#1F2E30"],TXT=["#1F2E30","#1F2E30","#1F2E30","#FFFFFF","#FFFFFF"];
+const RK=[["w","Water stress","#2F78A8"],["dr","Drought","#C68A1E"],["c","One main supplier","#6F5FC7"],["d","Deforestation","#B23B26"]];
+const GC={fru:"#D2604A",veg:"#5E9447",mt:"#9C4A3E",dai:"#D9AE4E",cer:"#B98E52",oil:"#8F9A3A",cof:"#6E4B35",drk:"#7D4F86",feed:"#7F8C82",spi:"#C56E2E",oth:"#8A8A8A"};
+const tint=(c,t)=>d3.interpolateRgb("#FFFFFF",c)(t);
 const tv=p=>Object.values(p.c).reduce((a,b)=>a+b,0);
 const top=P.map((p,i)=>({i,p,t:tv(p)})).sort((a,b)=>b.t-a.t).slice(0,70);
 top.forEach(o=>{let w=0,dr=0,mx=0,mk=null;for(const k in o.p.c){const v=o.p.c[k];if(C[k]&&C[k].w>=3)w+=v;if(C[k]&&C[k].dr>=3)dr+=v;if(v>mx){mx=v;mk=k}}
-o.ws=w/o.t;o.ds=dr/o.t;o.cs=mx/o.t;o.top=mk;o.dh=o.p.f?Object.values(FAM[o.p.f]||{}).reduce((a,b)=>a+b,0):0;o.fl={w:o.ws>.5,dr:o.ds>.5,c:o.cs>.5,d:o.dh>500};o.n=Object.values(o.fl).filter(Boolean).length;o.name=short(o.p.n)});
-const W=960,H=640,svg=d3.select("#bub"),tip=document.getElementById("btip");
+o.ws=w/o.t;o.ds=dr/o.t;o.cs=mx/o.t;o.top=mk;o.dh=o.p.f?Object.values(FAM[o.p.f]||{}).reduce((a,b)=>a+b,0):0;o.fl={w:o.ws>.5,dr:o.ds>.5,c:o.cs>.5,d:o.dh>500};o.n=Object.values(o.fl).filter(Boolean).length;o.name=short(o.p.n);o.col=GC[o.p.g]||"#888"});
+const W=960,H=640,svg=d3.select("#bub"),tip=document.getElementById("btip"),wrap=document.querySelector(".bubwrap");
+svg.append("rect").attr("class","bg").attr("width",W).attr("height",H).attr("fill","transparent");
+const world=svg.append("g");
 const groups=[...new Set(top.map(d=>d.p.g))];
 const root=d3.hierarchy({children:groups.map(g=>({g,children:top.filter(d=>d.p.g===g).map(d=>({d}))}))}).sum(x=>x.d?Math.max(x.d.t,60000):0).sort((a,b)=>b.value-a.value);
-d3.pack().size([W-20,H-20]).padding(n=>n.depth===0?30:3)(root);
-const SX=1.48,cx0=(W-20)/2;const stretch=x=>W/2+(x-cx0)*SX;
-const gnodes=root.children.map(n=>({g:n.data.g,x:stretch(n.x),y:n.y+10,r:n.r,ox:n.x}));
-root.children.forEach((n,k)=>n.leaves().forEach(l=>{const d=l.data.d;d.r=l.r;d.px=gnodes[k].x+(l.x-n.x);d.py=l.y+10}));
-const mx={l:76,r:30,t:40,b:56},xs=d3.scaleLinear().domain([0,1]).range([mx.l,W-mx.r]),ys=d3.scaleLinear().domain([0,1]).range([H-mx.b,mx.t]);
-const ax=svg.append("g").attr("class","ax").style("opacity",0);
-ax.append("rect").attr("x",xs(.5)).attr("y",ys(1)).attr("width",xs(1)-xs(.5)).attr("height",ys(.5)-ys(1)).attr("fill","#B5462E").attr("opacity",.06);
-[0,.25,.5,.75,1].forEach(v=>{ax.append("line").attr("x1",xs(v)).attr("x2",xs(v)).attr("y1",ys(0)).attr("y2",ys(1)).attr("stroke","var(--rule)").attr("stroke-dasharray",v===.5?"":"2 4");
-ax.append("line").attr("y1",ys(v)).attr("y2",ys(v)).attr("x1",xs(0)).attr("x2",xs(1)).attr("stroke","var(--rule)").attr("stroke-dasharray",v===.5?"":"2 4");
-ax.append("text").attr("x",xs(v)).attr("y",H-mx.b+18).attr("text-anchor","middle").text(Math.round(v*100)+"%");ax.append("text").attr("x",mx.l-10).attr("y",ys(v)+4).attr("text-anchor","end").text(Math.round(v*100)+"%")});
-ax.append("text").attr("x",(xs(0)+xs(1))/2).attr("y",H-12).attr("text-anchor","middle").text("Share from water-stressed countries →");
-ax.append("text").attr("transform","translate(18,"+((ys(0)+ys(1))/2)+") rotate(-90)").attr("text-anchor","middle").text("Share from the single biggest supplier →");
-ax.append("text").attr("class","ql").attr("x",xs(1)-10).attr("y",ys(1)+22).attr("text-anchor","end").text("Exposed and dependent");
-ax.append("text").attr("class","ql").attr("x",xs(0)+10).attr("y",ys(0)-12).attr("text-anchor","start").text("Spread out, lower stress");
-const gwrap=svg.append("g").attr("class","glayer");
-gwrap.selectAll("circle").data(gnodes).join("circle").attr("cx",n=>n.x).attr("cy",n=>n.y).attr("r",n=>n.r).attr("fill","none").attr("stroke","var(--rule)").attr("stroke-dasharray","3 4");
-const gl=gwrap.selectAll("text").data(gnodes).join("text").attr("class","gl").attr("x",n=>n.x).attr("y",n=>n.y-n.r-8).style("font-size",n=>(n.r<70?12:15)+"px").text(n=>GN[n.g]);
+d3.pack().size([H-30,H-30]).padding(n=>n.depth===0?44:4)(root);
+const SX=1.5,cx0=(H-30)/2,stretch=x=>W/2+(x-cx0)*SX;
+const gnodes=root.children.map(n=>({g:n.data.g,x:stretch(n.x),y:n.y+18,r:n.r,col:GC[n.data.g],items:n.leaves().map(l=>l.data.d)}));
+root.children.forEach((n,k)=>n.leaves().forEach(l=>{const d=l.data.d;d.r=l.r;d.px=gnodes[k].x+(l.x-n.x);d.py=l.y+18}));
+const mx={l:78,r:30,t:44,b:58},xs=d3.scaleLinear().domain([0,1]).range([mx.l,W-mx.r]),ys=d3.scaleLinear().domain([0,1]).range([H-mx.b,mx.t]);
+const ax=world.append("g").attr("class","ax").style("opacity",0).style("pointer-events","none");
+ax.append("rect").attr("x",xs(.5)).attr("y",ys(1)).attr("width",xs(1)-xs(.5)).attr("height",ys(.5)-ys(1)).attr("fill","#B23B26").attr("opacity",.06).attr("rx",6);
+[0,.25,.5,.75,1].forEach(v=>{ax.append("line").attr("x1",xs(v)).attr("x2",xs(v)).attr("y1",ys(0)).attr("y2",ys(1)).attr("stroke","var(--rule)").attr("stroke-dasharray",v===.5?"":"2 5");
+ax.append("line").attr("y1",ys(v)).attr("y2",ys(v)).attr("x1",xs(0)).attr("x2",xs(1)).attr("stroke","var(--rule)").attr("stroke-dasharray",v===.5?"":"2 5");
+ax.append("text").attr("x",xs(v)).attr("y",H-mx.b+20).attr("text-anchor","middle").text(Math.round(v*100)+"%");ax.append("text").attr("x",mx.l-10).attr("y",ys(v)+4).attr("text-anchor","end").text(Math.round(v*100)+"%")});
+ax.append("text").attr("x",(xs(0)+xs(1))/2).attr("y",H-14).attr("text-anchor","middle").text("Share from water-stressed countries →");
+ax.append("text").attr("transform","translate(20,"+((ys(0)+ys(1))/2)+") rotate(-90)").attr("text-anchor","middle").text("Share from the single biggest supplier →");
+ax.append("text").attr("class","ql").attr("x",xs(1)-12).attr("y",ys(1)+24).attr("text-anchor","end").text("Exposed and dependent");
+ax.append("text").attr("class","ql").attr("x",xs(0)+12).attr("y",ys(0)-14).attr("text-anchor","start").text("Spread out, lower stress");
+const gl=world.append("g").attr("class","glayer");
+const gcirc=gl.selectAll("g").data(gnodes).join("g").attr("class","gnode").attr("tabindex",0).attr("role","button").attr("aria-label",n=>"Zoom into "+GN[n.g]);
+gcirc.append("circle").attr("cx",n=>n.x).attr("cy",n=>n.y).attr("r",n=>n.r+6).attr("fill",n=>tint(n.col,.09)).attr("stroke",n=>tint(n.col,.45)).attr("stroke-width",1.2);
+const GLL=[];const glab=gcirc.append("text").attr("class","gl").attr("x",n=>n.x).attr("y",n=>n.y-n.r-28).attr("fill",n=>d3.color(n.col).darker(1.2)).text(n=>GN[n.g]);
+const gsub=gcirc.append("text").attr("class","gs").attr("x",n=>n.x).attr("y",n=>n.y-n.r-13).attr("fill",n=>d3.color(n.col).darker(.6)).text(n=>money(d3.sum(n.items,d=>d.t)));
 const arc=d3.arc();
-const nodes=svg.append("g").selectAll("g").data(top).join("g").attr("class","node").attr("tabindex",0).attr("role","button").attr("aria-label",d=>d.p.n+", "+money(d.t)+", "+d.n+" of 4 risks");
-nodes.append("circle").attr("class","core").attr("r",d=>d.r).attr("fill",d=>FILL[d.n]);
-const ringD=(r,j)=>arc({innerRadius:r+2,outerRadius:r+(r>20?6:4.5),startAngle:j*Math.PI/2+0.09,endAngle:(j+1)*Math.PI/2-0.09});
+const nodes=world.append("g").selectAll("g").data(top).join("g").attr("class","node").attr("tabindex",-1).attr("role","button").attr("aria-label",d=>d.p.n+", "+money(d.t)+", "+d.n+" of 4 risks");
+nodes.append("circle").attr("class","core").attr("r",d=>d.r).attr("fill",d=>tint(d.col,.22+d.n*.19)).attr("stroke","#FFFFFF").attr("stroke-width",1.2);
+let K=1;const th=()=>Math.max(2.2,4.5/K);
+const ringD=(r,j)=>arc({innerRadius:r+1.5/K,outerRadius:r+1.5/K+th(),startAngle:j*Math.PI/2+0.1,endAngle:(j+1)*Math.PI/2-0.1});
 top.forEach(d=>d.cr=d.r);
-nodes.each(function(d){const g=d3.select(this);RK.forEach(([k,lab,col],j)=>{g.append("path").attr("class","seg seg-"+k).attr("data-j",j).attr("d",ringD(d.r,j)).attr("fill",d.fl[k]?col:"var(--rule)").attr("opacity",d.fl[k]?1:.55)})});
+nodes.each(function(d){const g=d3.select(this);RK.forEach(([k,lab,col],j)=>{g.append("path").attr("class","seg seg-"+k).attr("data-j",j).attr("d",ringD(d.r,j)).attr("fill",d.fl[k]?col:"#D9DDD9").attr("opacity",d.fl[k]?1:.7)})});
+const glayer2=world.append("g").attr("class","glabels").style("pointer-events","none");glab.each(function(){glayer2.node().appendChild(this)});gsub.each(function(){glayer2.node().appendChild(this)});
+const lb=nodes.append("text").attr("class","lb").attr("text-anchor","middle");
+const lb2=nodes.append("text").attr("class","lb2").attr("dy","0.35em").style("text-anchor","start").style("paint-order","stroke").style("stroke","var(--card)").style("stroke-width","3px").style("opacity",0).text(d=>d.name);
+function fitLines(d,px){const avail=px*1.72;for(let fs=Math.max(9,Math.min(14,px/3));fs>=8.5;fs-=0.5){const cw=fs*0.56;const words=d.name.split(" ");let lines=[],cur="";
+words.forEach(w=>{const t=cur?cur+" "+w:w;if(t.length*cw<=avail)cur=t;else{if(cur)lines.push(cur);cur=w}});if(cur)lines.push(cur);
+if(!(lines.some(l=>l.length*cw>avail)||lines.length*fs*1.15>px*1.35||lines.length>3))return{lines,fs}}return null}
+function drawLabels(){lb.each(function(d){const t=d3.select(this);t.selectAll("tspan").remove();if(mode==="matrix")return;const px=d.cr*K;if(px<17)return;const f=fitLines(d,px);if(!f)return;
+const fs=f.fs/K,n=f.lines.length,showV=K>1.2&&px>34;const tot=n+(showV?1:0);t.attr("fill",d.n>=3?"#FFFFFF":d3.color(d.col).darker(2.2)).style("font-size",fs+"px");
+f.lines.forEach((l,i)=>t.append("tspan").attr("x",0).attr("y",(i-(tot-1)/2)*fs*1.15).attr("dy","0.35em").style("font-weight",600).text(l));
+if(showV)t.append("tspan").attr("x",0).attr("y",(n-(tot-1)/2)*fs*1.15).attr("dy","0.35em").style("font-weight",400).style("font-size",(fs*0.9)+"px").text(money(d.t))})}
 const outside=d=>d.n>=3||(d.ws>.5&&d.cs>.5)||d.t>2.5e6||d.cs>.7;
-function resize(scale,dur){top.forEach(d=>{const from=d.cr,to=d.r*scale;d.cr=to;d._from=from});
+let mode="cluster",focus=null;const reduce_=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function resize(scale,dur){top.forEach(d=>{d._from=d.cr;d.cr=d.r*scale});
 nodes.select("circle.core").transition().duration(dur).attr("r",d=>d.cr);
 nodes.selectAll("path.seg").transition().duration(dur).attrTween("d",function(){const d=d3.select(this.parentNode).datum(),j=+this.dataset.j,i=d3.interpolate(d._from,d.cr);return t=>ringD(i(t),j)});
-nodes.select("text.lb").transition().duration(dur).style("opacity",scale<1?0:1);
-nodes.select("text.lb2").attr("y",0).transition().duration(dur).style("opacity",d=>scale<1&&outside(d)?1:0)}
-const BAD=["Soft","Frozen","Food","Other","Raw","Pork,","Tinned","Easy","Prepared","Preserved","Instant","Roasted","Cocoa","Tomato"];
-function fitName(d,r){const fs=r>40?13:11,w=fs*0.58;if(d.name.length*w<r*2-8)return d.name;const f=d.name.split(" ")[0];return(f.length*w<r*2-8&&!BAD.includes(f))?f:""}
-nodes.append("text").attr("class","lb").attr("dy","0.35em").attr("fill",d=>TXT[d.n]).style("font-size",d=>(d.r>40?13:11)+"px").text(d=>d.r>=20?fitName(d,d.r):"");
-nodes.append("text").attr("class","lb2").attr("dy","0.35em").style("text-anchor","start").style("paint-order","stroke").style("stroke","var(--card)").style("stroke-width","3px").style("font-size","12px").style("font-weight","600").attr("fill","var(--ink)").style("opacity",0).text(d=>d.name);
-function showTip(e,d){const wr=document.querySelector(".bubwrap"),b=wr.getBoundingClientRect();tip.style.left=(e.clientX-b.left+wr.scrollLeft)+"px";tip.style.top=(e.clientY-b.top)+"px";tip.style.display="block";tip.style.whiteSpace="normal";tip.style.maxWidth="260px";
-tip.innerHTML="<b>"+d.p.n+"</b><br>"+money(d.t)+" a year<br>Water-stressed origins: "+Math.round(d.ws*100)+"%<br>Drought-risk origins: "+Math.round(d.ds*100)+"%<br>Biggest supplier: "+(C[d.top]?C[d.top].n:"")+", "+Math.round(d.cs*100)+"%<br>Deforestation risk: "+(d.dh?nf.format(Math.round(d.dh))+" ha":"none linked")}
-nodes.on("mousemove",showTip).on("mouseleave",()=>tip.style.display="none").on("click",(e,d)=>{setQ(d.i);document.getElementById("ex").scrollIntoView({behavior:"smooth"})}).on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setQ(d.i);document.getElementById("ex").scrollIntoView({behavior:"smooth"})}});
-top.forEach(d=>{d.x=W/2+(Math.random()-.5)*60;d.y=H/2+(Math.random()-.5)*60});
-let mode="cluster";const reduce_=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-function placeLabels(){const L=[];nodes.each(function(d){if(mode!=="matrix"||!outside(d))return;const t=d3.select(this).select("text.lb2"),right=d.x>W-190;t.attr("x",right?-(d.cr+8):d.cr+8).style("text-anchor",right?"end":"start");const w=d.name.length*6.8;L.push({d,t,x0:right?d.x-d.cr-8-w:d.x+d.cr+8,x1:right?d.x-d.cr-8:d.x+d.cr+8+w,y:d.y})});
-L.sort((a,b)=>a.y-b.y);for(let it=0;it<4;it++)for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i],b=L[j];if(a.x1<b.x0||b.x1<a.x0)continue;if(Math.abs(b.y-a.y)<14){b.y=a.y+14}}
+lb2.transition().duration(dur).style("opacity",d=>scale<1&&outside(d)?1:0)}
+function rings(){nodes.selectAll("path.seg").attr("d",function(){const d=d3.select(this.parentNode).datum();return ringD(d.cr,+this.dataset.j)})}
+function placeLabels(){if(mode!=="matrix")return;const L=[];nodes.each(function(d){if(!outside(d))return;const t=d3.select(this).select("text.lb2"),right=d.x>W-190;t.attr("x",right?-(d.cr+8):d.cr+8).style("text-anchor",right?"end":"start");const w=d.name.length*6.8;L.push({d,t,x0:right?d.x-d.cr-8-w:d.x+d.cr+8,x1:right?d.x-d.cr-8:d.x+d.cr+8+w,y:d.y})});
+L.sort((a,b)=>a.y-b.y);for(let it=0;it<4;it++)for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i],b=L[j];if(a.x1<b.x0||b.x1<a.x0)continue;if(Math.abs(b.y-a.y)<14)b.y=a.y+14}
 L.forEach(l=>l.t.attr("y",l.y-l.d.y))}
-const sim=d3.forceSimulation(top).alphaDecay(0.03).velocityDecay(0.32).on("end",()=>placeLabels()).on("tick",()=>{top.forEach(d=>{d.x=Math.max(d.cr+6,Math.min(W-d.cr-6,d.x));d.y=Math.max(d.cr+6,Math.min(H-d.cr-6,d.y))});nodes.attr("transform",d=>"translate("+d.x+","+d.y+")")}).stop();
-function setMode(m){mode=m;const cl=m==="cluster";
+const sim=d3.forceSimulation(top).alphaDecay(0.035).velocityDecay(0.34).on("end",placeLabels).on("tick",()=>{if(mode==="matrix")top.forEach(d=>{d.x=Math.max(d.cr+6,Math.min(W-d.cr-6,d.x));d.y=Math.max(d.cr+6,Math.min(H-d.cr-6,d.y))});nodes.attr("transform",d=>"translate("+d.x+","+d.y+")")}).stop();
+function zoomTo(n,dur){focus=n;let k=1,tx=0,ty=0;if(n){k=Math.min(W,H)*0.86/(2*(n.r+6));tx=W/2-n.x*k;ty=H/2-n.y*k+10}
+const t0=K;world.transition().duration(reduce_?0:dur).ease(d3.easeCubicInOut).attr("transform","translate("+tx+","+ty+") scale("+k+")").tween("k",()=>{const i=d3.interpolate(t0,k);return t=>{K=i(t);rings();glab.style("font-size",(15/K)+"px").attr("y",g=>g.y-g.r-6-22/K);gsub.style("font-size",(12/K)+"px").attr("y",g=>g.y-g.r-6-7/K)}}).on("end",()=>{drawLabels()});
+gcirc.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);glab.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);gsub.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);nodes.transition().duration(dur).style("opacity",d=>!n||d.p.g===n.g?1:.15);
+nodes.attr("tabindex",d=>n&&d.p.g===n.g?0:-1);
+crumb.innerHTML=n?'<button type="button" class="crumbbtn" id="zback">← All foods</button><span>'+GN[n.g]+': '+n.items.length+' foods, '+money(d3.sum(n.items,d=>d.t))+'</span>':'<span>Select a food group to zoom in</span>';
+if(n)document.getElementById("zback").onclick=()=>{hideCard();zoomTo(null,750)};lb.selectAll("tspan").remove()}
+const crumb=document.createElement("div");crumb.className="crumb";wrap.appendChild(crumb);
+const card=document.createElement("div");card.className="bcard";card.style.display="none";wrap.appendChild(card);
+function hideCard(){card.style.display="none"}
+function showCard(d){const bar=(lab,v,col,txt)=>'<div class="cb"><span>'+lab+'</span><div class="cbt"><i style="width:'+Math.round(v*100)+'%;background:'+col+'"></i></div><b>'+txt+'</b></div>';
+card.innerHTML='<button type="button" class="cx" aria-label="Close">×</button><p class="ck" style="color:'+d3.color(d.col).darker(1)+'">'+GN[d.p.g]+'</p><h4>'+d.p.n+'</h4><p class="cv">'+money(d.t)+' a year</p>'+
+bar("Water stress",d.ws,RK[0][2],Math.round(d.ws*100)+"%")+bar("Drought",d.ds,RK[1][2],Math.round(d.ds*100)+"%")+bar("Biggest supplier",d.cs,RK[2][2],Math.round(d.cs*100)+"%")+
+'<p class="cs">Biggest supplier: '+(C[d.top]?C[d.top].n:"")+'</p><p class="cs">Deforestation risk: <b>'+(d.dh?nf.format(Math.round(d.dh))+' ha':'none linked')+'</b>'+(d.p.f&&d.dh?' (whole '+d.p.f.toLowerCase()+' crop)':'')+'</p><button type="button" class="cgo">Open on the map</button>';
+card.style.display="block";card.querySelector(".cx").onclick=hideCard;card.querySelector(".cgo").onclick=()=>{setQ(d.i);document.getElementById("ex").scrollIntoView({behavior:"smooth"})}}
+function showTip(e,d){const b=wrap.getBoundingClientRect();tip.style.left=(e.clientX-b.left+wrap.scrollLeft)+"px";tip.style.top=(e.clientY-b.top)+"px";tip.style.display="block";tip.innerHTML="<b>"+d.name+"</b>, "+money(d.t)+(d.n?" · "+d.n+" of 4 risks":"")}
+nodes.on("mousemove",showTip).on("mouseleave",()=>tip.style.display="none").on("click",(e,d)=>{e.stopPropagation();tip.style.display="none";if(mode==="cluster"&&(!focus||focus.g!==d.p.g)){zoomTo(gnodes.find(g=>g.g===d.p.g),750);showCard(d);return}showCard(d)})
+.on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showCard(d)}});
+gcirc.on("click",(e,n)=>{e.stopPropagation();if(mode!=="cluster")return;hideCard();zoomTo(focus===n?null:n,750)}).on("keydown",(e,n)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();hideCard();zoomTo(focus===n?null:n,750)}});
+svg.select("rect.bg").on("click",()=>{if(focus){hideCard();zoomTo(null,750)}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&focus){hideCard();zoomTo(null,750)}});
+function setMode(m){mode=m;const cl=m==="cluster";hideCard();if(focus)zoomTo(null,500);
 resize(cl?1:0.5,700);
-sim.force("x",d3.forceX(d=>cl?d.px:xs(d.ws)).strength(cl?0.35:0.6)).force("y",d3.forceY(d=>cl?d.py:ys(d.cs)).strength(cl?0.35:0.6)).force("collide",d3.forceCollide(d=>(cl?d.r:d.r*0.5)+(cl?2:2.5)).strength(0.8).iterations(2));
-ax.transition().duration(600).style("opacity",cl?0:1);gwrap.transition().duration(500).style("opacity",cl?1:0);
-if(reduce_){sim.alpha(1);for(let k=0;k<300;k++)sim.tick();sim.on("tick")();placeLabels()}else{sim.alpha(0.9).restart();setTimeout(placeLabels,1600)}}
+sim.force("x",d3.forceX(d=>cl?d.px:xs(d.ws)).strength(cl?0.4:0.6)).force("y",d3.forceY(d=>cl?d.py:ys(d.cs)).strength(cl?0.4:0.6)).force("collide",d3.forceCollide(d=>(cl?d.r:d.r*0.5)+2.5).strength(0.85).iterations(2));
+ax.transition().duration(600).style("opacity",cl?0:1);gl.transition().duration(500).style("opacity",cl?1:0).style("pointer-events",cl?"auto":"none");glayer2.transition().duration(500).style("opacity",cl?1:0);
+crumb.style.visibility=cl?"visible":"hidden";lb.selectAll("tspan").remove();
+nodes.select("circle.core").transition("fill").duration(600).attr("fill",d=>cl?tint(d.col,.22+d.n*.19):d.col).attr("stroke",cl?"#FFFFFF":"var(--card)");
+const done=()=>{placeLabels();if(cl)drawLabels()};
+if(reduce_){sim.alpha(1);for(let k=0;k<300;k++)sim.tick();sim.on("tick")();done()}else{sim.alpha(0.9).restart();setTimeout(done,1700)}}
 document.querySelectorAll("#bmode button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#bmode button").forEach(x=>x.setAttribute("aria-pressed",x===b));setMode(b.dataset.v)});
-const K=document.getElementById("rkeys");let hi=null;
-K.innerHTML=RK.map(([k,l,c])=>'<button class="rkey" data-k="'+k+'" aria-pressed="false" style="--c:'+c+'"><i></i>'+l+'</button>').join("");
-K.querySelectorAll(".rkey").forEach(b=>b.onclick=()=>{hi=hi===b.dataset.k?null:b.dataset.k;K.querySelectorAll(".rkey").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===hi));
-nodes.select("circle.core").style("opacity",d=>!hi||d.fl[hi]?1:.18);nodes.selectAll(".seg").style("opacity",function(){return null});
-nodes.selectAll(".seg").style("opacity",function(){const k=[...this.classList].find(c=>c.startsWith("seg-")).slice(4),d=d3.select(this.parentNode).datum();if(!hi)return d.fl[k]?1:.55;return d.fl[hi]?(d.fl[k]?1:.55):.12})});
+const KE=document.getElementById("rkeys");let hi=null;
+KE.innerHTML=RK.map(([k,l,c])=>'<button class="rkey" data-k="'+k+'" aria-pressed="false" style="--c:'+c+'"><i></i>'+l+'</button>').join("");
+KE.querySelectorAll(".rkey").forEach(b=>b.onclick=()=>{hi=hi===b.dataset.k?null:b.dataset.k;KE.querySelectorAll(".rkey").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===hi));
+nodes.select("circle.core").style("opacity",d=>!hi||d.fl[hi]?1:.2);nodes.select("text.lb").style("opacity",d=>!hi||d.fl[hi]?1:.25);
+nodes.selectAll(".seg").style("opacity",function(){const k=[...this.classList].find(c=>c.startsWith("seg-")).slice(4),d=d3.select(this.parentNode).datum();if(!hi)return d.fl[k]?1:.7;return d.fl[hi]?(d.fl[k]?1:.7):.12})});
+document.getElementById("gkeys").innerHTML=groups.map(g=>'<span style="--c:'+GC[g]+'">'+GN[g]+'</span>').join("");
+top.forEach(d=>{d.x=W/2+(Math.random()-.5)*80;d.y=H/2+(Math.random()-.5)*80});nodes.attr("transform",d=>"translate("+d.x+","+d.y+")");
+zoomTo(null,0);
 const start=()=>setMode("cluster");
-if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting)){start();io.disconnect()}},{threshold:.2});io.observe(document.getElementById("bub"))}else start();
-nodes.attr("transform",d=>"translate("+d.x+","+d.y+")")})();
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting)){start();io.disconnect()}},{threshold:.2});io.observe(document.getElementById("bub"))}else start()})();
 (function(){const D=document.getElementById("dcom"),mx=FD.dcom[0][1];
 D.innerHTML=FD.dcom.map(([n,v])=>'<div class="grow"><span>'+n+'</span><div class="track" style="background:none"><span style="width:'+(v/mx*100)+'%;background:'+(n==="Other"?"#8A9A9C":RAMP.d[3])+'"></span></div><b>'+nf.format(v)+' ha</b></div>').join("")})();
 (function(){const s=document.getElementById("dtrend"),ys=Object.keys(FD.dtrend).map(Number).sort(),vs=ys.map(y=>FD.dtrend[y]),W=760,H=240,pl=56,pr=20,pt=12,pb=28,mx=Math.ceil(Math.max(...vs)/10000)*10000;
