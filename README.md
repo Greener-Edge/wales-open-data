@@ -19,3 +19,4 @@ Each page is a single self-contained HTML file with data embedded. No build step
 - Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, v2.1, doi.org/10.5281/zenodo.18953516. CC BY.
 - World boundaries: Natural Earth (public domain).
 - Welsh Government, Survey of agriculture and horticulture: June 2025. Open Government Licence v3.0.
+- World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections (temperature change). Open Database License.
