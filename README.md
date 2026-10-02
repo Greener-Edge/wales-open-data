@@ -4,6 +4,7 @@ A series of interactive dashboards by Greener Edge Sustainability, built on offi
 
 - `emissions/`: greenhouse gas emissions for Wales's 22 councils, 2005 to 2024 (DESNZ, June 2026 release)
 - `uk-food-imports/`: where UK food imports come from, checked against water stress, drought, flooding and deforestation (FAOSTAT 2024, WRI Aqueduct 4.0, Singh et al. 2026)
+- `what-wales-grows/`: Welsh farmland use and livestock, 1867 to 2025 (Welsh Government June agricultural survey 2025)
 - `commercial-epc/`: current non-domestic EPC ratings in Wales, against the planned 2031 EPC B standard (MHCLG EPC register, downloaded 2 October 2026)
 
 Each page is a single self-contained HTML file with data embedded. No build step.
@@ -17,3 +18,4 @@ Each page is a single self-contained HTML file with data embedded. No build step
 - World Resources Institute, Aqueduct 4.0 country rankings. CC BY 4.0.
 - Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, v2.1, doi.org/10.5281/zenodo.18953516. CC BY.
 - World boundaries: Natural Earth (public domain).
+- Welsh Government, Survey of agriculture and horticulture: June 2025. Open Government Licence v3.0.

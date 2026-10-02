@@ -102,7 +102,7 @@ footer a{color:var(--ink)}
 </div>
 <div class="explore">
 <div><div class="mapwrap"><svg class="map" id="map" role="group" aria-label="Map of Welsh councils"></svg><div class="tip" id="tip"></div></div>
-<div class="legend" id="legend"></div></div>
+<div class="legend" id="legend"></div><p class="note" id="agrilink" style="display:none;margin-top:10px">Why is farming so high in rural councils? <a href="../what-wales-grows/">See what Wales grows</a>.</p></div>
 <div class="panel" aria-live="polite">
 <label class="find">Find a council <select id="pick"></select></label>
 <h3 id="pname"></h3>
@@ -197,7 +197,7 @@ function short2(v){return Math.abs(v)>=100?nf0.format(v):nf1.format(v)}
 function draw(){const r=range();
 for(const c in pathEl){const p=pathEl[c],v=val(c,st.y),k=color(v,r);p.style.fill=k.bg;p.classList.toggle("sel",c===st.sel);p.setAttribute("aria-label",LA[c].name+": "+fmt(v));p.setAttribute("aria-pressed",c===st.sel)}
 const sp=pathEl[st.sel];if(sp)map.insertBefore(sp,map.querySelector("text"));pick.value=st.sel;
-document.getElementById("yrout").textContent=Y[st.y];legend(r);panel()}
+document.getElementById("yrout").textContent=Y[st.y];legend(r);panel();document.getElementById("agrilink").style.display=st.s==="agr"?"block":"none"}
 document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{st.m=b.dataset.m;document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));draw()});
 document.getElementById("sector").onchange=e=>{st.s=e.target.value;draw()};
 const yr=document.getElementById("year");yr.oninput=()=>{st.y=+yr.value;draw()};

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What does Wales grow? | Greener Edge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--paper:#F6F7F4;--card:#FFFFFF;--ink:#1C2B2D;--ink2:#4A5A5C;--ink3:#7B8889;--rule:#DCE1DD;
+--e0:#F1EDE2;--e1:#E6CF9F;--e2:#D9A55B;--e3:#B86B2E;--e4:#7E3A1E;--s1:#A9D3CB;--s2:#3E8C84;--focus:#2F5D8A;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#121A1B;--card:#1A2526;--ink:#E8EDEA;--ink2:#B4C0BD;--ink3:#86938F;--rule:#2E3B3C;--e0:#2A2F2B;--focus:#8DB4DD}}
+:root[data-theme="dark"]{--paper:#121A1B;--card:#1A2526;--ink:#E8EDEA;--ink2:#B4C0BD;--ink3:#86938F;--rule:#2E3B3C;--e0:#2A2F2B;--focus:#8DB4DD}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+main{max-width:1080px;margin:0 auto;padding:40px 20px 64px}
+h1,h2{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,5vw,3.25rem);max-width:18ch;letter-spacing:-0.01em}
+h2{font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:8px}
+.lede{font-size:1.15rem;color:var(--ink2);max-width:62ch;margin:16px 0 0}
+.byline{font-size:.9rem;color:var(--ink3);margin:0 0 20px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin:36px 0 0;border-top:2px solid var(--ink)}
+.fact{padding:14px 18px 6px 0}
+.fact b{display:block;font-family:var(--serif);font-size:2rem;font-weight:600;line-height:1.1}
+.fact span{font-size:.92rem;color:var(--ink2)}
+section{margin-top:64px}
+.sub{color:var(--ink2);max-width:64ch;margin:0 0 20px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:0 0 18px;font-size:.92rem}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;color:var(--ink2);font:inherit;padding:7px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+select{font:inherit;padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink)}
+.yr{display:inline-flex;align-items:center;gap:10px}
+.yr input{width:180px;accent-color:var(--ink)}
+.yr output{font-family:var(--serif);font-weight:600;font-size:1.2rem;min-width:3ch}
+.play{border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,.tile:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.explore{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:760px){.explore{grid-template-columns:minmax(0,1fr)}}
+.mapwrap{position:relative;max-width:560px}
+.map{width:100%;height:auto;display:block}
+.map path{stroke:var(--paper);stroke-width:1;cursor:pointer;transition:fill .35s}
+.map path:hover{stroke:var(--ink);stroke-width:1.5}
+.map path.sel{stroke:var(--ink);stroke-width:2.5}
+.map path:focus-visible{outline:none;stroke:var(--focus);stroke-width:3}
+.map text{pointer-events:none;font-size:11px;font-weight:600;fill:#1C2B2D;paint-order:stroke;stroke:rgba(255,255,255,.55);stroke-width:2.5px}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:6px 10px;font-size:.85rem;white-space:nowrap;transform:translate(-50%,-115%);display:none}
+.find{margin:0 0 12px;font-size:.88rem;color:var(--ink2)}
+.tile{aspect-ratio:1;border:0;border-radius:6px;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;transition:background-color .35s;line-height:1.15}
+.tile .ab{font-size:.78rem;font-weight:600}
+.tile .v{font-size:.68rem;opacity:.9}
+.tile[aria-pressed="true"]{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
+.tile.big .ab{font-size:1rem}.tile.big .v{font-size:.8rem}
+.legend{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--ink3);margin-top:12px;flex-wrap:wrap}
+.legend i{display:inline-block;width:22px;height:10px;border-radius:2px}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:20px}
+.panel h3{font-family:var(--serif);font-size:1.5rem;margin:0;font-weight:600}
+.panel .big{font-family:var(--serif);font-size:2.1rem;font-weight:600;margin:6px 0 0;line-height:1.1}
+.panel .meta{color:var(--ink2);font-size:.9rem;margin:2px 0 14px}
+.stack{display:flex;height:16px;border-radius:4px;overflow:hidden;margin:6px 0 8px;background:var(--e0)}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 14px;font-size:.82rem;color:var(--ink2)}
+.keys span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;background:var(--c)}
+.label{font-size:.82rem;color:var(--ink3);margin:16px 0 2px}
+svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+.drv{width:100%;overflow-x:auto}
+.note{font-size:.85rem;color:var(--ink3);max-width:72ch}
+footer{margin-top:72px;border-top:1px solid var(--rule);padding-top:20px;font-size:.88rem;color:var(--ink2)}
+footer p{max-width:78ch;margin:0 0 10px}
+footer a{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.tile{transition:none}}
+.waffle{display:grid;grid-template-columns:repeat(50,minmax(0,1fr));gap:2px;max-width:720px}
+.waffle i{aspect-ratio:1;border-radius:2px;background:var(--rule);transition:background-color .4s}
+.waffle i.hort{outline:2px solid var(--ink);outline-offset:1px}
+.wkeys{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 0;font-size:.9rem;color:var(--ink2)}
+.wkeys span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:7px;vertical-align:-1px;background:var(--c)}
+.callout{border-left:3px solid var(--ink);padding:4px 0 4px 14px;margin:18px 0 0;max-width:64ch;border-radius:0}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px}
+.lk{display:block;border-top:2px solid var(--ink);padding:14px 0;color:var(--ink);text-decoration:none}
+.lk h3{font-family:var(--serif);font-size:1.25rem;margin:0 0 6px;font-weight:600}
+.lk p{margin:0;color:var(--ink2)}
+.lk:hover h3{text-decoration:underline}
+svg .ann{font-size:11px;fill:var(--ink3)}
+@media (prefers-reduced-motion:reduce){.waffle i{transition:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<p class="byline">Analysis by Greener Edge Sustainability, using Welsh Government farming statistics</p>
+<h1>85% of Welsh farmland is grass. Fruit and vegetables use less than 0.1%.</h1>
+<p class="lede">Wales farms 1.77 million hectares. Most of it feeds sheep and cattle, because that's what the land, soil and rain suit best. Here's what Wales grows, how that's changed since 1867, and how it compares with what the UK imports.</p>
+<div class="facts">
+<div class="fact"><b>8.8 million</b><span>sheep and lambs in June 2025, about 2.8 for every person in Wales</span></div>
+<div class="fact"><b>1,188 ha</b><span>of vegetables, orchards, soft fruit and glasshouses, about 1,700 football pitches</span></div>
+<div class="fact"><b>3.3×</b><span>more egg-laying hens than in 1998: 4.5 million, up from 1.4 million</span></div>
+<div class="fact"><b>5×</b><span>more maize than in 1998, mostly grown to feed livestock</span></div>
+</div>
+</header>
+
+<section aria-labelledby="lu">
+<h2 id="lu">Welsh farmland, square by square</h2>
+<p class="sub">Each square is one thousandth of the land on Welsh farms, about 1,770 hectares. Common land, around 180,000 hectares more, isn't included.</p>
+<div class="waffle" id="waffle" role="img" aria-label="Waffle chart of Welsh farmland use"></div>
+<div class="wkeys" id="wkeys"></div>
+<p class="callout" id="hortnote">The single outlined square is more than all of Wales's vegetables, orchards, soft fruit and glasshouses put together.</p>
+</section>
+
+<section aria-labelledby="hi">
+<h2 id="hi">158 years of Welsh farming</h2>
+<p class="sub">From the first agricultural census in 1867 to June 2025. Pick what to show, then press play.</p>
+<div class="controls">
+<div class="seg" role="group" aria-label="What to show" id="metric">
+<button data-m="sheep" aria-pressed="true">Sheep</button><button data-m="cattle" aria-pressed="false">Cattle</button><button data-m="pigs" aria-pressed="false">Pigs</button><button data-m="poultry" aria-pressed="false">Poultry</button><button data-m="arable" aria-pressed="false">Arable land</button>
+</div>
+<button class="play" id="hplay" type="button">Play</button>
+<span class="yr"><input type="range" id="hyear" min="0" max="158" step="1" value="158" aria-label="Year"><output id="hyout">2025</output></span>
+</div>
+<div class="panel" style="padding:16px 18px"><p class="big" id="hval" style="margin:0"></p><p class="meta" id="hmeta" style="margin:2px 0 6px"></p>
+<svg id="hist" viewBox="0 0 760 280" width="100%" role="img" aria-label="Line chart of Welsh farming since 1867"></svg></div>
+<p class="note">Some years are missing, for example 2020, when the survey was disrupted. Poultry wasn't counted consistently before the 1920s. Cattle figures since 2006 come from the Cattle Tracing System.</p>
+</section>
+
+<section aria-labelledby="cm">
+<h2 id="cm">What Wales grows, and what the UK buys in</h2>
+<p class="sub">Welsh farming is built on grass, livestock, milk and eggs. The UK's most climate-exposed imports are the foods that use the least Welsh land: two-thirds of imported fruit and nuts, and 61% of vegetables, come from water-stressed countries. Wales can't grow citrus or cocoa, but the gap raises a fair question about what more could be grown closer to home.</p>
+<div class="links">
+<a class="lk" href="../uk-food-imports/#q=Tomatoes&lens=w"><h3>See where the UK's food comes from</h3><p>Search any food, such as tomatoes, and check it against water stress, drought and deforestation.</p></a>
+<a class="lk" href="../emissions/"><h3>See farming emissions by council</h3><p>On the emissions map, choose Agriculture. Farming is the biggest source in 8 of Wales's 22 councils.</p></a>
+</div>
+<p class="note" style="margin-top:18px">Council-by-council farm figures aren't currently published online. We've asked Welsh Government for them, and will add a map when they arrive.</p>
+</section>
+
+<footer>
+<p><b>Source:</b> Welsh Government, Survey of agriculture and horticulture: June 2025 (released December 2025), including the historical series from 1867. Contains public sector information licensed under the Open Government Licence v3.0.</p>
+<p><b>Our working:</b> grass includes grassland under and over five years old and sole-rights rough grazing. Fruit and vegetables include vegetables and salad grown in the open, commercial orchards, other orchards and small fruit, and glasshouses. Football pitch comparison assumes about 0.7 hectares a pitch. Sheep per person uses the 2024 mid-year population of Welsh councils, from the DESNZ emissions dataset.</p>
+<p><b>Limits:</b> survey estimates are based on the farms that respond, scaled up to represent all farms. The 2025 response rate was 50%.</p>
+<p>Greener Edge Sustainability helps food and drink businesses and farms measure and reduce their carbon footprint.</p>
+</footer>
+</main>
+<script>const A={"yrs":[1867,1868,1869,1870,1871,1872,1873,1874,1875,1876,1877,1878,1879,1880,1881,1882,1883,1884,1885,1886,1887,1888,1889,1890,1891,1892,1893,1894,1895,1896,1897,1898,1899,1900,1901,1902,1903,1904,1905,1906,1907,1908,1909,1910,1911,1912,1913,1914,1915,1916,1917,1918,1919,1920,1921,1922,1923,1924,1925,1926,1927,1928,1929,1930,1931,1932,1933,1934,1935,1936,1937,1938,1939,1940,1941,1942,1943,1944,1945,1946,1947,1948,1949,1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960,1961,1962,1963,1964,1965,1966,1967,1968,1969,1970,1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"ls":{"sheep":[2410146,2874087,2922814,2902447,2885119,3051631,3174145,3278388,3163393,3067596,3051047,3122479,3040961,2845068,2584347,2652756,2726558,2821437,2952614,2693595,2921902,2916667,3020260,3270021,3460230,3432563,3314485,3271646,3201115,3420789,3399709,3481946,3639543,3659658,3655666,3695801,3748598,3728247,3767920,3821929,3943861,3972569,4054566,3937620,3829392,3777612,3599885,3818262,3926340,4116948,3897898,3704250,3415130,3331123,3392171,3440516,3519180,3741180,3891040,4137193,4231031,4000484,3945366,4102405,4321708,4361553,4317470,4173556,4277609,4347731,4463347,4567741,4648428,4512823,3909106,3849046,3864203,3947495,3980024,4049701,2815708,3286272,3642062,3869962,3835048,4235181,4426614,4497186,4370780,4492666,4745714,5028366,5187874,5333340,5526069,5703960,5635571,5883107,6038975,6284400,6238883,6300098,6051537,5992318,6052901,6283077,6551683,6736800,6734300,6929500,7109700,7632600,7571000,8013800,8201500,8416300,8721200,9000800,9129700,9461600,9795800,10296500,10754400,10935300,10850800,11123800,11256200,11092600,11190700,10874000,10915100,11505200,11768500,11192200,9941473,10050140,9859665,9736836,9510384,9350699,8987035,8517595,8237737,8244162,8619414,8898183,9460692,9738871,9503977,9810486,10037473,9530790,9533616,8989410,9464299,9352130,8694495,8749167,8813021],"cattle":[579706,631871,628050,644953,635145,641657,685172,710698,695115,678866,656587,647789,685461,696636,698856,688678,679069,728303,759413,771415,746239,711631,710621,752008,809788,807139,787884,740433,749366,759029,754403,747599,785306,808185,791348,768769,758164,777926,789648,798422,788776,782169,794530,789796,789432,803304,774546,807903,837204,868648,858701,830573,859339,774307,769990,799640,790141,798648,818065,816582,828797,818057,793696,784750,819887,857842,856857,853020,831578,842326,844068,858643,858597,843553,869358,859625,905455,937873,945961,927693,898746,940608,985381,1011218,961128,958427,1016587,1062995,1030827,1054971,1071976,1098998,1125595,1167975,1171165,1174128,1183368,1181457,1236453,1288386,1319538,1315657,1343544,1349919,1368275,1423828,1504296,1575200,1500300,1421800,1428300,1414400,1420000,1408400,1413700,1432300,1434600,1445600,1398300,1388400,1370300,1341700,1354500,1362900,1343400,1334400,1340000,1344700,1336600,1359900,1323000,1314000,1318300,1273000,1268385,1195146,1271607,1267000,1251000,1216459,1164393,1143218,1129968,1138127,1123449,1113141,1094644,1102768,1118979,1134341,1137399,1134137,1119844,1122369,1128849,1131811,1116640,1089836,1079470],"pigs":[249970,202740,185757,214233,242313,257080,227705,230265,217744,230202,246626,234526,205581,194379,205697,251315,247420,233587,232857,220959,238622,247892,257299,275765,289931,210774,213692,242761,278968,276708,231032,255227,275909,244523,227629,231484,262409,259249,228444,225503,250589,258829,220044,210340,253357,244680,204191,236972,231137,204814,196311,168246,185253,194841,234685,200668,228010,258998,202855,186164,237261,246384,193915,205942,251945,251479,223620,240599,280740,255247,239690,222781,207779,204166,151651,144412,120793,109759,132793,102688,79062,123563,132859,115472,160958,231222,237688,290780,239572,228010,247173,281262,225873,197283,216329,241415,245045,267618,303801,266976,251021,236151,244368,241465,253171,228179,217276,194759,154944,158000,146029,135000,139981,134700,131100,139300,147300,128400,125799,129878,129900,124903,111800,100900,103100,104355,107862,99300,90800,98800,98600,93025,81540,68130,40487,44344,48414,30657,28363,25166,23812,20808,22218,26974,25809,28665,24890,28370,25295,23204,24515,23199,24431,28430,27181,26904,24826,27864,28051],"poultry":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,3310912,null,null,null,null,null,null,null,2771105,null,null,3174281,null,3761798,3870396,3811363,4006831,4139146,4311103,4598794,5070776,4999857,4901183,4933595,4591111,4587473,4406680,3884559,3694309,3370205,3019140,3314481,3800004,3952081,3850025,4683946,5388526,5487352,5310121,5399616,5228606,4761386,4778489,5150128,5136245,4953308,4870109,4422401,4442383,4192592,4129150,4203480,3942609,4009706,5245730,5527064,4554674,6462476,5741646,4894853,8363127,7882000,7646000,8404300,7371600,7255900,7161700,7671900,7482700,7705500,5799500,6486600,6747900,6716200,6972500,7171600,7010000,7024100,7246500,5749200,5916700,6365800,6784700,6450700,8364000,9546010,10597008,10405924,10173028,6073965,10479588,8690432,7193790,6122800,7510334,7169660,7250598,7570679,8110979,8248225,8736547,8997200,7844922,7828676,7741955,8180544,8489799,9840150,10352244,9936457,10322925,11842438,12092052]},"land":{"pasture":[605026,625666,675040,629308,658852,674230,696893,721175,734935,748695,764074,770954,783904,798878,804948,814661,827207,836920,838943,849061,855940,859988,864844,868486,891554,880222,887507,880627,879413,879008,859178,856750,855940,860392,865249,858369,864439,879818,886698,886698,900458,908956,914217,911789,910575,900053,915431,913408,910980,894387,876985,797259,792403,808591,811019,831254,843800,851489,853108,851894,858773,862416,856750,851489,860797,863225,859583,854726,850275,863225,866867,873747,873747,764883,675444,611906,555653,532585,543512,555653,582768,586410,600575,599765,625262,631332,638617,666136,683943,694060,700940,710653,715105,704987,706606,708225,711867,718747,719557,734126,738578,724008,732102,738982,741006,742220,753551,758341,773071,776261,776333,792941,836618,843275,835051,845031,861589,866026,854086,871046,879466,885127,904639,903712,902714,901877,905833,921922,915258,927841,912575,926539,961259,933008,974474,925390,1002224,1009657,982386,1037585,1001081,1016601,1026867,1020506,1044697,1049087,997620,1047916,1068814,1065603,1083587,1107963,1126318,1062875,1141336,1124040,1114803,1105019,1081526],"rough":[395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,395392,422912,437885,455692,467428,478760,494543,503042,509113,520040,528538,534609,532585,537846,536228,545131,549583,551201,555653,559700,556867,556462,554034,543107,539870,560105,567794,579530,592076,626880,622833,633356,643068,649948,658042,660066,664922,696489,695275,696489,697703,698917,701345,704987,706606,707820,733316,733721,730079,749909,750314,755980,756384,761241,762860,756789,756384,751123,743839,739387,736554,727246,719152,713486,704178,699726,695275,688799,684752,677468,667755,666136,660066,657233,653590,650758,645496,645496,628904,622833,615144,610288,603870,602509,593409,586559,588292,555833,538398,541029,531428,525257,526584,529252,520545,515427,518575,513817,516230,515793,505958,495768,492228,493609,486417,478980,478216,470382,441753,408230,452715,390580,382276,401061,409184,389808,380129,393677,409919,404475,403277,444121,437060,437569,440501,428983,431082,434385,433324,421838,415675,418647,423513,445123],"newgrass":[129099,140836,111697,172807,163094,161475,155405,156214,155405,155405,151762,153786,148930,141240,140431,133146,131123,131123,142454,136384,133551,131528,135574,140431,138003,142859,134360,135979,139217,138812,157833,160666,165927,166332,168760,171593,163499,153786,145692,145692,135170,130718,122624,119386,118172,119791,107246,108864,105627,116958,114530,91462,104008,120601,128290,127480,120601,119791,120601,118982,116149,113316,117363,121005,117768,115340,114935,114125,115744,106031,106436,97937,99152,93486,83368,90653,117363,155000,174830,184138,180901,178068,173616,174426,181306,179282,180901,187376,194256,186971,192232,191828,201541,208016,212872,216110,216919,210444,212872,199517,197089,204778,191018,182520,178068,180496,172807,172402,158500,170500,169300,162300,151400,164400,167100,166200,167200,164500,173800,168700,169000,161300,146800,148600,149300,154200,159500,144000,139400,139200,151100,140900,129300,133253,118846,128416,117390,107628,115056,99661,95034,86934,88052,103247,116681,138001,143720,152571,157501,157778,153723,155795,161294,155205,155923,150470,155336,155791,157814],"arable":[328212,333878,326188,318499,323760,322141,310405,299073,294622,287742,284909,282885,280052,276410,280052,280862,273172,267507,257794,255366,255366,257389,253747,249700,238368,233107,233107,238368,228251,227441,227846,224608,218943,214491,206802,205588,203564,197089,196684,196280,192232,185757,186567,189804,188995,193447,187781,184543,188590,199517,219752,308381,280052,238773,203159,182924,174830,163904,155405,154191,149334,143668,143668,144883,136384,133551,135574,138407,136384,129504,122624,130313,118577,197898,282076,337115,358564,343590,311619,289360,264269,266293,256580,261436,230679,230274,222180,195065,171998,172807,161475,153381,140431,142859,135574,133551,131123,132337,132337,129504,128290,123434,119791,116149,118172,114935,112507,111292,111256,110846,109670,108991,108262,102812,100040,97197,91676,90156,90882,89823,88408,86779,78890,74408,71910,72926,70232,69340,68181,71998,76006,73131,71086,67152,64924,66372,66597,69769,65738,63945,67042,75429,83584,85229,88155,84248,79461,85034,87436,87653,90144,93818,93116,84955,94308,100395,101499,107791,110140]},"lu":{"Wheat":27980,"Winter barley":9887,"Spring barley":13680,"Other cereals for combining":6431,"Potatoes":3637,"Maize":26707,"Crops for stockfeeding":11574,"Oil seed rape (winter & spring)":4333,"Other crops":4496,"Bare fallow":1415,"Vegetables & Salad grown in the open":343,"Commercial orchards":322,"Other orchards & small fruit":494,"Total hardy nursery stock":333,"Glasshouse":29,"Grassland under 5 years old":157814,"Grassland over 5 years old":1081526,"Sole-rights rough grazing":264818,"Set-aside - total":null,"Woodland":126130,"All other land":28172,"TOTAL AREA ON FARMS":1770121},"layers":{"yrs":[1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"v":[1370528,1414255,1365388,1294972,1134595,1159928,1548876,1507493,1532725,1246414,1193260,1254953,1289205,1640787,1911862,2018062,2100924,1624124,1768438,2035104,2337116,2316331,null,3148511,3436906,4483388,4377888,4519963]},"maize":{"yrs":[1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"v":[5345,6120,6316,8223,8356,8228,7298,9099,9239,9911,11278,12701,12995,12805,10802,9599,9372,10492,9951,12022,12296,14502,null,14821,16016,19103,24501,26707]},"pop":3186.58};
+const nf=new Intl.NumberFormat("en-GB"),reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+(function(){const lu=A.lu,T=lu["TOTAL AREA ON FARMS"];
+const grass=lu["Grassland under 5 years old"]+lu["Grassland over 5 years old"]+lu["Sole-rights rough grazing"];
+const hort=lu["Vegetables & Salad grown in the open"]+lu["Commercial orchards"]+lu["Other orchards & small fruit"]+lu["Glasshouse"];
+const arable=["Wheat","Winter barley","Spring barley","Other cereals for combining","Potatoes","Maize","Crops for stockfeeding","Oil seed rape (winter & spring)","Other crops","Bare fallow"].reduce((a,k)=>a+lu[k],0);
+const wood=lu["Woodland"];
+const cats=[["Grass and grazing",grass,"#7FA35B"],["Arable crops",arable,"#D9A55B"],["Farm woodland",wood,"#2F5D3A"],["Fruit, vegetables and glasshouses",hort,"#B8453A"],["Other land",T-grass-arable-wood-hort,"#B8B4A8"]];
+let n=cats.map(c=>c[1]/T*1000),r=n.map(Math.floor);r[3]=Math.max(1,r[3]);let left=1000-r.reduce((a,b)=>a+b,0);
+const order=n.map((v,i)=>[v-Math.floor(v),i]).sort((a,b)=>b[0]-a[0]);for(let j=0;left>0;j++){const i=order[j%order.length][1];if(i!==3){r[i]++;left--}}
+const W=document.getElementById("waffle");let cells=[];r.forEach((k,i)=>{for(let j=0;j<k;j++)cells.push(i)});
+const seq=[];for(let i=0;i<1000;i++){const e=document.createElement("i");W.appendChild(e);seq.push(e)}
+const hortIdx=cells.indexOf(3);
+document.getElementById("wkeys").innerHTML=cats.map(c=>'<span style="--c:'+c[2]+'">'+c[0]+': '+(c[1]/T*100<1?(c[1]/T*100).toFixed(2):Math.round(c[1]/T*100))+'% ('+nf.format(Math.round(c[1]))+' ha)</span>').join("");
+function fill(){seq.forEach((e,i)=>{const c=cells[i];const go=()=>{e.style.background=cats[c][2];if(i===hortIdx)e.classList.add("hort")};if(reduce)go();else setTimeout(go,Math.floor(i/50)*45+(i%50)*3)})}
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting)){fill();io.disconnect()}},{threshold:.25});io.observe(W)}else fill()})();
+(function(){const Y=A.yrs,S={sheep:A.ls.sheep,cattle:A.ls.cattle,pigs:A.ls.pigs,poultry:A.ls.poultry,arable:A.land.arable};
+const L={sheep:"sheep and lambs",cattle:"cattle and calves",pigs:"pigs",poultry:"poultry",arable:"hectares of arable crops"};
+const COL={sheep:"#5B7F3A",cattle:"#7E3A1E",pigs:"#B08FA8",poultry:"#D9A55B",arable:"#B86B2E"};
+const ANN={sheep:[[1999,"1999: peak of 11.8 million"],[2001,"2001: foot-and-mouth"]],arable:[[1943,"1943: wartime ploughing peak"]],poultry:[[2025,"2025: a record 12.1 million"]],pigs:[[1867,"1867: 250,000 pigs"]],cattle:[[1974,"1970s: cattle peak"]]};
+let m="sheep",yi=Y.length-1,timer=null;const svg=document.getElementById("hist"),W=760,H=280,pl=64,pr=16,pt=18,pb=26;
+const sx=i=>pl+i*(W-pl-pr)/(Y.length-1);
+function fmtBig(v){return v>=1e6?(v/1e6).toFixed(1)+" million":nf.format(v)}
+function render(){const s=S[m],vals=s.filter(v=>v!=null),mx=Math.max(...vals),step=Math.pow(10,Math.floor(Math.log10(mx))),top=Math.ceil(mx/step)*step,sy=v=>pt+(top-v)/top*(H-pt-pb);
+let h="";for(let g=0;g<=top;g+=top/4)h+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+sy(g)+'" y2="'+sy(g)+'" stroke="var(--rule)"/><text x="'+(pl-8)+'" y="'+(sy(g)+4)+'" text-anchor="end">'+(g>=1e6?(g/1e6)+"m":g>=1e3?nf.format(g/1e3)+"k":g)+'</text>';
+[1867,1900,1925,1950,1975,2000,2025].forEach(y=>{const i=Y.indexOf(y);if(i>=0)h+='<text x="'+sx(i)+'" y="'+(H-6)+'" text-anchor="middle">'+y+'</text>'});
+let d="",pen=false;for(let i=0;i<=yi;i++){const v=s[i];if(v==null){pen=false;continue}d+=(pen?"L":"M")+sx(i).toFixed(1)+","+sy(v).toFixed(1);pen=true}
+let full="";pen=false;for(let i=0;i<Y.length;i++){const v=s[i];if(v==null){pen=false;continue}full+=(pen?"L":"M")+sx(i).toFixed(1)+","+sy(v).toFixed(1);pen=true}
+h+='<path d="'+full+'" fill="none" stroke="var(--rule)" stroke-width="2"/><path d="'+d+'" fill="none" stroke="'+COL[m]+'" stroke-width="2.6"/>';
+(ANN[m]||[]).forEach(([y,t],k)=>{const i=Y.indexOf(y);if(i<0||i>yi||s[i]==null)return;const x=sx(i),yy=sy(s[i]);const anchor=i>Y.length*0.75?"end":"start";const dy=k%2?18:-8;h+='<circle cx="'+x+'" cy="'+yy+'" r="3.5" fill="'+COL[m]+'"/><text class="ann" x="'+(x+(anchor==="end"?-6:6))+'" y="'+(yy+dy)+'" text-anchor="'+anchor+'">'+t+'</text>'});
+let ci=yi;while(ci>0&&s[ci]==null)ci--;if(s[ci]!=null)h+='<line x1="'+sx(yi)+'" x2="'+sx(yi)+'" y1="'+pt+'" y2="'+(H-pb)+'" stroke="var(--ink3)" stroke-dasharray="3 3"/><circle cx="'+sx(ci)+'" cy="'+sy(s[ci])+'" r="5" fill="'+COL[m]+'" stroke="var(--paper)" stroke-width="2"/>';
+svg.innerHTML=h;document.getElementById("hyout").textContent=Y[yi];
+const v=s[yi];document.getElementById("hval").textContent=v==null?"No figure":fmtBig(v);
+document.getElementById("hmeta").textContent=L[m]+" in Wales, "+Y[yi]+(v!=null&&s[0]!=null&&yi>0?". "+(v>s[0]?"Up":"Down")+" "+Math.round(Math.abs(v/s[0]-1)*100)+"% on 1867.":".")}
+document.querySelectorAll("#metric button").forEach(b=>b.onclick=()=>{m=b.dataset.m;document.querySelectorAll("#metric button").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
+const sl=document.getElementById("hyear");sl.oninput=()=>{yi=+sl.value;render()};
+const pb_=document.getElementById("hplay");pb_.onclick=()=>{if(timer){clearInterval(timer);timer=null;pb_.textContent="Play";return}
+if(yi>=Y.length-1)yi=0;pb_.textContent="Pause";timer=setInterval(()=>{yi++;sl.value=yi;render();if(yi>=Y.length-1){clearInterval(timer);timer=null;pb_.textContent="Play"}},reduce?0:45)};
+render()})();
+</script>
+</body></html>
