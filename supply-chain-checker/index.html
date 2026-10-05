@@ -34,7 +34,9 @@
 <div class="controls"><label>Future view <select id="horizon"><option value="2050">2050s</option><option value="2080">2080s</option></select></label>
 <label>Scenario <select id="scen"><option value="opt">Optimistic</option><option value="bau" selected>Business as usual</option><option value="pes">Pessimistic</option></select></label></div>
 <div class="summ" id="rsumm" aria-live="polite"></div>
-<div class="rmap"><svg id="omap" role="img" aria-label="Map of your ingredient origins"></svg><div class="legend" id="olegend"></div></div>
+<div class="rmap"><svg id="omap" role="img" aria-label="Map of supply routes from your ingredient origins"></svg>
+<div class="flowwrap"><p class="flowt">What comes from where</p><svg id="sankey" role="img" aria-label="Flow chart linking each ingredient to its origin country"></svg></div>
+<div class="legend" id="olegend"></div></div>
 <h3 class="h3">Ingredient by ingredient</h3>
 <div class="tw"><table class="res" id="res"></table></div>
 <h3 class="h3">Questions you might ask your suppliers</h3>

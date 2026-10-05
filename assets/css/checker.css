@@ -16,7 +16,14 @@ table.res td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-
 .p0{background:#E7EEE9;color:#2E5A3C}.p1{background:#F6E7C8;color:#7A5410}.p2{background:#F4D2C8;color:#8A2E1A}.pn{background:var(--rule);color:var(--ink3)}
 .rating{font-weight:600}
 .rmap{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px;margin:6px 0 0}
-#omap{width:100%;height:auto;display:block}
+#omap{width:100%;height:auto;display:block;max-height:300px}
+.flowwrap{border-top:1px solid var(--rule);margin-top:6px;padding-top:10px;overflow-x:auto}
+.flowt{font-family:var(--serif);font-weight:600;margin:0 0 4px 6px}
+#sankey{width:100%;min-width:620px;height:auto;display:block}
+#sankey text{font-family:var(--sans)}
+#sankey .band{transition:opacity .2s}
+#sankey.hl .band{opacity:.15}
+#sankey.hl .band.on{opacity:.85}
 .ask{border-top:1px solid var(--rule);padding:10px 0}
 .ask b{display:block;margin-bottom:2px}
 .ask p{margin:0;color:var(--ink2);max-width:74ch}
@@ -56,7 +63,7 @@ body:not(.rep) .snav,body:not(.rep) .controls,body:not(.rep) #build,body:not(.re
 #report .bar{display:grid;grid-template-columns:150px 1fr 110px;gap:8px;align-items:center;margin:4px 0;font-size:9pt}
 #report .bar i{display:block;height:9px;background:#1C2B2D;border-radius:3px}
 #report .bar .tr{background:#E6E9E6;border-radius:3px}
-#report .mapimg svg{width:100%;height:auto;border:1px solid #D5DBD7;border-radius:6px}
+#report .mapimg svg{width:100%;height:auto;border:1px solid #D5DBD7;border-radius:6px;display:block;margin-bottom:6px}
 #report .q b{display:block}
 #report .q{margin:0 0 8px}
 #report .small{font-size:8.3pt;color:#4A5A5C}
