@@ -4,6 +4,8 @@ A series of interactive dashboards by Greener Edge Sustainability, built on offi
 
 - `emissions/`: greenhouse gas emissions for Wales's 22 councils, 2005 to 2024 (DESNZ, June 2026 release)
 - `uk-food-imports/`: where UK food imports come from, checked against water stress, drought, flooding and deforestation (FAOSTAT 2024, WRI Aqueduct 4.0, Singh et al. 2026)
+- `supply-chain-checker/`: free screening tool for food businesses, runs entirely in the browser
+- `methods/`: methods, sources and licences
 - `what-wales-grows/`: Welsh farmland use and livestock, 1867 to 2025 (Welsh Government June agricultural survey 2025)
 - `commercial-epc/`: current non-domestic EPC ratings in Wales, against the planned 2031 EPC B standard (MHCLG EPC register, downloaded 2 October 2026)
 

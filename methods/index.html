@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Methods and sources | Greener Edge open data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--paper:#F6F7F4;--card:#FFFFFF;--ink:#1C2B2D;--ink2:#4A5A5C;--ink3:#7B8889;--rule:#DCE1DD;
+--e0:#F1EDE2;--e1:#E6CF9F;--e2:#D9A55B;--e3:#B86B2E;--e4:#7E3A1E;--s1:#A9D3CB;--s2:#3E8C84;--focus:#2F5D8A;
+--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--sans:"Public Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#121A1B;--card:#1A2526;--ink:#E8EDEA;--ink2:#B4C0BD;--ink3:#86938F;--rule:#2E3B3C;--e0:#2A2F2B;--focus:#8DB4DD}}
+:root[data-theme="dark"]{--paper:#121A1B;--card:#1A2526;--ink:#E8EDEA;--ink2:#B4C0BD;--ink3:#86938F;--rule:#2E3B3C;--e0:#2A2F2B;--focus:#8DB4DD}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6}
+main{max-width:1080px;margin:0 auto;padding:40px 20px 64px}
+h1,h2{font-family:var(--serif);font-weight:600;line-height:1.15;margin:0}
+h1{font-size:clamp(2rem,5vw,3.25rem);max-width:18ch;letter-spacing:-0.01em}
+h2{font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:8px}
+.lede{font-size:1.15rem;color:var(--ink2);max-width:62ch;margin:16px 0 0}
+.byline{font-size:.9rem;color:var(--ink3);margin:0 0 20px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin:36px 0 0;border-top:2px solid var(--ink)}
+.fact{padding:14px 18px 6px 0}
+.fact b{display:block;font-family:var(--serif);font-size:2rem;font-weight:600;line-height:1.1}
+.fact span{font-size:.92rem;color:var(--ink2)}
+section{margin-top:64px}
+.sub{color:var(--ink2);max-width:64ch;margin:0 0 20px}
+.controls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;margin:0 0 18px;font-size:.92rem}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;color:var(--ink2);font:inherit;padding:7px 12px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+select{font:inherit;padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink)}
+.yr{display:inline-flex;align-items:center;gap:10px}
+.yr input{width:180px;accent-color:var(--ink)}
+.yr output{font-family:var(--serif);font-weight:600;font-size:1.2rem;min-width:3ch}
+.play{border:1px solid var(--rule);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,.tile:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.explore{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:760px){.explore{grid-template-columns:minmax(0,1fr)}}
+.mapwrap{position:relative;max-width:560px}
+.map{width:100%;height:auto;display:block}
+.map path{stroke:var(--paper);stroke-width:1;cursor:pointer;transition:fill .35s}
+.map path:hover{stroke:var(--ink);stroke-width:1.5}
+.map path.sel{stroke:var(--ink);stroke-width:2.5}
+.map path:focus-visible{outline:none;stroke:var(--focus);stroke-width:3}
+.map text{pointer-events:none;font-size:11px;font-weight:600;fill:#1C2B2D;paint-order:stroke;stroke:rgba(255,255,255,.55);stroke-width:2.5px}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:6px 10px;font-size:.85rem;white-space:nowrap;transform:translate(-50%,-115%);display:none}
+.find{margin:0 0 12px;font-size:.88rem;color:var(--ink2)}
+.tile{aspect-ratio:1;border:0;border-radius:6px;font:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px;transition:background-color .35s;line-height:1.15}
+.tile .ab{font-size:.78rem;font-weight:600}
+.tile .v{font-size:.68rem;opacity:.9}
+.tile[aria-pressed="true"]{box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
+.tile.big .ab{font-size:1rem}.tile.big .v{font-size:.8rem}
+.legend{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--ink3);margin-top:12px;flex-wrap:wrap}
+.legend i{display:inline-block;width:22px;height:10px;border-radius:2px}
+.panel{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:20px}
+.panel h3{font-family:var(--serif);font-size:1.5rem;margin:0;font-weight:600}
+.panel .big{font-family:var(--serif);font-size:2.1rem;font-weight:600;margin:6px 0 0;line-height:1.1}
+.panel .meta{color:var(--ink2);font-size:.9rem;margin:2px 0 14px}
+.stack{display:flex;height:16px;border-radius:4px;overflow:hidden;margin:6px 0 8px;background:var(--e0)}
+.keys{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 14px;font-size:.82rem;color:var(--ink2)}
+.keys span::before{content:"";display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;background:var(--c)}
+.label{font-size:.82rem;color:var(--ink3);margin:16px 0 2px}
+svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+.drv{width:100%;overflow-x:auto}
+.note{font-size:.85rem;color:var(--ink3);max-width:72ch}
+footer{margin-top:72px;border-top:1px solid var(--rule);padding-top:20px;font-size:.88rem;color:var(--ink2)}
+footer p{max-width:78ch;margin:0 0 10px}
+footer a{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.tile{transition:none}}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}
+.toc a{border:1px solid var(--rule);background:var(--card);color:var(--ink);text-decoration:none;border-radius:999px;padding:6px 13px;font-size:.88rem}
+.m h3{font-family:var(--serif);font-size:1.15rem;margin:22px 0 6px}
+.m p,.m li{max-width:74ch}
+.m ul{padding-left:20px}
+.m li{margin:4px 0}
+table.src{border-collapse:collapse;width:100%;font-size:.9rem;margin:10px 0}
+table.src th,table.src td{border-top:1px solid var(--rule);padding:8px 10px 8px 0;text-align:left;vertical-align:top}
+table.src th{font-weight:600;color:var(--ink2)}
+.tw{overflow-x:auto}
+</style>
+</head>
+<body>
+<main class="m">
+<p class="byline"><a href="../" style="color:inherit">Greener Edge open data</a></p>
+<h1>Methods and sources</h1>
+<p class="lede">How we built each part of the series: which data we used, what we did to it, what it can and can't tell you, and how it's licensed. Last updated 5 October 2026.</p>
+<div class="toc"><a href="#principles">Principles</a><a href="#emissions">Emissions</a><a href="#epc">Commercial EPCs</a><a href="#food">Food imports</a><a href="#checker">Supply chain checker</a><a href="#farming">What Wales grows</a><a href="#licences">Licences</a><a href="#changes">Changes</a></div>
+
+<section id="principles"><h2>Our principles</h2>
+<ul>
+<li>We only use public, openly licensed data. No client data is used anywhere in the series.</li>
+<li>Where we derive a figure, such as a grouping or a weighted average, we say so on the page.</li>
+<li>We describe risk and exposure, not cause. A country's average score doesn't tell you about a particular farm or product.</li>
+<li>When we find an error, we fix it and record it below.</li>
+</ul></section>
+
+<section id="emissions"><h2>Where did Wales's emissions go?</h2>
+<h3>Data</h3><p>Department for Energy Security and Net Zero (DESNZ), UK local authority and regional greenhouse gas emissions statistics, 2005 to 2024, published June 2026 (table 1.1, full dataset). Council boundaries from the Office for National Statistics, via the UK-GeoJSON project.</p>
+<h3>What we did</h3><ul><li>Extracted the 22 Welsh local authorities, every sector and year.</li><li>Per person figures divide emissions by mid-year population.</li><li>Grouped DESNZ sub-sectors into drivers (electricity, landfill, large industrial sites, gas and so on) to show what changed between 2005 and 2024. These groupings are ours.</li><li>Checked our Wales totals against the DESNZ statistical release (43.8 to 23.5 MtCO₂e, a 46% fall).</li></ul>
+<h3>Limits</h3><ul><li>These are territorial emissions. Aviation, shipping, military transport and fluorinated gases are excluded.</li><li>Electricity emissions combine a cleaner grid and lower use; the data doesn't separate them.</li><li>Land use and forestry can be negative, where land absorbs more carbon than it releases.</li><li>DESNZ advises caution, as councils have limited influence over some sources.</li></ul></section>
+
+<section id="epc"><h2>Is Wales's commercial property ready for EPC B?</h2>
+<h3>Data</h3><p>Ministry of Housing, Communities and Local Government, Energy Performance of Buildings Data for England and Wales, non-domestic certificates, downloaded 2 October 2026.</p>
+<h3>What we did</h3><ul><li>Filtered to the 22 Welsh councils.</li><li>Kept the most recent certificate per building, matched on property reference (UPRN) where available, otherwise on address.</li><li>Counted certificates lodged in the last 10 years as current.</li><li>"Large" means a floor area over 1,000 m². "Last certified for letting" means the latest certificate was issued because the property was being let.</li><li>Removed all address data before analysis. Only council-level counts are published.</li></ul>
+<h3>Limits</h3><ul><li>The register only covers buildings that have needed an EPC.</li><li>It can't tell us which buildings are rented today, so 2031 figures show buildings that would be in scope if rented.</li><li>The 2031 EPC B standard comes from the UK government's interim response of June 2026 and still needs secondary legislation.</li></ul></section>
+
+<section id="food"><h2>Where does the UK's food come from, and what's at risk?</h2>
+<div class="tw"><table class="src"><tr><th>Layer</th><th>Source</th><th>Measure we show</th></tr>
+<tr><td>Imports</td><td>FAO, FAOSTAT Detailed Trade Matrix, 2024</td><td>Import value by product and partner country</td></tr>
+<tr><td>Water stress</td><td>World Resources Institute, Aqueduct 4.0 country rankings</td><td>Baseline water stress weighted by irrigated agriculture; 2030, 2050 and 2080 projections</td></tr>
+<tr><td>Drought</td><td>WRI Aqueduct 4.0</td><td>Drought risk weighted by irrigated agriculture</td></tr>
+<tr><td>River flooding</td><td>WRI Aqueduct 4.0</td><td>Riverine flood risk weighted by population (the only weighting published)</td></tr>
+<tr><td>Warming</td><td>World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree</td><td>Change in annual mean temperature, median of the model ensemble, for 2020-39, 2040-59 and 2080-99</td></tr>
+<tr><td>Deforestation</td><td>Singh, Persson, Croft, Kastner and West (2026), v2.1, physical trade model</td><td>Deforestation risk embodied in UK imports, amortised over five years</td></tr></table></div>
+<h3>What we did</h3><ul>
+<li>Grouped FAOSTAT's products into food types and removed non-food items (tobacco, cotton, wool, live animals, pet food and similar).</li>
+<li>Removed FAOSTAT's "rice, paddy equivalent" total, which double counts individual rice products.</li>
+<li>"Water-stressed" means Aqueduct's high or extremely high bands; "drought risk" means its medium-high or high bands.</li>
+<li>Future scenarios are shown as optimistic (SSP1-2.6), business as usual (SSP3-7.0) and pessimistic (SSP5-8.5).</li>
+<li>"Average warming where it's grown" weights each supplier country by the value of food it sends the UK.</li>
+<li>Deforestation for processed foods is shown for the whole crop family, as the source data is at crop level.</li>
+<li>The supplier shock simulator removes a share of one country's supply and reports the share of each UK import lost, before any switching to other suppliers. It's illustrative.</li>
+<li>Meal ingredient lists are our illustrative choices, and show only the imported part of each ingredient.</li></ul>
+<h3>Limits</h3><ul>
+<li>Trade figures use the recorded partner country, which may be where food was processed or shipped from rather than grown. Belgium and the Netherlands handle a lot of food grown elsewhere.</li>
+<li>Country scores are national averages. A supplier may farm in a less stressed or cooler region.</li>
+<li>Deforestation estimates measure risk exposure, not proof that a product caused clearing, and count direct imports only.</li>
+<li>Values are in US dollars, as FAOSTAT reports them.</li></ul></section>
+
+<section id="checker"><h2>Check your supply chain</h2>
+<h3>How it works</h3><ul><li>Uses the same datasets as the food imports map. Each ingredient is matched to a FAOSTAT product and scored for its chosen origin country.</li>
+<li>Where the origin is unknown, it uses the UK's 2024 import mix for that food and reports the share coming from flagged countries.</li>
+<li>Deforestation is flagged when UK imports of that crop from that country are linked to 10 ha or more of deforestation risk in 2023 (500 ha for the import mix).</li>
+<li>Results are weighted by spend when spend is entered for every ingredient; otherwise each ingredient counts equally.</li>
+<li>The supplier questions are prompts based on the flags, not advice.</li></ul>
+<h3>Privacy</h3><p>The checker runs entirely in the browser. Nothing entered is sent to Greener Edge or anyone else. Lists are saved in the user's own browser storage so they can return to them.</p>
+<h3>Limits</h3><ul><li>Country averages can't reflect a specific farm, region or certification.</li><li>It's a screening tool, not an audit or a footprint.</li></ul></section>
+
+<section id="farming"><h2>What does Wales grow?</h2>
+<h3>Data</h3><p>Welsh Government, Survey of agriculture and horticulture: June 2025, including the historical series from 1867.</p>
+<h3>What we did</h3><ul><li>Grouped land use into grass and grazing, arable, farm woodland, fruit and vegetables, and other land.</li><li>Sheep per person uses the 2024 mid-year population of Welsh councils.</li></ul>
+<h3>Limits</h3><ul><li>Survey estimates are scaled up from responding farms (a 50% response rate in 2025).</li><li>Council-level farm figures aren't currently published online. We've asked Welsh Government for them.</li></ul></section>
+
+<section id="licences"><h2>Licences and credits</h2><ul>
+<li>DESNZ, MHCLG and Welsh Government data: Open Government Licence v3.0.</li>
+<li>Boundaries: ONS (via UK-GeoJSON, contains OS data © Crown copyright and database right) and Natural Earth (public domain).</li>
+<li>WRI Aqueduct 4.0: Creative Commons Attribution 4.0.</li>
+<li>World Bank Climate Change Knowledge Portal: Open Database License.</li>
+<li>Singh et al. (2026): Creative Commons Attribution, doi.org/10.5281/zenodo.18953516.</li>
+<li>FAOSTAT: used under FAO's terms for statistical databases, with attribution.</li>
+<li>Inspired in part by <a href="https://delwyno.github.io/The-UK-Power-Flow-Llif-Pwer-y-DU/">The UK Power Flow</a>.</li></ul></section>
+
+<section id="changes"><h2>Changes and corrections</h2><ul>
+<li><b>October 2026:</b> removed a double-counted rice total from the food imports data. Headline shares moved from 37% to 36% (water stress) and 48% to 47% (drought).</li>
+<li><b>October 2026:</b> first published.</li></ul>
+<p>Spotted something? Contact Greener Edge Sustainability.</p></section>
+<footer><p>Greener Edge Sustainability helps organisations measure and reduce their carbon footprint.</p></footer>
+</main></body></html>
