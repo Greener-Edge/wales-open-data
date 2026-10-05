@@ -39,7 +39,9 @@
 <div class="tw"><table class="res" id="res"></table></div>
 <h3 class="h3">Questions you might ask your suppliers</h3>
 <div id="asks"></div>
-<div class="controls" style="margin-top:22px"><button class="play" id="csv" type="button">Download results (CSV)</button><button class="play" id="print" type="button">Print or save as PDF</button></div>
+<div class="repbox"><h3 class="h3" style="margin-top:0">Create a report</h3><p class="sub" style="margin-bottom:10px">Turn these results into a short, printable Supply Chain Risk Snapshot to share with colleagues, buyers or your board.</p>
+<div class="controls"><label>Business name (optional) <input id="bizname" class="search" placeholder="Your business"></label><button class="play primary" id="mkreport" type="button">Create report (PDF)</button><button class="play" id="csv" type="button">Download results (CSV)</button></div>
+<p class="note">Your browser's print window opens: choose "Save as PDF". Nothing is uploaded.</p></div>
 <div class="cta"><h3>Want to go further?</h3><p>Greener Edge helps food and drink businesses measure product carbon footprints, map supply chain risks and build reduction plans. This checker gives a first view; a proper review uses your actual suppliers and farms.</p><a class="ctab" href="https://www.greener-edge.co.uk/">Talk to Greener Edge</a></div>
 </section>
 
@@ -48,6 +50,7 @@
 <p><b>Limits:</b> scores are country averages, so they can't reflect a specific farm, region or certification. Deforestation flags show risk exposure, not proof. This is a screening tool, not an audit.</p>
 </footer>
 </main>
+<div id="report" aria-hidden="true"></div>
 <script src="../assets/js/load.js"></script>
 <script>runPage({FD:"../data/food.json",WG:"../data/world-map.json"},"../assets/js/checker.js")</script>
 </body>

@@ -34,7 +34,7 @@ function money(v){return"£"+nf.format(Math.round(v))}
 let last=[];
 function compute(){const yr=document.getElementById("horizon").value,sc=document.getElementById("scen").value,key=yr+sc,lab=yr+"s, "+document.getElementById("scen").selectedOptions[0].text.toLowerCase();
 const items=rows.map(r=>({r,i:pidx(r.p)})).filter(x=>x.i!=null).map(x=>{const risk=x.r.o?oneRisk(x.i,x.r.o,key):mixRisk(x.i,key);return{name:SHORT[P[x.i].n]||P[x.i].n,full:P[x.i].n,o:x.r.o,spend:parseFloat(x.r.s)||0,risk,fl:flags(risk)}});
-last={items,key,lab};const S=document.getElementById("rsumm"),R=document.getElementById("res"),A=document.getElementById("asks");
+last={items,key,lab,yr};const S=document.getElementById("rsumm"),R=document.getElementById("res"),A=document.getElementById("asks");
 if(!items.length){S.innerHTML="";R.innerHTML='<tr><td class="empty">Add at least one recognised ingredient to see results, or load the example.</td></tr>';A.innerHTML="";drawMap([]);return}
 const useSpend=items.every(x=>x.spend>0),wt=x=>useSpend?x.spend:1,TW=items.reduce((a,x)=>a+wt(x),0);
 const share=f=>items.reduce((a,x)=>a+(x.risk.mix?(f==="w"?x.risk.w:f==="w5"?x.risk.w5:f==="dr"?x.risk.dr:x.risk.fl):(x.fl[f]?1:0))*wt(x),0)/TW*100;
@@ -61,6 +61,7 @@ if(topC&&topC[1]/TW>=.4)asks.push(["Concentration: "+C[topC[0]].n,"40% or more o
 if(tavg!=null&&tavg>=2)asks.push(["Rising heat","Your origins are projected to warm by over 2°C. Ask suppliers how they're adapting: heat-tolerant varieties, shade, irrigation, changed harvest timing."]);
 if(any("fl").length)asks.push(["River flooding: "+any("fl").join(", "),"Have floods disrupted harvests, processing or transport? How resilient are routes to port?"]);
 A.innerHTML=asks.length?asks.map(([t,q])=>'<div class="ask"><b>'+t+'</b><p>'+q+'</p></div>').join(""):'<p class="note">No major flags for these origins. It\'s still worth asking suppliers about traceability and climate resilience.</p>';
+last.useSpend=useSpend;last.TW=TW;last.share=share;last.tavg=tavg;last.topC=topC;last.byC=byC;last.asks=asks;last.nd=nd;last.wt=wt;
 drawMap(items,wt)}
 const NS="http://www.w3.org/2000/svg",om=document.getElementById("omap");om.setAttribute("viewBox","0 0 "+WG.w+" "+WG.h);
 for(const iso in WG.p){const p=document.createElementNS(NS,"path");p.setAttribute("d",WG.p[iso].d);p.setAttribute("fill","#E6E9E6");p.setAttribute("stroke","var(--card)");p.setAttribute("stroke-width",".5");om.appendChild(p)}
@@ -75,10 +76,43 @@ const t=document.createElementNS(NS,"title");t.textContent=C[k].n+": "+a.names.j
 const u=document.createElementNS(NS,"circle");u.setAttribute("cx",ux);u.setAttribute("cy",uy);u.setAttribute("r",4);u.setAttribute("fill","var(--ink)");dots.appendChild(u);
 document.getElementById("olegend").innerHTML='Circle size shows your '+(items&&items.length&&items.every(x=>x.spend>0)?"spend":"number of ingredients")+'. Colour shows the most flags on any ingredient from there: '+["None","1","2","3","4"].map((l,i)=>'<i style="background:'+col[i]+'"></i>'+l).join(" ")+'. Unknown origins use the top five UK suppliers.'}
 document.getElementById("horizon").onchange=compute;document.getElementById("scen").onchange=compute;
-document.getElementById("print").onclick=()=>window.print();
 document.getElementById("csv").onclick=()=>{const {items,lab}=last;if(!items||!items.length)return;const esc=v=>{v=v==null?"":String(v);return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
 const rows_=[["Ingredient","FAOSTAT product","Origin","Annual spend (£)","Water stress today","Water stress ("+lab+")","Drought risk","River flood risk","Projected warming ("+lab+", °C)","Deforestation linked (ha, UK imports of this crop from this origin)","Flags"]];
 items.forEach(x=>{const r=x.risk,f=x.fl;rows_.push([x.name,x.full,x.o?C[x.o].n:"UK import mix",x.spend||"",r.mix?Math.round(r.w*100)+"% of mix":(r.wc!=null?WL[r.wc]:""),r.mix?Math.round(r.w5*100)+"% of mix":(r.w5c!=null?WL[r.w5c]:""),r.mix?Math.round(r.dr*100)+"% of mix":(r.drc!=null?DL[r.drc]:""),r.mix?Math.round(r.fl*100)+"% of mix":(r.flc!=null?WL[r.flc]:""),r.tw!=null?r.tw.toFixed(2):"",r.dh?Math.round(r.dh):0,["w","dr","fl","d"].filter(k=>f[k]).map(k=>({w:"water stress",dr:"drought",fl:"flooding",d:"deforestation"})[k]).join("; ")])});
 rows_.push([]);rows_.push(["Screening results from Greener Edge's supply chain checker. Country averages, not farm-level assessments. Sources: WRI Aqueduct 4.0, World Bank CCKP, Singh et al. 2026, FAOSTAT 2024."]);
 const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows_.map(r=>r.map(esc).join(",")).join("\n")],{type:"text/csv;charset=utf-8"}));a.download="supply-chain-check.csv";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
 load();renderRows();compute();
+
+const andList=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+function buildReport(){const L=last;if(!L.items||!L.items.length){alert("Add at least one recognised ingredient first.");return}
+const biz=document.getElementById("bizname").value.trim()||"Your business",today=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+const it=L.items,useS=L.useSpend,unit=useS?"spend":"ingredients",ukw=FD.ukt[L.key];
+const flagged=k=>it.filter(x=>x.fl[k]).map(x=>x.name);const clean=it.filter(x=>!["w","dr","fl","d"].some(k=>x.fl[k])).map(x=>x.name);
+const F=[];
+if(L.topC&&L.topC[1]/L.TW>=.3)F.push(Math.round(L.topC[1]/L.TW*100)+"% of your "+unit+" comes from one country, "+C[L.topC[0]].n+". A poor harvest or disruption there would hit a large share of your purchasing.");
+if(flagged("d").length)F.push(andList(flagged("d"))+(flagged("d").length>1?" are":" is")+" linked to deforestation risk at the chosen origin. Traceability to farm or plantation level is the key question for suppliers.");
+const ws=L.share("w"),dr=L.share("dr");if(ws>=10)F.push(Math.round(ws)+"% of your "+unit+" comes from origins with high or extremely high water stress on farmland"+(flagged("w").length?" ("+andList(flagged("w"))+")":"")+".");
+if(dr>=10)F.push(Math.round(dr)+"% comes from origins with medium-high or high drought risk for farming.");
+if(L.tavg!=null)F.push("Your origins are projected to warm by about "+L.tavg.toFixed(1)+"°C on average by the "+L.lab+(ukw!=null?", compared with "+ukw.toFixed(1)+"°C for the UK":"")+".");
+if(clean.length)F.push("No major flags for "+andList(clean)+" at the chosen origins.");
+const cards=document.getElementById("rsumm").innerHTML;
+const rows=document.getElementById("res").innerHTML;
+const svg=document.getElementById("omap").outerHTML.replace(/var\(--card\)/g,"#ffffff").replace(/var\(--ink\)/g,"#1C2B2D");
+const byC=Object.entries(L.byC||{}).sort((a,b)=>b[1]-a[1]),unk=it.filter(x=>!x.o).reduce((a,x)=>a+L.wt(x),0);
+const bars=byC.map(([k,v])=>'<div class="bar"><span>'+C[k].n+'</span><span class="tr"><i style="width:'+(v/L.TW*100)+'%"></i></span><span>'+Math.round(v/L.TW*100)+'%'+(useS?" (£"+nf.format(Math.round(v))+")":"")+'</span></div>').join("")+(unk?'<div class="bar"><span>Origin unknown</span><span class="tr"><i style="width:'+(unk/L.TW*100)+'%;background:#9AA5A0"></i></span><span>'+Math.round(unk/L.TW*100)+'%</span></div>':"");
+const stress=useS?byC.slice(0,3).map(([k,v])=>'<tr><td>'+C[k].n+'</td><td>£'+nf.format(Math.round(v*0.3))+'</td><td>'+(v*0.3/L.TW*100).toFixed(1)+'%</td><td>'+it.filter(x=>x.o===k).map(x=>x.name).join(", ")+'</td></tr>').join(""):"";
+const asks=document.getElementById("asks").innerHTML.replace(/class="ask"/g,'class="q"');
+document.getElementById("report").innerHTML=
+'<section class="rp"><div class="band"><p class="k">Supply Chain Risk Snapshot</p><h1>'+biz.replace(/</g,"&lt;")+'</h1><p>'+today+'. A screening report from Greener Edge Sustainability.</p></div>'+
+'<h2>At a glance</h2><div class="cards">'+cards+'</div>'+
+'<h2>Key findings</h2><ul class="find">'+F.map(f=>'<li>'+f+'</li>').join("")+'</ul>'+
+'<h2>Where your ingredients come from</h2><div class="mapimg">'+svg+'</div><p class="small">Circle size shows your '+unit+'; colour shows the most risk flags on any ingredient from that country.</p></section>'+
+'<section class="rp"><h2>Ingredient by ingredient</h2><table>'+rows+'</table>'+
+'<h2>Exposure by country</h2><p class="small">Share of your '+unit+' by origin country.</p>'+bars+
+(stress?'<h2>Stress test: if a key origin lost 30% of supply</h2><p class="small">Purchasing affected if supply from each of your three largest origins fell by 30%, before switching to other suppliers.</p><table><tr><th>Origin</th><th>Spend affected</th><th>Share of total spend</th><th>Ingredients</th></tr>'+stress+'</table>':'')+'</section>'+
+'<section class="rp"><h2>Questions to ask your suppliers</h2>'+asks+
+'<h2>Suggested next steps</h2><ul class="find"><li>Confirm the region, not just the country, for your highest-spend ingredients. Risks vary a lot within countries.</li><li>Ask suppliers the questions above and record their answers.</li>'+(flagged("d").length?'<li>For '+andList(flagged("d"))+', request evidence of traceability and deforestation-free sourcing.</li>':'')+(L.topC&&L.topC[1]/L.TW>=.3?'<li>Consider qualifying a second source outside '+C[L.topC[0]].n+'.</li>':'')+'<li>Pair this with a product carbon footprint: the same ingredient list is most of the input.</li></ul>'+
+'<h2>How to read this report</h2><p class="small">Scores are country averages from open datasets: WRI Aqueduct 4.0 (water stress, drought and river flooding; CC BY 4.0), the World Bank Climate Change Knowledge Portal (projected warming; ODbL), Singh et al. (2026) (deforestation risk linked to UK imports of each crop from each country; CC BY) and FAOSTAT 2024 (UK import mix, used where origin is unknown). They cannot reflect a specific farm, region or certification. Deforestation flags show risk exposure, not proof. This is a screening tool, not an audit or a compliance assessment.</p>'+
+'<div class="foot">Greener Edge Sustainability helps food and drink businesses measure product carbon footprints, map supply chain risks and build reduction plans. Methods: greener-edge.github.io/wales-open-data/methods/</div></section>';
+document.body.classList.add("rep");const done=()=>{document.body.classList.remove("rep");window.removeEventListener("afterprint",done)};window.addEventListener("afterprint",done);setTimeout(()=>window.print(),80)}
+document.getElementById("mkreport").onclick=buildReport;
