@@ -9,6 +9,7 @@ These files are not committed (they're large, and each source publishes its own)
 | `non-domestic-csv.zip` | MHCLG Energy Performance of Buildings Data | get-energy-performance-data.communities.gov.uk, Download files, Non-domestic EPCs (GOV.UK One Login needed) |
 | `ne_110m_admin_0_countries.geojson` | Natural Earth 1:110m countries | `raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson` |
 | `faostat_uk_imports.csv` | FAO, FAOSTAT Detailed Trade Matrix | fao.org/faostat, Detailed trade matrix: reporter United Kingdom, all partners, elements Import value and Import quantity, all items, latest two years, CSV |
+| `faostat_uk_food_balances.csv` | FAO, FAOSTAT Food Balance Sheets | fao.org/faostat, Food Balances (2010-): United Kingdom, elements Production, Import quantity, Export quantity, Domestic supply quantity, all items, latest three years, CSV |
 | `aqueduct-4-0-country-rankings.zip` | WRI Aqueduct 4.0 country rankings | wri.org/data/aqueduct-40-country-rankings |
 | `deduce_physical_trade.csv` | Singh et al. (2026), version 2.1 | doi.org/10.5281/zenodo.18953516, file 2 (physical trade model), renamed |
 | `cckp_tas_anomaly.xlsx` | World Bank Climate Change Knowledge Portal | Download Data: global_countries, cmip6-x0.25, climatology, tas, anomaly, annual, all four periods, median, ssp126 + ssp370 + ssp585; renamed |

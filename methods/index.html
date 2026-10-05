@@ -14,7 +14,7 @@
 <p class="byline"><a href="../" style="color:inherit">Greener Edge open data</a></p>
 <h1>Methods and sources</h1>
 <p class="lede">How we built each part of the series: which data we used, what we did to it, what it can and can't tell you, and how it's licensed. Last updated 5 October 2026.</p>
-<div class="toc"><a href="#principles">Principles</a><a href="#emissions">Emissions</a><a href="#epc">Commercial EPCs</a><a href="#food">Food imports</a><a href="#checker">Supply chain checker</a><a href="#farming">What Wales grows</a><a href="#licences">Licences</a><a href="#changes">Changes</a></div>
+<div class="toc"><a href="#principles">Principles</a><a href="#emissions">Emissions</a><a href="#epc">Commercial EPCs</a><a href="#food">Food imports</a><a href="#grown">Grown in the UK</a><a href="#checker">Supply chain checker</a><a href="#farming">Wales farming</a><a href="#licences">Licences</a><a href="#changes">Changes</a></div>
 
 <section id="principles"><h2>Our principles</h2>
 <ul>
@@ -57,6 +57,11 @@
 <li>Deforestation estimates measure risk exposure, not proof that a product caused clearing, and count direct imports only.</li>
 <li>Values are in US dollars, as FAOSTAT reports them.</li></ul></section>
 
+<section id="grown"><h2>Grown in the UK</h2>
+<h3>Data</h3><p>FAO, FAOSTAT Food Balance Sheets for the United Kingdom: production, imports, exports and domestic supply, 2021 to 2023, downloaded 5 October 2026.</p>
+<h3>What we did</h3><ul><li>Averaged the three years, as harvests vary from year to year.</li><li>"How much the UK grows of what it uses" is production divided by domestic supply, by weight.</li><li>Left out primary crops that FAO also counts as processed products (sugar beet and cane), and non-food or catch-all lines.</li><li>Linked each food to its traded products to show the share of imports, by value, from water-stressed countries. This match is ours and approximate, and isn't shown for catch-all groups or fish.</li></ul>
+<h3>Limits</h3><ul><li>Weights are as FAO records them; milk is in milk equivalent.</li><li>A home-grown food can still rely on imported feed, fertiliser or energy.</li><li>Maize grain excludes maize grown in the UK for silage.</li></ul></section>
+
 <section id="checker"><h2>Check your supply chain</h2>
 <h3>How it works</h3><ul><li>Uses the same datasets as the food imports map. Each ingredient is matched to a FAOSTAT product and scored for its chosen origin country.</li>
 <li>Where the origin is unknown, it uses the UK's 2024 import mix for that food and reports the share coming from flagged countries.</li>
@@ -66,7 +71,7 @@
 <h3>Privacy</h3><p>The checker runs entirely in the browser. Nothing entered is sent to Greener Edge or anyone else. Lists are saved in the user's own browser storage so they can return to them.</p>
 <h3>Limits</h3><ul><li>Country averages can't reflect a specific farm, region or certification.</li><li>It's a screening tool, not an audit or a footprint.</li></ul></section>
 
-<section id="farming"><h2>What does Wales grow?</h2>
+<section id="farming"><h2>Wales (food hub, Wales tab)</h2>
 <h3>Data</h3><p>Welsh Government, Survey of agriculture and horticulture: June 2025, including the historical series from 1867.</p>
 <h3>What we did</h3><ul><li>Grouped land use into grass and grazing, arable, farm woodland, fruit and vegetables, and other land.</li><li>Sheep per person uses the 2024 mid-year population of Welsh councils.</li></ul>
 <h3>Limits</h3><ul><li>Survey estimates are scaled up from responding farms (a 50% response rate in 2025).</li><li>Council-level farm figures aren't currently published online. We've asked Welsh Government for them.</li></ul></section>

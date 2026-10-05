@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Where does the UK's food come from, and what's at risk? | Greener Edge</title>
+<title>The UK's food: where it comes from, what we grow, and what's at risk | Greener Edge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/site.css">
@@ -11,12 +11,23 @@
 </head>
 <body>
 <nav class="snav" id="snav" aria-label="Sections"><div class="snav-in"><a class="brand" href="../">Greener Edge open data</a><span class="links">
-<a href="#quizsec">Quiz</a><a href="#gl">Around the world</a><a href="#ex">Explore</a><a href="#mr">Biggest imports</a><a href="#ml">Your plate</a><a href="#sk">What if?</a><a href="#ty">The future</a><a href="#df">Deforestation</a><a href="../supply-chain-checker/">Check your supply chain</a><a href="../methods/">Methods</a></span></div></nav>
+<a href="#quizsec" data-t="imports">Quiz</a><a href="#gl" data-t="imports">Around the world</a><a href="#ex" data-t="imports">Explore</a><a href="#mr" data-t="imports">Biggest imports</a><a href="#ml" data-t="imports">Your plate</a><a href="#sk" data-t="imports">What if?</a><a href="#ty" data-t="imports">The future</a><a href="#df" data-t="imports">Deforestation</a><a href="#gs" data-t="grown">Home-grown or imported</a><a href="#gb" data-t="grown">Grown here or bought in</a><a href="#lu" data-t="wales">Farmland</a><a href="#hi" data-t="wales">158 years of farming</a><a href="#cm" data-t="wales">Wales and UK imports</a><a href="../supply-chain-checker/">Check your supply chain</a><a href="../methods/">Methods</a></span></div></nav>
 <main>
 <header>
-<p class="byline">Analysis by Greener Edge Sustainability, using FAO, WRI and Chalmers University open data</p>
-<h1>Two-thirds of the UK's imported fruit and nuts come from water-stressed countries.</h1>
-<p class="lede">The UK imports around $72 billion of food a year. We mapped where it comes from, and checked each origin against water stress, drought, flooding and deforestation, today and into the future.</p>
+<p class="byline">Analysis by Greener Edge Sustainability, using FAO, WRI, World Bank, Chalmers University and Welsh Government open data</p>
+<h1>The UK's food: where it comes from, what we grow, and what's at risk</h1>
+<p class="lede">Explore the food the UK imports and the climate risks in those supply chains, how much of its own food the UK grows, and what Welsh farms produce.</p>
+<div class="tabs" role="tablist" aria-label="Food views">
+<button role="tab" id="tab-imports" data-tab="imports" aria-selected="true" aria-controls="tp-imports">Imports and risk</button>
+<button role="tab" id="tab-grown" data-tab="grown" aria-selected="false" aria-controls="tp-grown">Grown in the UK</button>
+<button role="tab" id="tab-wales" data-tab="wales" aria-selected="false" aria-controls="tp-wales">Wales</button>
+</div>
+</header>
+
+
+<div class="tabpanel" id="tp-imports" role="tabpanel" aria-labelledby="tab-imports" data-tab="imports">
+<div class="tlead"><h2 class="tl2">Two-thirds of the UK's imported fruit and nuts come from water-stressed countries.</h2>
+<p class="sub">The UK imports around $72 billion of food a year. We mapped where it comes from, and checked each origin against water stress, drought, flooding, warming and deforestation, today and into the future.</p>
 <div class="facts">
 <div class="fact"><b>36%</b><span>of UK food imports by value come from countries with high or extremely high water stress on farmland</span></div>
 <div class="fact"><b>67%</b><span>of imported fruit and nuts, and 61% of vegetables, come from those countries</span></div>
@@ -25,8 +36,7 @@
 </div>
 <div class="todo" aria-label="What you can do here"><span class="tl">What you can do here:</span>
 <a href="#quizsec">Test yourself</a><a href="#ex">Search any food</a><a href="#ml">Check a meal</a><a href="#sk">Stress-test a supplier</a><a href="#ex" data-play="1">Play the future</a><a href="../supply-chain-checker/">Check your own supply chain</a></div>
-</header>
-
+</div>
 <section id="quizsec" aria-labelledby="qz">
 <div class="quiz"><div class="qhead"><h2 id="qz">How well do you know your food?</h2><span class="qprog" id="qprog"></span></div>
 <div id="qbody" aria-live="polite"></div></div>
@@ -135,8 +145,74 @@
 <p class="note">Figures are amortised over five years, so each year reflects recent clearing, not one season. They count direct imports only. Soy fed to animals abroad and imported as meat isn't included, so the true figure is likely higher.</p>
 </section>
 
+</div>
+<div class="tabpanel" id="tp-grown" role="tabpanel" aria-labelledby="tab-grown" data-tab="grown" hidden>
+<div class="tlead"><h2 class="tl2">The UK grows 2% of the tomatoes it eats, but more barley, oats and lamb than it uses.</h2>
+<p class="sub">How much of each food the UK produces, compared with how much it uses, from FAO food balance sheets. Averages for <span class="fbyrs"></span>, by weight.</p>
+<div class="facts" id="gfacts"></div></div>
+
+<section aria-labelledby="gs">
+<h2 id="gs">Home-grown, or imported from water-stressed places?</h2>
+<p class="sub">Each bubble is a food, sized by how much the UK uses. Across is how much of it the UK grows itself. Up is the share of its imports, by value, from water-stressed countries. The top-left corner is where the UK depends most on others, and on stressed places.</p>
+<div class="gwrap"><svg id="gscatter" viewBox="0 0 960 560" role="img" aria-label="Scatter chart of UK self-sufficiency against import water stress"></svg><div class="tip" id="gtip"></div></div>
+<div class="legend" id="glegend"></div>
+</section>
+
+<section aria-labelledby="gb">
+<h2 id="gb">Grown here, or bought in?</h2>
+<p class="sub">UK production as a share of what the UK uses. Over 100% means the UK grows more than it uses and exports the rest.</p>
+<div class="controls"><label>Sort <select id="gsort"><option value="dom">Biggest foods first</option><option value="lo">Least home-grown first</option><option value="hi">Most home-grown first</option><option value="ws">Most water-exposed imports first</option></select></label>
+<label>Food type <select id="ggrp"></select></label></div>
+<div id="gbars"></div>
+<p class="note">Production compared with domestic supply (production plus imports, minus exports, adjusted for stock changes), in tonnes as FAO records them. Milk and cheese are in milk equivalent. A home-grown food can still rely on imported feed, fertiliser or energy, so these figures show where food is grown, not how independent it is. "Maize (grain)" excludes maize grown in the UK for animal feed silage.</p>
+</section>
+</div>
+<div class="tabpanel" id="tp-wales" role="tabpanel" aria-labelledby="tab-wales" data-tab="wales" hidden>
+<div class="tlead"><h2 class="tl2">85% of Welsh farmland is grass. Fruit and vegetables use less than 0.1%.</h2>
+<p class="sub">Wales farms 1.77 million hectares, mostly feeding sheep and cattle, because that's what the land, soil and rain suit best. More Welsh data, on Wales's share of UK farm output and its food trade, is on the way.</p>
+<div class="facts">
+<div class="fact"><b>8.8 million</b><span>sheep and lambs in June 2025, about 2.8 for every person in Wales</span></div>
+<div class="fact"><b>1,188 ha</b><span>of vegetables, orchards, soft fruit and glasshouses, about 1,700 football pitches</span></div>
+<div class="fact"><b>3.3×</b><span>more egg-laying hens than in 1998: 4.5 million, up from 1.4 million</span></div>
+<div class="fact"><b>5×</b><span>more maize than in 1998, mostly grown to feed livestock</span></div>
+</div>
+</div>
+<section aria-labelledby="lu">
+<h2 id="lu">Welsh farmland, square by square</h2>
+<p class="sub">Each square is one thousandth of the land on Welsh farms, about 1,770 hectares. Common land, around 180,000 hectares more, isn't included.</p>
+<div class="waffle" id="waffle" role="img" aria-label="Waffle chart of Welsh farmland use"></div>
+<div class="wkeys" id="wkeys"></div>
+<p class="callout" id="hortnote">The single outlined square is more than all of Wales's vegetables, orchards, soft fruit and glasshouses put together.</p>
+</section>
+
+<section aria-labelledby="hi">
+<h2 id="hi">158 years of Welsh farming</h2>
+<p class="sub">From the first agricultural census in 1867 to June 2025. Pick what to show, then press play.</p>
+<div class="controls">
+<div class="seg" role="group" aria-label="What to show" id="metric">
+<button data-m="sheep" aria-pressed="true">Sheep</button><button data-m="cattle" aria-pressed="false">Cattle</button><button data-m="pigs" aria-pressed="false">Pigs</button><button data-m="poultry" aria-pressed="false">Poultry</button><button data-m="arable" aria-pressed="false">Arable land</button>
+</div>
+<button class="play" id="hplay" type="button">Play</button>
+<span class="yr"><input type="range" id="hyear" min="0" max="158" step="1" value="158" aria-label="Year"><output id="hyout">2025</output></span>
+</div>
+<div class="panel" style="padding:16px 18px"><p class="big" id="hval" style="margin:0"></p><p class="meta" id="hmeta" style="margin:2px 0 6px"></p>
+<svg id="hist" viewBox="0 0 760 280" width="100%" role="img" aria-label="Line chart of Welsh farming since 1867"></svg></div>
+<p class="note">Some years are missing, for example 2020, when the survey was disrupted. Poultry wasn't counted consistently before the 1920s. Cattle figures since 2006 come from the Cattle Tracing System.</p>
+</section>
+
+<section aria-labelledby="cm">
+<h2 id="cm">What Wales grows, and what the UK buys in</h2>
+<p class="sub">Welsh farming is built on grass, livestock, milk and eggs. The UK's most climate-exposed imports are the foods that use the least Welsh land: two-thirds of imported fruit and nuts, and 61% of vegetables, come from water-stressed countries. Wales can't grow citrus or cocoa, but the gap raises a fair question about what more could be grown closer to home.</p>
+<div class="links">
+<a class="lk" href="#tab=imports&q=Tomatoes&lens=w" data-tabgo="imports" data-q="Tomatoes"><h3>See where the UK's food comes from</h3><p>Search any food, such as tomatoes, and check it against water stress, drought and deforestation.</p></a>
+<a class="lk" href="../emissions/"><h3>See farming emissions by council</h3><p>On the emissions map, choose Agriculture. Farming is the biggest source in 8 of Wales's 22 councils.</p></a>
+</div>
+<p class="note" style="margin-top:18px">Council-by-council farm figures aren't currently published online. We've asked Welsh Government for them, and will add a map when they arrive.</p>
+</section>
+
+</div>
 <footer>
-<p><b>Sources:</b> Warming: World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections, change in annual mean temperature (median of the model ensemble), downloaded 2 October 2026, Open Database License. Scenarios SSP1-2.6, SSP3-7.0 and SSP5-8.5 are shown as optimistic, business as usual and pessimistic, matching WRI's scenarios. "Average warming where it's grown" weights each supplier country by the value of food it sends the UK. UK imports: FAO, FAOSTAT Detailed Trade Matrix, 2024, downloaded 2 October 2026. Water stress, drought and flooding: World Resources Institute, Aqueduct 4.0 country rankings (CC BY 4.0). Water stress and drought are weighted by irrigated agriculture; river flood risk is weighted by population, as that's the only weighting WRI publishes for it. Future water stress uses WRI's 2030, 2050 and 2080 projections under optimistic, business-as-usual and pessimistic scenarios. Deforestation: Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, physical trade model, version 2.1, doi.org/10.5281/zenodo.18953516 (CC BY). Boundaries: Natural Earth.</p>
+<p><b>Sources:</b> Grown in the UK: FAO, FAOSTAT Food Balance Sheets, United Kingdom, downloaded 5 October 2026. Wales: Welsh Government, Survey of agriculture and horticulture: June 2025, including the historical series from 1867 (Open Government Licence). Warming: World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections, change in annual mean temperature (median of the model ensemble), downloaded 2 October 2026, Open Database License. Scenarios SSP1-2.6, SSP3-7.0 and SSP5-8.5 are shown as optimistic, business as usual and pessimistic, matching WRI's scenarios. "Average warming where it's grown" weights each supplier country by the value of food it sends the UK. UK imports: FAO, FAOSTAT Detailed Trade Matrix, 2024, downloaded 2 October 2026. Water stress, drought and flooding: World Resources Institute, Aqueduct 4.0 country rankings (CC BY 4.0). Water stress and drought are weighted by irrigated agriculture; river flood risk is weighted by population, as that's the only weighting WRI publishes for it. Future water stress uses WRI's 2030, 2050 and 2080 projections under optimistic, business-as-usual and pessimistic scenarios. Deforestation: Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, physical trade model, version 2.1, doi.org/10.5281/zenodo.18953516 (CC BY). Boundaries: Natural Earth.</p>
 <p>Full methods, sources and licences for the whole series are on the <a href="../methods/">Methods page</a>.</p>
 <p><b>Our working:</b> we grouped FAOSTAT's 425 products into food types and removed non-food items such as tobacco, cotton, wool, live animals and pet food. "Water-stressed" means Aqueduct's high (40-80%) or extremely high (over 80%) bands. "Drought risk" means its medium-high or high drought bands. Deforestation for processed foods, such as chocolate or soy oil, is shown for the whole crop family (all cocoa, all soy), because the deforestation data is measured at crop level. Supplier concentration is the share of UK imports of a food from its single biggest supplier. Values are in US dollars, as FAOSTAT reports them.</p>
 <p><b>Limits:</b> trade figures show the country recorded as the partner, which can be where food was processed or shipped from rather than grown. Belgium and the Netherlands, for example, handle a lot of food grown elsewhere. Country water stress scores are averages, so a supplier may farm in a less stressed region. Deforestation figures are national averages that measure risk exposure, not proof that a particular product caused clearing.</p>
@@ -145,6 +221,6 @@
 </main>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <script src="../assets/js/load.js"></script>
-<script>runPage({FD:"../data/food.json",WG:"../data/world-map.json",GLOBE:"../data/globe.json"},"../assets/js/food.js")</script>
+<script>runPage({FD:"../data/food.json",WG:"../data/world-map.json",GLOBE:"../data/globe.json",FB:"../data/food-balance.json",A:"../data/farming.json"},"../assets/js/food.js")</script>
 </body>
 </html>

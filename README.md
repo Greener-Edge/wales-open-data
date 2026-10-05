@@ -6,9 +6,9 @@ Interactive pages by Greener Edge Sustainability, built entirely on public, open
 |---|---|
 | Where did Wales's emissions go? | `emissions/` |
 | Is Wales's commercial property ready for EPC B? | `commercial-epc/` |
-| Where does the UK's food come from, and what's at risk? | `uk-food-imports/` |
+| The UK's food: imports and risk, grown in the UK, and Wales (three tabs) | `uk-food-imports/` |
 | Check your supply chain (runs entirely in the browser) | `supply-chain-checker/` |
-| What does Wales grow? | `what-wales-grows/` |
+| What does Wales grow? (now redirects to the food page's Wales tab) | `what-wales-grows/` |
 | Methods, sources and licences | `methods/` |
 
 ## How the repo is organised

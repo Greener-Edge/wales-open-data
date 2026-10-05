@@ -1,4 +1,4 @@
-/* Food imports page styles (also used by the supply chain checker) */
+/* Food page styles (also used by the supply chain checker) */
 svg text{font-family:var(--sans);font-size:12px}
 svg text:not([fill]){fill:var(--ink2)}
 .wmap{width:100%;height:auto;display:block}
@@ -157,3 +157,34 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 60px)}
 .qnav button{border:1px solid rgba(255,255,255,.4);background:none;color:var(--paper);border-radius:8px;padding:8px 14px;font:inherit;cursor:pointer}
 .qnav button.primary{background:var(--paper);color:var(--ink);border-color:var(--paper)}
 .qscore{font-family:var(--serif);font-size:3rem;font-weight:600;margin:10px 0 0}
+svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+.waffle{display:grid;grid-template-columns:repeat(50,minmax(0,1fr));gap:2px;max-width:720px}
+.waffle i{aspect-ratio:1;border-radius:2px;background:var(--rule);transition:background-color .4s}
+.waffle i.hort{outline:2px solid var(--ink);outline-offset:1px}
+.wkeys{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 0;font-size:.9rem;color:var(--ink2)}
+.wkeys span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:7px;vertical-align:-1px;background:var(--c)}
+.callout{border-left:3px solid var(--ink);padding:4px 0 4px 14px;margin:18px 0 0;max-width:64ch;border-radius:0}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px}
+.lk{display:block;border-top:2px solid var(--ink);padding:14px 0;color:var(--ink);text-decoration:none}
+.lk h3{font-family:var(--serif);font-size:1.25rem;margin:0 0 6px;font-weight:600}
+.lk p{margin:0;color:var(--ink2)}
+.lk:hover h3{text-decoration:underline}
+svg .ann{font-size:11px;fill:var(--ink3)}
+@media (prefers-reduced-motion:reduce){.waffle i{transition:none}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:26px 0 0;border-bottom:1px solid var(--rule)}
+.tabs button{border:0;background:none;color:var(--ink2);font:inherit;font-weight:600;padding:10px 16px;border-bottom:3px solid transparent;cursor:pointer;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+.tabs button:hover{color:var(--ink)}
+.tlead{margin-top:34px}
+.tl2{font-size:clamp(1.5rem,3.4vw,2.2rem);max-width:28ch}
+.gwrap{position:relative;background:var(--card);border:1px solid var(--rule);border-radius:12px;overflow-x:auto}
+#gscatter{width:100%;min-width:640px;height:auto;display:block}
+#gscatter .gd{cursor:pointer;transition:opacity .2s}
+#gscatter.dim .gd{opacity:.2}#gscatter.dim .gd.on{opacity:1}
+.gbar{display:grid;grid-template-columns:200px minmax(0,1fr) 118px;gap:10px;align-items:center;font-size:.92rem;margin:7px 0}
+.gbar .tr{position:relative;height:16px;background:var(--rule);border-radius:4px;overflow:visible}
+.gbar .tr i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.gbar .tr .hund{position:absolute;top:-4px;bottom:-4px;border-left:2px dashed var(--ink3)}
+.gbar b{font-variant-numeric:tabular-nums}
+.gbar small{display:block;color:var(--ink3);font-size:.76rem}
+@media (max-width:600px){.gbar{grid-template-columns:120px minmax(0,1fr) 84px;font-size:.82rem}}
