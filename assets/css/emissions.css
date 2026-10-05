@@ -1,0 +1,2 @@
+/* Styles specific to this page; shared styles are in site.css */
+svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}

@@ -1,0 +1,30 @@
+/* Supply chain checker styles, on top of site.css and food.css */
+.privacy{background:var(--card);border:1px solid var(--rule);border-left:3px solid #3E8C5A;border-radius:8px;padding:10px 14px;max-width:68ch;margin:18px 0 0;font-size:.95rem}
+.tw{overflow-x:auto}
+table.ing{border-collapse:collapse;width:100%;min-width:640px}
+table.ing th{font-size:.82rem;color:var(--ink3);font-weight:600;text-align:left;padding:6px 8px 6px 0}
+table.ing td{padding:5px 8px 5px 0}
+table.ing input,table.ing select{font:inherit;width:100%;padding:8px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink)}
+table.ing input.bad{border-color:#B23B26}
+.rm{border:0;background:none;color:var(--ink3);font-size:1.3rem;cursor:pointer;padding:4px 8px}
+.rm:hover{color:#B23B26}
+.h3{font-family:var(--serif);font-size:1.3rem;margin:30px 0 10px}
+table.res{border-collapse:collapse;width:100%;min-width:760px;font-size:.9rem}
+table.res th{font-size:.8rem;color:var(--ink3);font-weight:600;text-align:left;padding:8px 8px 8px 0;border-bottom:1px solid var(--rule)}
+table.res td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-align:middle}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.78rem;white-space:nowrap}
+.p0{background:#E7EEE9;color:#2E5A3C}.p1{background:#F6E7C8;color:#7A5410}.p2{background:#F4D2C8;color:#8A2E1A}.pn{background:var(--rule);color:var(--ink3)}
+.rating{font-weight:600}
+.rmap{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:8px;margin:6px 0 0}
+#omap{width:100%;height:auto;display:block}
+.ask{border-top:1px solid var(--rule);padding:10px 0}
+.ask b{display:block;margin-bottom:2px}
+.ask p{margin:0;color:var(--ink2);max-width:74ch}
+.cta{margin-top:34px;background:var(--ink);color:var(--paper);border-radius:14px;padding:22px 24px}
+.cta h3{font-family:var(--serif);margin:0 0 6px;color:var(--paper)}
+.cta p{margin:0 0 14px;opacity:.9;max-width:70ch}
+.ctab{display:inline-block;background:var(--paper);color:var(--ink);text-decoration:none;border-radius:8px;padding:9px 16px;font-weight:600}
+.empty{color:var(--ink3);padding:14px 0}
+@media print{.snav,.controls,#build,.cta,.rm,footer .privacy{display:none!important}body{background:#fff}main{padding:0}.summ div{border:1px solid #ccc}}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+

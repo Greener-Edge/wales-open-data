@@ -1,24 +1,51 @@
 # Wales and the UK, in open data
 
-A series of interactive dashboards by Greener Edge Sustainability, built on official open data.
+Interactive pages by Greener Edge Sustainability, built entirely on public, openly licensed data. Live at **greener-edge.github.io/wales-open-data**.
 
-- `emissions/`: greenhouse gas emissions for Wales's 22 councils, 2005 to 2024 (DESNZ, June 2026 release)
-- `uk-food-imports/`: where UK food imports come from, checked against water stress, drought, flooding and deforestation (FAOSTAT 2024, WRI Aqueduct 4.0, Singh et al. 2026)
-- `supply-chain-checker/`: free screening tool for food businesses, runs entirely in the browser
-- `methods/`: methods, sources and licences
-- `what-wales-grows/`: Welsh farmland use and livestock, 1867 to 2025 (Welsh Government June agricultural survey 2025)
-- `commercial-epc/`: current non-domestic EPC ratings in Wales, against the planned 2031 EPC B standard (MHCLG EPC register, downloaded 2 October 2026)
+| Page | Folder |
+|---|---|
+| Where did Wales's emissions go? | `emissions/` |
+| Is Wales's commercial property ready for EPC B? | `commercial-epc/` |
+| Where does the UK's food come from, and what's at risk? | `uk-food-imports/` |
+| Check your supply chain (runs entirely in the browser) | `supply-chain-checker/` |
+| What does Wales grow? | `what-wales-grows/` |
+| Methods, sources and licences | `methods/` |
 
-Each page is a single self-contained HTML file with data embedded. No build step.
+## How the repo is organised
 
-## Sources and licences
+```
+index.html                 landing page
+<page>/index.html          each page: layout and text only
+assets/css/site.css        styles shared by every page
+assets/css/<page>.css      styles for one page
+assets/js/load.js          loads a page's data files, then its script
+assets/js/<page>.js        the page's interactive code
+data/*.json                processed data the pages read (generated, don't edit by hand)
+scripts/                   Python that turns raw downloads into data/*.json
+data-raw/                  raw downloads (not committed; see data-raw/README.md)
+```
 
-- DESNZ, UK local authority and regional greenhouse gas emissions statistics, 2005 to 2024. Open Government Licence v3.0.
-- MHCLG, Energy Performance of Buildings Data for England and Wales. Aggregated to council level; no address data is used or published.
-- Boundaries: ONS local authority districts via the UK-GeoJSON project. Contains OS data © Crown copyright and database right.
-- FAO, FAOSTAT Detailed Trade Matrix.
-- World Resources Institute, Aqueduct 4.0 country rankings. CC BY 4.0.
-- Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, v2.1, doi.org/10.5281/zenodo.18953516. CC BY.
-- World boundaries: Natural Earth (public domain).
-- Welsh Government, Survey of agriculture and horticulture: June 2025. Open Government Licence v3.0.
-- World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections (temperature change). Open Database License.
+No build tools or frameworks: GitHub Pages serves the files as they are. The food map loads D3 from cdnjs.
+
+## Viewing locally
+
+Pages fetch their data, which browsers block for files opened directly from disk. Run a small local server from the repo root instead:
+
+```
+python -m http.server 8000
+```
+
+then open http://localhost:8000.
+
+## Refreshing the data
+
+```
+pip install -r scripts/requirements.txt
+python scripts/build_all.py
+```
+
+Each script prints headline figures (for example Wales's total emissions) so you can check them against the source before pushing. Individual datasets can be rebuilt with `python scripts/build_food.py` and so on.
+
+## Licences
+
+DESNZ, MHCLG and Welsh Government data: Open Government Licence v3.0. WRI Aqueduct 4.0: CC BY 4.0. World Bank CCKP: Open Database License. Singh et al. (2026): CC BY. FAOSTAT: FAO terms for statistical databases, with attribution. Boundaries: ONS (contains OS data © Crown copyright and database right) and Natural Earth (public domain). Full details on the Methods page.

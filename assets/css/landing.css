@@ -1,0 +1,8 @@
+/* Styles specific to this page; shared styles are in site.css */
+svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+.item{display:block;border-top:2px solid var(--ink);padding:18px 0 22px;text-decoration:none;color:var(--ink);max-width:72ch}
+.item h2{font-size:1.6rem}
+.item:hover h2,.item:focus-visible h2{text-decoration:underline}
+.item p{margin:6px 0 0;color:var(--ink2)}
+.item .go{display:inline-block;margin-top:10px;font-weight:600;color:var(--ink)}
+.item:focus-visible{outline:2px solid var(--focus);outline-offset:4px}

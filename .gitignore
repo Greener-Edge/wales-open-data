@@ -1,0 +1,7 @@
+# Raw downloads are large (the EPC file alone is over 250 MB) and are not committed.
+# See data-raw/README.md for where to get each one.
+data-raw/*
+!data-raw/README.md
+__pycache__/
+*.pyc
+.DS_Store

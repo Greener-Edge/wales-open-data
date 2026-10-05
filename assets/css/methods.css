@@ -1,0 +1,12 @@
+/* Styles specific to this page; shared styles are in site.css */
+svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}
+.toc a{border:1px solid var(--rule);background:var(--card);color:var(--ink);text-decoration:none;border-radius:999px;padding:6px 13px;font-size:.88rem}
+.m h3{font-family:var(--serif);font-size:1.15rem;margin:22px 0 6px}
+.m p,.m li{max-width:74ch}
+.m ul{padding-left:20px}
+.m li{margin:4px 0}
+table.src{border-collapse:collapse;width:100%;font-size:.9rem;margin:10px 0}
+table.src th,table.src td{border-top:1px solid var(--rule);padding:8px 10px 8px 0;text-align:left;vertical-align:top}
+table.src th{font-weight:600;color:var(--ink2)}
+.tw{overflow-x:auto}
