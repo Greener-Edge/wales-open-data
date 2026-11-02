@@ -42,3 +42,73 @@ kcal = {"total": round(float(K.sum())), "home_share": round(float((K * ss).sum()
         "protein_home_share": round(float((Pr * ss).sum() / Pr.sum()), 3)}
 print(f"Soy used as feed: {soy['feed_share']*100:.0f}% by weight. Calories home-grown: {kcal['home_share']*100:.0f}%; protein {kcal['protein_home_share']*100:.0f}%")
 write_json("food-uses.json", {"years": years, "soy": soy, "meals": meals, "feedshare": feedshare, "kcal": kcal})
+
+# ---- People or animals: every food's use, by food group ----
+# Food (what people eat) = domestic supply minus every other use, FAO's own accounting identity.
+# Processing (turning one product into another that is counted separately, such as milk into butter
+# or seeds into oil and meal) is left out, so nothing is counted twice. Oilseed meals aren't in the
+# food balance sheets, so they're added from the supply utilization accounts, all as feed.
+import re as _re
+_src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "build_food_balance.py")).read()
+M = eval(_re.search(r"M = (\{.*?\n\})", _src, _re.S).group(1))
+GROUPS = {"cer": "Cereals", "veg": "Vegetables, potatoes and pulses", "fru": "Fruit and nuts", "oil": "Oils and oilseeds", "dai": "Milk, dairy and eggs",
+          "mt": "Meat", "fish": "Fish and seafood", "cof": "Sugar, cocoa, coffee and tea", "drk": "Drinks", "meal": "Oilseed meals"}
+USES = ["people", "animals", "nonfood", "seedloss"]
+fb_ws = {r["item"]: r["ws"] for r in fb["rows"]}
+EXCL = {"Sugar beet", "Sugar cane", "Alcohol, Non-Food", "Miscellaneous", "Infant food"}
+grp = {k: dict.fromkeys(USES, 0.0) for k in GROUPS}
+imp_use = dict.fromkeys(USES, 0.0); ws_use = dict.fromkeys(USES, 0.0); items_out = []
+for it, r in Q.iterrows():
+    if it in EXCL: continue
+    gk = M.get(it, (it, None, []))[1]
+    if gk not in GROUPS: continue
+    dom = r.get("Domestic supply quantity", 0)
+    u = {"animals": r.get("Feed", 0), "nonfood": r.get("Other uses (non-food)", 0), "seedloss": r.get("Seed", 0) + r.get("Losses", 0)}
+    food = dom - (sum(u.values()) + r.get("Processing", 0) + r.get("Residuals", 0))
+    u["people"] = max(food, 0)
+    tot = sum(u.values())
+    if tot <= 0: continue
+    for k in USES: grp[gk][k] += u[k]
+    share = {k: u[k] / tot for k in USES}
+    imp = r.get("Import quantity", 0)
+    for k in USES: imp_use[k] += imp * share[k]
+    w = fb_ws.get(it)
+    if w is not None:
+        for k in USES: ws_use[k] += imp * w * share[k]
+    items_out.append({"item": it, "n": M.get(it, (it,))[0], "g": gk, **{k: round(u[k]) for k in USES}})
+for n_, i_ in [("Soybean meal", "Cake of soya beans"), ("Rapeseed meal", "Cake of rapeseed"), ("Sunflower meal", "Cake of sunflower seed"), ("Palm kernel meal", "Cake of palm kernel")]:
+    f_ = g(P, i_, "Feed") / 1000; grp["meal"]["animals"] += f_; imp_use["animals"] += g(P, i_, "Import quantity") / 1000
+groups_out = [{"k": k, "n": GROUPS[k], **{u_: round(v[u_]) for u_ in USES}} for k, v in grp.items() if sum(v.values()) > 50]
+tot_all = {u_: sum(x[u_] for x in groups_out) for u_ in USES}
+palm = {"nonfood_share": round(g(Q, "Palm Oil", "Other uses (non-food)") / max(1, g(Q, "Palm Oil", "Domestic supply quantity")), 3)}
+extra = {"groups": groups_out, "totals": tot_all, "imports": {k: round(v) for k, v in imp_use.items()},
+         "ws_imports": {k: round(v) for k, v in ws_use.items()}, "items": items_out, "palm": palm}
+out = json.load(open(os.path.join(OUT, "food-uses.json"))); out.update(extra)
+T = sum(tot_all.values())
+print("All food used in the UK (thousand t): " + ", ".join(f"{k} {tot_all[k]/T*100:.0f}%" for k in USES))
+TI = sum(imp_use.values()); print("Imports: " + ", ".join(f"{k} {imp_use[k]/TI*100:.0f}%" for k in USES))
+write_json("food-uses.json", out)
+
+# ---- Deforestation risk in UK imports, by end use ----
+# Oilseed crops are split by what their oil and meal are used for (by weight, from the supply utilization accounts).
+# Other crops (cocoa, beef, coffee, fruit...) are treated as food for people.
+def oilseed_split(seed, oil, meal, kernel_oil=None, extra_food=()):
+    animals = g(P, meal, "Feed") + g(P, seed, "Feed")
+    people = g(P, oil, "Food supply quantity (tonnes)") + g(P, seed, "Food supply quantity (tonnes)") + g(P, oil, "Processed") + sum(g(P, x, "Food supply quantity (tonnes)") for x in extra_food)
+    nonfood = g(P, oil, "Other uses (non-food)") + (g(P, kernel_oil, "Other uses (non-food)") if kernel_oil else 0)
+    t = animals + people + nonfood
+    return {"people": people / t, "animals": animals / t, "nonfood": nonfood / t}
+SPLIT = {"Soya beans": oilseed_split("Soya beans", "Soya bean oil", "Cake of soya beans", extra_food=("Soya sauce",)),
+         "Sunflower seed": oilseed_split("Sunflower seed", "Sunflower-seed oil, crude", "Cake of sunflower seed"),
+         "Oil palm fruit": oilseed_split("Palm kernels", "Palm oil", "Cake of palm kernel", "Oil of palm kernel"),
+         "Rape or colza seed": oilseed_split("Rape or colza seed", "Rapeseed or canola oil, crude", "Cake of rapeseed")}
+food_json = json.load(open(os.path.join(OUT, "food.json")))
+defo = dict.fromkeys(["people", "animals", "nonfood"], 0.0); defo_by = {}
+for fam_, d_ in food_json["fam"].items():
+    ha = sum(d_.values()); s_ = SPLIT.get(fam_, {"people": 1, "animals": 0, "nonfood": 0})
+    for k in defo: defo[k] += ha * s_[k]
+    if fam_ in SPLIT: defo_by[fam_] = {k: round(ha * v) for k, v in s_.items()}
+out = json.load(open(os.path.join(OUT, "food-uses.json")))
+out["defo_uses"] = {k: round(v) for k, v in defo.items()}; out["defo_split"] = {k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in SPLIT.items()}; out["defo_by"] = defo_by
+T = sum(defo.values()); print("Deforestation risk by end use: " + ", ".join(f"{k} {v/T*100:.0f}%" for k, v in defo.items()))
+write_json("food-uses.json", out)

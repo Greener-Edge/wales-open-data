@@ -215,10 +215,10 @@ const crumb=document.createElement("div");crumb.className="crumb";wrap.appendChi
 const card=document.createElement("div");card.className="bcard";card.style.display="none";wrap.appendChild(card);
 function hideCard(){card.style.display="none"}
 function showCard(d){const bar=(lab,v,col,txt)=>'<div class="cb"><span>'+lab+'</span><div class="cbt"><i style="width:'+Math.round(v*100)+'%;background:'+col+'"></i></div><b>'+txt+'</b></div>';
-card.innerHTML='<button type="button" class="cx" aria-label="Close">×</button><p class="ck" style="color:'+d3.color(d.col).darker(1)+'">'+GN[d.p.g]+'</p><h4>'+d.p.n+'</h4><p class="cv">'+money(d.t)+' a year</p>'+
+card.innerHTML='<button type="button" class="cx" aria-label="Close">×</button><p class="ck" style="color:'+d3.color(d.col).darker(1)+'">'+GN[d.p.g]+'</p><h4>'+d.p.n+'</h4><p class="cv">'+money(d.t)+' a year</p>'+(d.p.g==="feed"?'<p class="cr">Oilseed meal like this is used almost entirely as animal feed. <a href="#uses" data-jumpto-card="1">See how UK food is used</a></p>':'')+
 bar("Water stress",d.ws,RK[0][2],Math.round(d.ws*100)+"%")+bar("Drought",d.ds,RK[1][2],Math.round(d.ds*100)+"%")+bar("Biggest supplier",d.cs,RK[2][2],Math.round(d.cs*100)+"%")+
 '<p class="cs">Biggest supplier: '+(C[d.top]?C[d.top].n:"")+'</p><p class="cs">Deforestation risk: <b>'+(d.dh?nf.format(Math.round(d.dh))+' ha':'none linked')+'</b>'+(d.p.f&&d.dh?' (whole '+d.p.f.toLowerCase()+' crop)':'')+'</p><button type="button" class="cgo">Open on the map</button>';
-card.style.display="block";card.querySelector(".cx").onclick=hideCard;card.querySelector(".cgo").onclick=()=>{setQ(d.i);GE.jump("ex")}}
+card.style.display="block";card.querySelector(".cx").onclick=hideCard;const jl=card.querySelector("[data-jumpto-card]");if(jl)jl.onclick=e=>{e.preventDefault();hideCard();GE.jump("uses")};card.querySelector(".cgo").onclick=()=>{setQ(d.i);GE.jump("ex")}}
 function showTip(e,d){const b=wrap.getBoundingClientRect();tip.style.left=(e.clientX-b.left+wrap.scrollLeft)+"px";tip.style.top=(e.clientY-b.top)+"px";tip.style.display="block";tip.innerHTML="<b>"+d.name+"</b>, "+money(d.t)+(d.n?" · "+d.n+" of 4 risks":"")}
 nodes.on("mousemove",showTip).on("mouseleave",()=>tip.style.display="none").on("click",(e,d)=>{e.stopPropagation();tip.style.display="none";if(mode==="cluster"&&(!focus||focus.g!==d.p.g)){zoomTo(gnodes.find(g=>g.g===d.p.g),750);showCard(d);return}showCard(d)})
 .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showCard(d)}});
@@ -516,4 +516,21 @@ document.getElementById("kfacts").innerHTML='<div><b>'+pc(k.home_share)+'</b><sp
 /* feed share on the cereal bars */
 const FSN={"Wheat":fs.Wheat,"Barley":fs.Barley,"Maize (grain)":fs.Maize,"Oats":fs.Oats};
 const B=document.getElementById("gbars");if(B){const tag=()=>B.querySelectorAll(".sbar").forEach(r=>{const n=r.querySelector(".sn").firstChild.textContent;if(FSN[n]!=null&&!r.querySelector(".fd")){const b=r.querySelector("b");b.insertAdjacentHTML("beforeend",'<small class="fd">'+pc(FSN[n])+' fed to animals</small>')}});tag();new MutationObserver(tag).observe(B,{childList:true})}
+})();
+
+/* Feeding people or animals: use of each food group, and where water and deforestation risks end up */
+(function(){if(typeof FU==="undefined"||!FU.groups)return;const pc=v=>Math.round(v*100)+"%";
+const U=[["people","Eaten by people","#5E9447"],["animals","Fed to animals","#9C4A3E"],["nonfood","Used outside food","#7B8889"],["seedloss","Seed and losses","#D3D9D5"]];
+const sum=o=>U.reduce((a,[k])=>a+(o[k]||0),0);
+const crops=FU.groups.filter(g=>["cer","veg","fru","oil","cof","meal"].includes(g.k)),C0={};U.forEach(([k])=>C0[k]=crops.reduce((a,g)=>a+g[k],0));const ct=sum(C0);
+const im=FU.imports,it_=sum(im),dv=FU.defo_uses,dt=dv.people+dv.animals+dv.nonfood;
+document.getElementById("ufacts").innerHTML='<div><b>'+pc(C0.animals/ct)+'</b><span>of the crops used in the UK, including oilseed meals, are fed to animals; '+pc(C0.people/ct)+' are eaten by people</span></div><div><b>'+pc(im.animals/it_)+'</b><span>of the UK\'s food imports, by weight, are animal feed</span></div><div><b>'+pc(dv.animals/dt)+'</b><span>of the deforestation risk in UK imports is linked to animal feed, mostly soy, sunflower and palm kernel meal</span></div>';
+document.getElementById("uleg").innerHTML=U.map(([k,l,c])=>'<i style="background:'+c+'"></i>'+l).join(" ");
+const bar=(o,label,sub)=>{const t=sum(o);return'<div class="sbar"><span class="sn">'+label+'<small>'+sub+'</small></span><div class="st">'+U.filter(([k])=>o[k]>0).map(([k,l,c])=>'<i class="sg" style="width:'+(o[k]/t*100)+'%;background:'+c+'" title="'+label+': '+l.toLowerCase()+' '+pc(o[k]/t)+'"></i>').join("")+'</div><b>'+pc((o.people||0)/t)+' people<small style="color:#9C4A3E">'+pc((o.animals||0)/t)+' animals</small></b></div>'};
+const gs=FU.groups.slice().sort((a,b)=>b.animals/sum(b)-a.animals/sum(a));
+document.getElementById("ubars").innerHTML=gs.map(g=>bar(g,g.n,nf.format(Math.round(sum(g)))+' thousand tonnes a year')).join("");
+document.getElementById("upalm").innerHTML='FAO records '+pc(FU.palm.nonfood_share)+' of the palm oil used in the UK as used outside food. Its definition covers non-food industries, for example fuel, cosmetics or cleaning products; the data doesn\'t say which.';
+const ws=FU.ws_imports;
+document.getElementById("urisk").innerHTML=bar(ws,"Imports from water-stressed countries",nf.format(Math.round(sum(ws)))+' thousand tonnes a year (estimate)')+bar(dv,"Deforestation risk in UK imports",nf.format(Math.round(dt/10)*10)+' hectares in '+FD.dyrs[FD.dyrs.length-1]);
+document.querySelectorAll("[data-jumpto]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();GE.jump(b.dataset.jumpto)}));
 })();

@@ -6,15 +6,15 @@
 <title>UK food risk: where our food comes from and what's at risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css?v=20261102g">
-<link rel="stylesheet" href="../assets/css/food.css?v=20261102g">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102h">
+<link rel="stylesheet" href="../assets/css/food.css?v=20261102h">
 <meta name="description" content="Where the UK's food imports come from, and the water stress, drought, flooding, warming and deforestation risks they carry. A free open data tool from Greener Edge Sustainability.">
 </head>
 <body>
 <div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
 <nav class="geswitch" aria-label="Greener Edge open data tools"><a href="../emissions/">Wales emissions</a><a href="../commercial-epc/">Commercial EPC</a><a href="../uk-food-imports/" aria-current="page">UK food risk</a><a href="../supply-chain-checker/">Supply chain checker</a><a href="../methods/">Methods</a></nav></div></div>
 <nav class="snav" id="snav" aria-label="On this page"><div class="snav-in"><span class="snav-t">UK food risk</span><span class="links">
-<a href="#inbrief">In brief</a><a href="#s-mr">Where the risk sits</a><a href="#s-ty">The future</a><a href="#s-df">Deforestation</a><a href="#grown">Home-grown or imported</a><a href="#wales">Wales</a><a href="#s-ex">Explore the data</a><a href="#try">Try it yourself</a><a href="#sources">Sources</a></span></div></nav>
+<a href="#inbrief">In brief</a><a href="#s-mr">Where the risk sits</a><a href="#s-ty">The future</a><a href="#s-df">Deforestation</a><a href="#grown">Home-grown or imported</a><a href="#uses">People or animals</a><a href="#wales">Wales</a><a href="#s-ex">Explore the data</a><a href="#try">Try it yourself</a><a href="#sources">Sources</a></span></div></nav>
 <main>
 <header class="hero">
 <div class="hero-text">
@@ -32,10 +32,10 @@
 <section id="inbrief" class="inbrief" aria-labelledby="ibh">
 <div class="ib">
 <h2 id="ibh">In brief</h2>
-<p><b>What we found.</b> Most of the risk sits in fruit, vegetables, olive oil and nuts, much of it from Spain and other dry regions. Deforestation risk is smaller, but concentrated in cocoa, beef, soy and palm oil.</p>
+<p><b>What we found.</b> Most of the risk sits in fruit, vegetables, olive oil and nuts, much of it from Spain and other dry regions. Deforestation risk is smaller, but concentrated in cocoa, beef, soy and palm oil, and about a quarter of it is linked to animal feed.</p>
 <p><b>Why it matters.</b> The UK grows only a small share of these foods itself, so it relies on other countries' water and weather. That risk is already here, and grows as the climate warms.</p>
 <p><b>What you can do here.</b> Search any food, check a meal, stress-test a supplier, or run your own supply chain through the free checker.</p>
-<div class="start"><button class="gebtn primary" type="button" data-go="search">Search a food</button><button class="gebtn" type="button" data-go="quiz">Take the quiz</button><a class="gebtn" href="../supply-chain-checker/">Check your own supply chain</a></div>
+<div class="start"><button class="gebtn primary" type="button" data-go="search">Search a food</button><button class="gebtn" type="button" data-go="quiz">Take the quiz</button><button class="gebtn" type="button" data-jumpto="uses">People or animals?</button><a class="gebtn" href="../supply-chain-checker/">Check your own supply chain</a></div>
 </div>
 <div class="ibside"><h3>The biggest suppliers</h3><p class="note" style="margin:0 0 6px">Select one to spin the globe to it.</p><div id="glist"></div></div>
 </section>
@@ -64,15 +64,7 @@
 <p class="label" style="margin-top:28px">Deforestation risk in UK food imports, 2005 to 2023 (hectares)</p>
 <svg id="dtrend" viewBox="0 0 760 240" width="100%" role="img" aria-label="Line chart of deforestation risk over time"></svg>
 <p class="note">Figures are amortised over five years, so each year reflects recent clearing, not one season. They count direct imports only. Soy fed to animals abroad and imported as meat isn't included, so the true figure is likely higher.</p>
-<div class="soyp" id="soypanel">
-<h3 class="h3s">Most of that soy feeds animals</h3>
-<div class="cap"><p><b>What this shows:</b> how the soy used in the UK is used, by weight, following whole beans, soybean meal and soybean oil through to their end use.</p><p><b>Why it matters:</b> soy's deforestation risk is mostly about feeding livestock, not people eating soy. Cutting it means looking at animal feed in meat, dairy and egg supply chains.</p></div>
-<div class="minifacts" id="soyfacts"></div>
-<div class="soybar" id="soybar" role="img" aria-label="How soy used in the UK is used"></div>
-<div class="legend" id="soyleg"></div>
-<p class="note" id="soymeals"></p>
-<p class="note">Estimate: we apply the feed share by weight to soy's deforestation risk. Splitting by value instead would give feed a smaller share, as soybean oil is worth more per tonne than meal. Soy fed to animals abroad and imported as meat, dairy or eggs isn't counted here, so the UK's full feed-linked footprint is larger.</p>
-</div>
+<div class="act" style="margin-top:22px"><button class="gebtn" type="button" data-jumpto="soypanel">Most of that soy feeds animals: see where UK soy goes</button></div>
 </section>
 <div class="group" id="grown"><div class="ghead"><p class="kicker">Context</p><h2>Home-grown or imported?</h2>
 <p class="sub">The UK grows 2% of the tomatoes it eats, but more barley, oats and lamb than it uses. These figures compare how much of each food the UK produces with how much it uses, from FAO food balance sheets: averages for <span class="fbyrs"></span>, by weight.</p>
@@ -87,6 +79,32 @@
 <button class="gebtn" id="gmore" type="button" hidden></button>
 <p class="note">How much the UK grows compares production with domestic supply (production plus imports, minus exports, adjusted for stock changes), in tonnes as FAO records them; milk and cheese are in milk equivalent. The split of imports uses the share of each food's import value from water-stressed countries, so it's an approximation. A home-grown food can still rely on imported feed, fertiliser or energy. "Maize (grain)" excludes maize grown in the UK for animal feed silage.</p>
 </section>
+</div>
+<div class="group" id="uses"><div class="ghead"><p class="kicker">Context</p><h2>Feeding people, or animals?</h2>
+<p class="sub">Not all the food the UK imports and grows ends up on plates. FAO's food balances record how each food is used: eaten by people, fed to animals, used outside food (for example in industry or fuel), or kept as seed and lost along the way. Averages for 2021 to 2023, by weight.</p>
+<div class="minifacts" id="ufacts"></div></div>
+<section id="s-ub" aria-labelledby="ub">
+<h3 id="ub" class="h3s">How each food group is used</h3>
+<div class="cap"><p><b>What this shows:</b> for each food group used in the UK, the share eaten by people, fed to animals, used outside food, or kept as seed and lost.</p><p><b>Why it matters:</b> half the cereals used in the UK feed animals, and oilseed meals are entirely animal feed. Cutting the risk in those supply chains runs through meat, dairy and eggs, not just what people buy directly.</p></div>
+<div class="legend" id="uleg" style="margin:0 0 12px"></div>
+<div id="ubars"></div>
+<p class="note" id="upalm"></p>
+</section>
+<section id="s-ur" aria-labelledby="ur">
+<h3 id="ur" class="h3s">Where the risks end up</h3>
+<div class="cap"><p><b>What this shows:</b> the UK's imports from water-stressed countries, and the deforestation risk linked to its imports, split by how the food is used.</p><p><b>Why it matters:</b> the two risks land differently. Water risk sits mostly in food people eat directly, such as fruit, vegetables and olive oil. Deforestation risk leans more towards animal feed, through soy, sunflower and palm kernel meal, though cocoa and beef mean most of it is still in food people eat.</p></div>
+<div id="urisk"></div>
+<p class="note">Imports are assumed to be used in the same way as the UK's overall supply of each food. Water-stressed imports are by weight, using each food's share of import value from water-stressed countries. For deforestation, oilseed crops (soy, sunflower, palm, rapeseed) are split by how their oil and meal are used; other crops, such as cocoa, beef and coffee, count as food for people. Processing into other products, such as milk into butter or seeds into oil and meal, is left out so nothing is counted twice.</p>
+</section>
+<div class="soyp" id="soypanel">
+<h3 class="h3s">Worked example: most UK soy feeds animals</h3>
+<div class="cap"><p><b>What this shows:</b> how the soy used in the UK is used, by weight, following whole beans, soybean meal and soybean oil through to their end use.</p><p><b>Why it matters:</b> soy's deforestation risk is mostly about feeding livestock, not people eating soy. Cutting it means looking at animal feed in meat, dairy and egg supply chains.</p></div>
+<div class="minifacts" id="soyfacts"></div>
+<div class="soybar" id="soybar" role="img" aria-label="How soy used in the UK is used"></div>
+<div class="legend" id="soyleg"></div>
+<p class="note" id="soymeals"></p>
+<p class="note">Estimate: we apply the feed share by weight to soy's deforestation risk. Splitting by value instead would give feed a smaller share, as soybean oil is worth more per tonne than meal. Soy fed to animals abroad and imported as meat, dairy or eggs isn't counted here, so the UK's full feed-linked footprint is larger.</p>
+</div>
 </div>
 <div class="group" id="wales"><div class="ghead"><p class="kicker">Closer to home</p><h2>Wales: what we grow</h2>
 <p class="sub">85% of Welsh farmland is grass, and fruit and vegetables use less than 0.1%. Wales farms 1.77 million hectares, mostly feeding sheep and cattle, because that's what the land, soil and rain suit best.</p>
@@ -227,8 +245,8 @@
 <div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
 </div></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-<script src="../shared/ge.js?v=20261102g"></script>
-<script src="../assets/js/load.js?v=20261102g"></script>
-<script>runPage({FD:"../data/food.json?v=20261102g",WG:"../data/world-map.json?v=20261102g",GLOBE:"../data/globe.json?v=20261102g",FB:"../data/food-balance.json?v=20261102g",A:"../data/farming.json?v=20261102g",FU:"../data/food-uses.json?v=20261102g"},"../assets/js/food.js?v=20261102g")</script>
+<script src="../shared/ge.js?v=20261102h"></script>
+<script src="../assets/js/load.js?v=20261102h"></script>
+<script>runPage({FD:"../data/food.json?v=20261102h",WG:"../data/world-map.json?v=20261102h",GLOBE:"../data/globe.json?v=20261102h",FB:"../data/food-balance.json?v=20261102h",A:"../data/farming.json?v=20261102h",FU:"../data/food-uses.json?v=20261102h"},"../assets/js/food.js?v=20261102h")</script>
 </body>
 </html>
