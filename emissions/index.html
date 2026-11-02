@@ -3,29 +3,55 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Where did Wales's emissions go? | Greener Edge</title>
+<title>Wales emissions: where did they go? | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/emissions.css">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102d">
+<link rel="stylesheet" href="../assets/css/emissions.css?v=20261102d">
+<meta name="description" content="Wales has nearly halved its greenhouse gas emissions since 2005. Explore every council, sector and year, and see what did the heavy lifting. A free open data tool from Greener Edge Sustainability.">
 </head>
 <body>
+<div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
+<nav class="geswitch" aria-label="Greener Edge open data tools"><a href="../emissions/" aria-current="page">Wales emissions</a><a href="../commercial-epc/">Commercial EPC</a><a href="../uk-food-imports/">UK food risk</a><a href="../supply-chain-checker/">Supply chain checker</a><a href="../methods/">Methods</a></nav></div></div>
+<nav class="snav" id="snav" aria-label="On this page"><div class="snav-in"><span class="snav-t">Wales emissions</span><span class="links">
+<a href="#inbrief">In brief</a><a href="#s-dr">What did the heavy lifting</a><a href="#s-np">One place, one year</a><a href="#s-ex">Explore every council</a><a href="#sources">Sources</a></span></div></nav>
 <main>
-<header>
-<p class="byline">Analysis by Greener Edge Sustainability, using official DESNZ statistics</p>
-<h1>Wales has nearly halved its emissions. Here's where they went.</h1>
-<p class="lede">Greenhouse gas emissions in Wales fell from 43.8 to 23.5 million tonnes CO₂e between 2005 and 2024. Explore every council, sector and year, and see which changes did the heavy lifting.</p>
-<div class="facts">
-<div class="fact"><b>46%</b><span>fall in Welsh emissions since 2005</span></div>
-<div class="fact"><b>37%</b><span>of that fall came from electricity, double the share from large industrial sites</span></div>
-<div class="fact"><b>96%</b><span>of the 2023 to 2024 fall happened in Neath Port Talbot</span></div>
-<div class="fact"><b>7.4 t</b><span>per person in Wales in 2024, against 5.1 t for the UK</span></div>
+<header class="hero hero-solo">
+<div class="hero-text">
+<p class="byline">Wales emissions: a free open data tool from Greener Edge Sustainability</p>
+<h1>Wales has nearly halved its greenhouse gas emissions since 2005.</h1>
+<p class="lede">Emissions fell from 43.8 to 23.5 million tonnes CO₂e between 2005 and 2024. Most of that came from a cleaner electricity grid and less waste sent to landfill, not from closing industry.</p>
+<div class="hnums">
+<div><b>46%</b><span>fall in Welsh emissions since 2005</span><small>Wales has a legal target of net zero by 2050, and about half of 2005's emissions remain.</small></div>
+<div><b>37%</b><span>of that fall came from electricity, double the share from large industrial sites</span><small>Cleaner power has done more than closures, and that progress lasts.</small></div>
+<div><b>96%</b><span>of the 2023 to 2024 fall happened in Neath Port Talbot</span><small>One steelworks closing drove almost all of last year's drop.</small></div>
+</div>
 </div>
 </header>
+<section id="inbrief" class="inbrief solo" aria-labelledby="ibh">
+<div class="ib">
+<h2 id="ibh">In brief</h2>
+<p><b>What we found.</b> Welsh emissions have fallen steadily since 2005. The biggest drivers were electricity (a cleaner grid and lower use) and landfill, with large industrial sites third. The 2023 to 2024 drop was different: almost all of it came from the closure of Port Talbot's last blast furnaces.</p>
+<p><b>Why it matters.</b> Wales has a legal target of net zero by 2050, and about half of 2005's emissions remain. Closures cut Welsh figures, but the products still get made somewhere, so they don't cut global emissions in the same way. The harder, lasting cuts are still ahead in transport, homes, farming and industry.</p>
+<p><b>What you can do here.</b> See what drove the fall, then explore every council by sector and year.</p>
+<div class="start"><button class="gebtn primary" type="button" data-jump="s-ex">Explore every council</button><button class="gebtn" type="button" data-jump="s-dr">See what drove the fall</button></div>
+</div>
+</section>
+<section id="s-dr" aria-labelledby="dr">
+<h2 id="dr">What did the heavy lifting?</h2><div class="cap"><p><b>What this shows:</b> How much each source of emissions changed between 2005 and 2024, grouped by type. Shares are of the total 20.2 million tonne fall.</p><p><b>Why it matters:</b> It separates lasting progress (cleaner power, less landfill) from one-off drops like closures, which matters when judging whether Wales is on track.</p></div>
 
-<section aria-labelledby="ex">
+<div class="drv"><svg id="drv" viewBox="0 0 760 360" width="100%" role="img" aria-label="Bar chart of drivers of change"></svg></div>
+<p class="note">Electricity covers power used by homes, businesses, industry, farms and the public sector. The fall reflects both a cleaner grid and lower use; the data doesn't separate the two. Groupings are our own, built from the DESNZ sub-sectors.</p>
+</section>
+<section id="s-np" aria-labelledby="np">
+<h2 id="np">One place, one year</h2><div class="cap"><p><b>What this shows:</b> Total Welsh emissions, Wales without Neath Port Talbot, and Neath Port Talbot itself, from 2005 to 2024.</p><p><b>Why it matters:</b> Neath Port Talbot is home to 4.5% of people in Wales but produced 17.6% of its emissions in 2024, mostly from large industrial sites. When the last blast furnaces closed, Welsh emissions dropped by 2.1 million tonnes in a single year, almost all of it here.</p></div>
+
+<svg id="npt" viewBox="0 0 760 300" width="100%" role="img" aria-label="Line chart of Wales and Neath Port Talbot emissions"></svg>
+<p class="note">The closures happened part way through 2024, so we'd expect more of the effect to show in the 2025 figures, due from DESNZ in June 2027. Territorial statistics only count what happens inside Wales, so emissions from steel made elsewhere and used here don't appear.</p>
+</section>
+<section id="s-ex" aria-labelledby="ex">
 <h2 id="ex">Explore every council</h2>
-<p class="sub">All 22 Welsh local authorities. Pick a measure and sector, drag the year, or press play. Select a council on the map, or from the list, to see its mix.</p>
+<p class="howto"><b>How to read this:</b> each council is shaded by the measure and sector you choose. Drag the year or press play to watch the change since 2005. Select a council on the map, or from the list, to see where its emissions come from and how they've changed.</p><p class="sub">In 2024, Wales emitted 7.4 tonnes per person, against 5.1 tonnes for the UK as a whole, partly because of heavy industry and farming.</p>
 <div class="controls">
 <div class="seg" role="group" aria-label="Measure">
 <button data-m="tot" aria-pressed="false">Total</button><button data-m="pc" aria-pressed="true">Per person</button><button data-m="chg" aria-pressed="false">Change since 2005</button>
@@ -38,7 +64,7 @@
 </div>
 <div class="explore">
 <div><div class="mapwrap"><svg class="map" id="map" role="group" aria-label="Map of Welsh councils"></svg><div class="tip" id="tip"></div></div>
-<div class="legend" id="legend"></div><p class="note" id="agrilink" style="display:none;margin-top:10px">Why is farming so high in rural councils? <a href="../uk-food-imports/#tab=wales">See what Wales grows</a>.</p></div>
+<div class="legend" id="legend"></div><p class="note" id="agrilink" style="display:none;margin-top:10px">Why is farming so high in rural councils? <a href="../uk-food-imports/#wales">See what Wales grows</a>.</p></div>
 <div class="panel" aria-live="polite">
 <label class="find">Find a council <select id="pick"></select></label>
 <h3 id="pname"></h3>
@@ -52,29 +78,29 @@
 </div>
 </div>
 </section>
-
-<section aria-labelledby="dr">
-<h2 id="dr">What did the heavy lifting?</h2>
-<p class="sub">Change in Welsh emissions between 2005 and 2024, grouped by source. Falling electricity emissions did twice as much as large industrial sites. Shares are of the total 20.2 million tonne fall.</p>
-<div class="drv"><svg id="drv" viewBox="0 0 760 360" width="100%" role="img" aria-label="Bar chart of drivers of change"></svg></div>
-<p class="note">Electricity covers power used by homes, businesses, industry, farms and the public sector. The fall reflects both a cleaner grid and lower use; the data doesn't separate the two. Groupings are our own, built from the DESNZ sub-sectors.</p>
+<section id="sources" class="sources" aria-labelledby="srch">
+<h2 id="srch">Sources and licences</h2>
+<ul class="srclist">
+<li><b>Emissions:</b> Department for Energy Security and Net Zero, <a href="https://www.gov.uk/government/statistics/uk-local-authority-and-regional-greenhouse-gas-emissions-statistics-2005-to-2024">UK local authority and regional greenhouse gas emissions statistics, 2005 to 2024</a> (published June 2026), table 1.1, full dataset. Open Government Licence v3.0.</li>
+<li><b>Boundaries:</b> Office for National Statistics local authority districts, via the UK-GeoJSON project. Contains OS data © Crown copyright and database right.</li>
+</ul>
+<details class="srcd"><summary>How we worked</summary>
+<p>Per person figures divide emissions by mid-year population. Driver groupings and the Neath Port Talbot shares are Greener Edge calculations from the published DESNZ sub-sectors. We checked our Wales totals against the DESNZ statistical release.</p>
+</details>
+<details class="srcd"><summary>Limits</summary>
+<p>These are territorial emissions of CO₂, methane and nitrous oxide. Aviation, shipping, military transport and fluorinated gases are excluded. Electricity and fuel supply emissions are assigned to where the energy is used, and the electricity fall combines a cleaner grid with lower use. Land use and forestry can be negative, where land absorbs more carbon than it releases.</p>
+<p>The Port Talbot closures happened part way through 2024, so we'd expect more of the effect in the 2025 figures. DESNZ advises that local figures be interpreted with care, as councils have limited influence over some sources.</p>
+</details>
+<p class="note">Full methods for the whole series are on the <a href="../methods/">Methods page</a>.</p>
 </section>
-
-<section aria-labelledby="np">
-<h2 id="np">One place, one year</h2>
-<p class="sub">Neath Port Talbot is home to 4.5% of people in Wales but produced 17.6% of its emissions in 2024, mostly from large industrial sites. When the last blast furnaces at Port Talbot closed, Welsh emissions dropped by 2.1 million tonnes in a single year, almost all of it here.</p>
-<svg id="npt" viewBox="0 0 760 300" width="100%" role="img" aria-label="Line chart of Wales and Neath Port Talbot emissions"></svg>
-<p class="note">The closures happened part way through 2024, so we'd expect more of the effect to show in the 2025 figures, due from DESNZ in June 2027. Territorial statistics only count what happens inside Wales, so emissions from steel made elsewhere and used here don't appear.</p>
-</section>
-
-<footer>
-<p><b>Source:</b> Department for Energy Security and Net Zero, <a href="https://www.gov.uk/government/statistics/uk-local-authority-and-regional-greenhouse-gas-emissions-statistics-2005-to-2024">UK local authority and regional greenhouse gas emissions statistics, 2005 to 2024</a> (published June 2026), table 1.1, full dataset. Contains public sector information licensed under the Open Government Licence v3.0. Boundaries: Office for National Statistics local authority districts, via the UK-GeoJSON project; contains OS data © Crown copyright and database right.</p>
-<p><b>What's included:</b> territorial emissions of CO₂, methane and nitrous oxide. Aviation, shipping, military transport and fluorinated gases are excluded. Electricity and fuel supply emissions are assigned to where the energy is used. Land use and forestry can be negative, where land absorbs more carbon than it releases.</p>
-<p><b>Our working:</b> per person figures divide emissions by mid-year population. Driver groupings and the Neath Port Talbot shares are Greener Edge calculations from the published figures. DESNZ advises that local figures be interpreted with care, as councils have limited influence over some sources.</p>
-<p>Greener Edge Sustainability helps organisations measure and reduce their carbon footprint.</p>
-</footer>
 </main>
-<script src="../assets/js/load.js"></script>
-<script>runPage({D:"../data/emissions.json",G:"../data/wales-boundaries.json"},"../assets/js/emissions.js")</script>
+<footer class="gefoot"><div class="gefoot-in">
+<div><p class="gfb">Greener Edge Sustainability</p><p>Free tools built entirely on public, openly licensed data. No client data is used. Greener Edge helps organisations measure and reduce their carbon footprint, including supply chain and product footprints.</p></div>
+<div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
+</div></footer>
+<script src="../shared/ge.js?v=20261102d"></script>
+<script src="../assets/js/load.js?v=20261102d"></script>
+<script>runPage({D:"../data/emissions.json?v=20261102d",G:"../data/wales-boundaries.json?v=20261102d"},"../assets/js/emissions.js?v=20261102d")</script>
+<script>document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>GE.jump(b.dataset.jump)))</script>
 </body>
 </html>

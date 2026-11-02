@@ -141,3 +141,6 @@ html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 60px)}
 .gefoot li{margin:4px 0}
 .gefoot .gfb{font-family:var(--serif);font-weight:600;font-size:1.05rem;opacity:1}
 @media (max-width:700px){.gefoot-in{grid-template-columns:minmax(0,1fr)}}
+.hero-solo{grid-template-columns:minmax(0,1fr)}
+.hero-solo h1{max-width:24ch}
+.inbrief.solo{grid-template-columns:minmax(0,1fr)}
