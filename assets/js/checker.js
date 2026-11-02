@@ -26,7 +26,8 @@ const tb=document.querySelector("#ing tbody");
 function pidx(t){if(!t)return null;const k=t.toLowerCase();if(DI[k]!==undefined)return DI[k];if(PI[k]!==undefined)return PI[k];return null}
 function originOpts(i,sel){const p=i!=null?P[i]:null;const sup=p?Object.entries(p.c).sort((a,b)=>b[1]-a[1]).slice(0,8).map(x=>x[0]).filter(k=>C[k]):[];
 let h='<option value="">Origin unknown (UK import mix)</option>';if(sup.length)h+='<optgroup label="Main UK suppliers of this food">'+sup.map(k=>'<option value="'+k+'"'+(k===sel?" selected":"")+'>'+C[k].n+'</option>').join("")+'</optgroup>';
-h+='<optgroup label="All countries">'+ctry.map(k=>'<option value="'+k+'"'+(k===sel&&!sup.includes(k)?" selected":"")+'>'+C[k].n+'</option>').join("")+'</optgroup>';return h}
+h+='<optgroup label="Grown at home"><option value="GBR"'+(sel==="GBR"?" selected":"")+'>United Kingdom</option></optgroup>';
+h+='<optgroup label="All countries">'+ctry.filter(k=>k!=="GBR").map(k=>'<option value="'+k+'"'+(k===sel&&!sup.includes(k)?" selected":"")+'>'+C[k].n+'</option>').join("")+'</optgroup>';return h}
 function renderRows(){tb.innerHTML=rows.map((r,j)=>{const i=pidx(r.p);return'<tr data-j="'+j+'"><td><input list="plist" class="pin'+(r.p&&i==null?" bad":"")+'" value="'+(r.p||"").replace(/"/g,"&quot;")+'" placeholder="e.g. Cocoa beans" aria-label="Ingredient"></td><td><select class="oin" aria-label="Origin">'+originOpts(i,r.o)+'</select></td><td><input class="sin" type="number" min="0" step="100" inputmode="numeric" value="'+(r.s||"")+'" placeholder="e.g. 25000" aria-label="Annual spend"></td><td><button class="rm" type="button" aria-label="Remove ingredient">×</button></td></tr>'}).join("");
 tb.querySelectorAll("tr").forEach(tr=>{const j=+tr.dataset.j,pin=tr.querySelector(".pin"),oin=tr.querySelector(".oin"),sin=tr.querySelector(".sin");
 pin.addEventListener("change",()=>{rows[j].p=pin.value;const i=pidx(pin.value);pin.classList.toggle("bad",!!pin.value&&i==null);oin.innerHTML=originOpts(i,rows[j].o);save();compute()});
@@ -38,7 +39,7 @@ document.getElementById("clearall").onclick=()=>{rows=[{p:"",o:"",s:""}];save();
 document.getElementById("example").onclick=()=>{rows=[["Cocoa beans","CIV",30000],["Cocoa beans","GHA",12000],["Cocoa butter, fat and oil","CIV",8000],["Raw cane or beet sugar (centrifugal only)","",18000],["Whole milk powder","IRL",15000],["Hazelnuts, shelled","TUR",12000],["Palm oil","IDN",6000],["Almonds, shelled","USA",9000],["Vanilla, raw","MDG",3000]].map(([p,o,s])=>({p:PI[p.toLowerCase()]!=null?disp(P[PI[p.toLowerCase()]].n):p,o,s:String(s)}));save();renderRows();compute()};
 function mixRisk(i,key){const p=P[i],t=Object.values(p.c).reduce((a,b)=>a+b,0);let w=0,w5=0,dr=0,fl=0,tw=0,twd=0,known=0;for(const k in p.c){const v=p.c[k],c=C[k];if(!c)continue;known+=v;if(c.w>=3)w+=v;if(c.wf&&c.wf[key]>=3)w5+=v;if(c.dr>=3)dr+=v;if(c.fl>=3)fl+=v;if(c.t&&c.t[key]!==undefined){tw+=v*c.t[key];twd+=v}}
 const f=p.f,dh=f?Object.values(FAM[f]||{}).reduce((a,b)=>a+b,0):0;return{mix:true,w:w/t,w5:w5/t,dr:dr/t,fl:fl/t,tw:twd?tw/twd:null,dh,f}}
-function oneRisk(i,k,key){const c=C[k]||{},p=P[i],f=p.f,dh=f&&FAM[f]?FAM[f][k]||0:0;return{mix:false,wc:c.w,w5c:c.wf?c.wf[key]:undefined,drc:c.dr,flc:c.fl,tw:c.t&&c.t[key]!==undefined?c.t[key]:null,dh,f,share:(P[i].c[k]||0)/Object.values(P[i].c).reduce((a,b)=>a+b,0)}}
+function oneRisk(i,k,key){const c=C[k]||{},p=P[i],f=p.f,dh=k==="GBR"?((c.dl||{})[f]||0):(f&&FAM[f]?FAM[f][k]||0:0);return{mix:false,wc:c.w,w5c:c.wf?c.wf[key]:undefined,drc:c.dr,flc:c.fl,tw:c.t&&c.t[key]!==undefined?c.t[key]:null,dh,f,share:(P[i].c[k]||0)/Object.values(P[i].c).reduce((a,b)=>a+b,0)}}
 function flags(r){if(r.mix)return{w:r.w>.5,w5:r.w5>.5,dr:r.dr>.5,fl:r.fl>.5,d:r.dh>500};return{w:r.wc>=3,w5:r.w5c>=3,dr:r.drc>=3,fl:r.flc>=3,d:r.dh>=10}}
 const pill=(lvl,t)=>'<span class="pill p'+lvl+'">'+t+'</span>';
 function wpill(c,arr){if(c==null)return'<span class="pill pn">No data</span>';return pill(c>=3?2:c>=2?1:0,arr[c])}
@@ -75,7 +76,7 @@ const gauges=[
 ["Warming",tavg!=null?Math.min(100,tavg/4*100):0,tavg==null?0:lvl(tavg,1.5,2.5),tavg!=null?"+"+tavg.toFixed(1)+"°C":"–","average warming at your origins by the "+lab+(ukw!=null?", against +"+ukw.toFixed(1)+"°C for the UK.":".")]];
 S.innerHTML='<div class="sc-top"><div class="sc-badge l'+overall+'"><span>Overall</span><b>'+LVN[overall]+' risk</b></div><p class="sc-verdict">'+
 (nrisky?'<b>'+nrisky+' of '+items.length+' ingredients</b> carry at least one major risk'+(items.filter(x=>x.rt===2).length?', and <b>'+items.filter(x=>x.rt===2).length+'</b> carry three or more':'')+'.':'None of your ingredients carry a major risk at the chosen origins.')+
-(topC&&conc>=30?' <b>'+Math.round(conc)+'%</b> of your '+unit+' relies on '+C[topC[0]].n+'.':'')+'</p></div>'+
+(topC&&conc>=30?' <b>'+Math.round(conc)+'%</b> of your '+unit+(unit==="spend"?' relies':' rely')+' on '+C[topC[0]].n+'.':'')+'</p></div>'+
 '<div class="sc-g">'+gauges.map(([n,v,l,txt,line])=>'<div class="g"><div class="gh"><span>'+n+'</span><b style="color:'+LV[l]+'">'+txt+'</b></div><div class="gb"><i style="width:'+Math.max(2,Math.min(100,v))+'%;background:'+LV[l]+'"></i></div><p>'+line+'</p></div>').join("")+'</div>';
 // per-ingredient questions
 function qs(x){const q=[],f=x.fl;if(!x.o)q.push("Which country, and ideally which region, does this come from? The rating uses the UK's average import mix until you know.");
@@ -90,7 +91,7 @@ const cell=(l,t)=>'<td><span class="hc h'+l+'">'+t+'</span></td>',na='<td><span 
 const catCell=(c,arr)=>c==null?na:cell(c>=3?2:c>=2?1:0,arr[c]);
 const mixCell=v=>cell(v>.5?2:v>.25?1:0,Math.round(v*100)+"% of mix");
 function heatRow(x,interactive){const r=x.risk;const dcell=!r.f?'<td><span class="hc hn">Not assessed</span></td>':r.mix?cell(r.dh>500?2:r.dh>0?1:0,nf.format(Math.round(r.dh))+" ha (all UK)"):cell(r.dh>=100?2:r.dh>=10?1:0,r.dh>=1?nf.format(Math.round(r.dh))+" ha":"None");
-return'<tr class="'+(interactive?'hr" data-id="'+x.id+'" tabindex="0" aria-expanded="'+OPEN.has(x.id):'hp')+'"><td class="ing"><b>'+esc(x.name)+'</b><small>'+(x.o?esc(C[x.o].n):"Origin unknown (UK mix)")+(useSpend?" · "+kmoney(x.spend):"")+'</small></td>'+
+return'<tr class="'+(interactive?'hr" data-id="'+x.id+'" tabindex="0" aria-expanded="'+OPEN.has(x.id):'hp')+'"><td class="ing"><b>'+esc(x.name)+'</b><small>'+(x.o?(x.o==="GBR"?"United Kingdom (home-grown)":esc(C[x.o].n)):"Origin unknown (UK mix)")+(useSpend?" · "+kmoney(x.spend):"")+'</small></td>'+
 (r.mix?mixCell(r.w):catCell(r.wc,WL))+(r.mix?mixCell(r.w5):catCell(r.w5c,WL))+(r.mix?mixCell(r.dr):catCell(r.drc,DL))+(r.mix?mixCell(r.fl):catCell(r.flc,WL))+
 (r.tw!=null?cell(r.tw>=2.5?2:r.tw>=1.5?1:0,"+"+r.tw.toFixed(1)+"°C"):na)+dcell+'<td><span class="hc ov h'+x.rt+'">'+LVN[x.rt]+'</span></td></tr>'+
 (interactive&&OPEN.has(x.id)?'<tr class="hd"><td colspan="8"><b>Questions for this supplier</b><ul>'+qs(x).map(q=>'<li>'+q+'</li>').join("")+'</ul></td></tr>':'')}

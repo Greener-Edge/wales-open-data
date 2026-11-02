@@ -6,8 +6,8 @@
 <title>UK food risk: where our food comes from and what's at risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css?v=20261102d">
-<link rel="stylesheet" href="../assets/css/food.css?v=20261102d">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102e">
+<link rel="stylesheet" href="../assets/css/food.css?v=20261102e">
 <meta name="description" content="Where the UK's food imports come from, and the water stress, drought, flooding, warming and deforestation risks they carry. A free open data tool from Greener Edge Sustainability.">
 </head>
 <body>
@@ -67,19 +67,14 @@
 <div class="group" id="grown"><div class="ghead"><p class="kicker">Context</p><h2>Home-grown or imported?</h2>
 <p class="sub">The UK grows 2% of the tomatoes it eats, but more barley, oats and lamb than it uses. These figures compare how much of each food the UK produces with how much it uses, from FAO food balance sheets: averages for <span class="fbyrs"></span>, by weight.</p>
 <div class="facts" id="gfacts"></div></div>
-<section id="s-gs" aria-labelledby="gs">
-<h3 id="gs" class="h3s">Home-grown, or imported from water-stressed places?</h3><div class="cap"><p><b>What this shows:</b> Each bubble is a food, sized by how much the UK uses. Across is how much of it the UK grows itself; up is the share of its imports, by value, from water-stressed countries.</p><p><b>Why it matters:</b> The top-left corner is where the UK depends most on others, and on stressed places: tomatoes, citrus, grapes, olive oil and many vegetables.</p></div>
-
-<div class="gwrap"><svg id="gscatter" viewBox="0 0 960 560" role="img" aria-label="Scatter chart of UK self-sufficiency against import water stress"></svg><div class="tip" id="gtip"></div></div>
-<div class="legend" id="glegend"></div>
-</section>
 <section id="s-gb" aria-labelledby="gb">
-<h3 id="gb" class="h3s">Grown here, or bought in?</h3><div class="cap"><p><b>What this shows:</b> UK production as a share of what the UK uses. Over 100% means the UK grows more than it uses and exports the rest.</p><p><b>Why it matters:</b> It shows which foods the UK could fall back on in a disruption, and which it can't. Home-grown food can still depend on imported feed, fertiliser and energy.</p></div>
-
-<div class="controls"><label>Sort <select id="gsort"><option value="dom">Biggest foods first</option><option value="lo">Least home-grown first</option><option value="hi">Most home-grown first</option><option value="ws">Most water-exposed imports first</option></select></label>
+<h3 id="gb" class="h3s">Grown here, or bought in?</h3><div class="cap"><p><b>What this shows:</b> each bar is everything the UK uses of a food. Green is what the UK grows itself; blue is imported from water-stressed countries; grey is imported from elsewhere.</p><p><b>Why it matters:</b> the longer the blue, the more the UK relies on other countries' scarce water for that food. Tomatoes, citrus, grapes and olive oil stand out. Foods the UK grows more of than it uses are marked as net exporters.</p></div>
+<div class="controls"><label>Sort <select id="gsort"><option value="dom">Biggest foods first</option><option value="ws">Most reliant on water-stressed imports first</option><option value="lo">Least home-grown first</option><option value="hi">Most home-grown first</option></select></label>
 <label>Food type <select id="ggrp"></select></label></div>
+<div class="legend" id="glegend2" style="margin:0 0 12px"></div>
 <div id="gbars"></div>
-<p class="note">Production compared with domestic supply (production plus imports, minus exports, adjusted for stock changes), in tonnes as FAO records them. Milk and cheese are in milk equivalent. A home-grown food can still rely on imported feed, fertiliser or energy, so these figures show where food is grown, not how independent it is. "Maize (grain)" excludes maize grown in the UK for animal feed silage.</p>
+<button class="gebtn" id="gmore" type="button" hidden></button>
+<p class="note">How much the UK grows compares production with domestic supply (production plus imports, minus exports, adjusted for stock changes), in tonnes as FAO records them; milk and cheese are in milk equivalent. The split of imports uses the share of each food's import value from water-stressed countries, so it's an approximation. A home-grown food can still rely on imported feed, fertiliser or energy. "Maize (grain)" excludes maize grown in the UK for animal feed silage.</p>
 </section>
 </div>
 <div class="group" id="wales"><div class="ghead"><p class="kicker">Closer to home</p><h2>Wales: what we grow</h2>
@@ -221,8 +216,8 @@
 <div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
 </div></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-<script src="../shared/ge.js?v=20261102d"></script>
-<script src="../assets/js/load.js?v=20261102d"></script>
-<script>runPage({FD:"../data/food.json?v=20261102d",WG:"../data/world-map.json?v=20261102d",GLOBE:"../data/globe.json?v=20261102d",FB:"../data/food-balance.json?v=20261102d",A:"../data/farming.json?v=20261102d"},"../assets/js/food.js?v=20261102d")</script>
+<script src="../shared/ge.js?v=20261102e"></script>
+<script src="../assets/js/load.js?v=20261102e"></script>
+<script>runPage({FD:"../data/food.json?v=20261102e",WG:"../data/world-map.json?v=20261102e",GLOBE:"../data/globe.json?v=20261102e",FB:"../data/food-balance.json?v=20261102e",A:"../data/farming.json?v=20261102e"},"../assets/js/food.js?v=20261102e")</script>
 </body>
 </html>

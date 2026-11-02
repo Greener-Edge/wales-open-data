@@ -188,3 +188,15 @@ svg .ann{font-size:11px;fill:var(--ink3)}
 .gbar b{font-variant-numeric:tabular-nums}
 .gbar small{display:block;color:var(--ink3);font-size:.76rem}
 @media (max-width:600px){.gbar{grid-template-columns:120px minmax(0,1fr) 84px;font-size:.82rem}}
+
+/* grown in the UK: one stacked bar per food */
+.sbar{display:grid;grid-template-columns:210px minmax(0,1fr) 170px;gap:12px;align-items:center;margin:8px 0;font-size:.92rem}
+.sbar .sn small{display:block;color:var(--ink3);font-size:.78rem}
+.sbar .st{display:flex;height:20px;border-radius:5px;overflow:hidden;background:var(--rule)}
+.sbar .sg{display:block;height:100%;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.sbar .sg+.sg{box-shadow:inset 1px 0 0 rgba(255,255,255,.7)}
+.sbar b{font-size:.88rem;font-variant-numeric:tabular-nums}
+.sbar b small{display:block;font-weight:400;color:#2F78A8;font-size:.78rem}
+.sbar .nx{display:inline-block;background:#5E9447;color:#fff;border-radius:999px;padding:1px 8px;font-size:.72rem;margin-right:4px}
+@media (max-width:640px){.sbar{grid-template-columns:110px minmax(0,1fr) 92px;font-size:.82rem}}
+#gmore{margin-top:8px}

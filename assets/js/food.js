@@ -69,7 +69,7 @@ document.getElementById("zin").onclick=()=>zoomAt(WG.w/2,WG.h/2,1.6,350);
 document.getElementById("zout").onclick=()=>zoomAt(WG.w/2,WG.h/2,1/1.6,350);
 document.getElementById("zreset").onclick=()=>animateTo({k:1,x:0,y:0},500);
 function rlabel(iso){const r=risk(iso);if(r===null)return"no data";if(st.lens==="tw")return"+"+r.toFixed(1)+"°C warmer by the "+twLabel();if(st.lens==="d")return r?nf.format(r)+" ha deforestation risk":"no deforestation risk recorded";return LAB[st.lens][r].toLowerCase()+" "+({w:"water stress",dr:"drought risk",fl:"flood risk"})[st.lens]}
-function tipText(iso){const c=C[iso];if(!c)return"No UK food imports recorded";const v=sv(iso);return c.n+": "+(v?money(v):"none sent to the UK")+", "+rlabel(iso)}
+function tipText(iso){const c=C[iso];if(!c)return"No UK food imports recorded";if(iso==="GBR")return"United Kingdom: where these imports arrive, "+rlabel(iso);const v=sv(iso);return c.n+": "+(v?money(v):"none sent to the UK")+", "+rlabel(iso)}
 const pick=document.getElementById("pick");isos().sort((a,b)=>C[a].n.localeCompare(C[b].n)).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=C[k].n;pick.appendChild(o)});
 pick.onchange=()=>{st.sel=pick.value;draw()};
 function topList(){return isos().map(k=>[k,sv(k)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1])}
@@ -430,36 +430,28 @@ future:()=>{setLens("w");GE.jump("ex");setTimeout(()=>document.getElementById("f
 timelapse:()=>{setQ(null);setLens("d");GE.jump("ex");setTimeout(()=>document.getElementById("dplay").click(),700)}};
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();const f=go[b.dataset.go];if(f)f(b)}));
 const t0=new URLSearchParams(_initHash.slice(1)).get("tab");if(t0==="grown"||t0==="wales")setTimeout(()=>GE.jump(t0),400)})();
-(function(){if(typeof FB==="undefined")return;const R=FB.rows,NS="http://www.w3.org/2000/svg",GCOL={fru:"#D2604A",veg:"#5E9447",mt:"#9C4A3E",dai:"#D9AE4E",cer:"#B98E52",oil:"#8F9A3A",cof:"#6E4B35",drk:"#7D4F86",spi:"#C56E2E",fish:"#3E7C9A",oth:"#8A8A8A"};
+(function(){if(typeof FB==="undefined")return;const R=FB.rows;
 const GNm=Object.assign({},GN,{fish:"Fish and seafood"});
 document.querySelectorAll(".fbyrs").forEach(e=>e.textContent=FB.years[0]+" to "+FB.years[FB.years.length-1]);
 const by=n=>R.find(r=>r.n===n),pc=v=>Math.round(v*100)+"%";
 const F=[["Tomatoes","of the tomatoes it eats"],["Apples","of its apples"],["Wheat","of its wheat"],["Lamb and mutton","of the lamb it eats, so it exports the rest"]].map(([n,t])=>{const r=by(n);return r?'<div class="fact"><b>'+pc(r.ss)+'</b><span>'+t+'</span></div>':""}).join("");
 document.getElementById("gfacts").innerHTML=F;
-// scatter
-const svg=document.getElementById("gscatter"),W=960,H=560,m={l:70,r:30,t:30,b:60},xmax=1.3,X=v=>m.l+Math.min(v,xmax)/xmax*(W-m.l-m.r),Y=v=>H-m.b-v*(H-m.t-m.b);
-const pts=R.filter(r=>r.ws!=null&&r.ss!=null&&r.g!=="fish"),mxd=Math.max(...pts.map(r=>r.dom)),rad=d=>4+26*Math.sqrt(d/mxd);
-let h='<rect x="'+m.l+'" y="'+m.t+'" width="'+(X(.5)-m.l)+'" height="'+(Y(.5)-m.t)+'" fill="#B23B26" opacity=".06" rx="6"/>';
-[0,.25,.5,.75,1].forEach(v=>{h+='<line x1="'+m.l+'" x2="'+(W-m.r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'" stroke="var(--rule)"'+(v===.5?'':' stroke-dasharray="2 5"')+'/><text x="'+(m.l-10)+'" y="'+(Y(v)+4)+'" text-anchor="end" font-size="12" fill="var(--ink3)">'+pc(v)+'</text>'});
-[0,.25,.5,.75,1,1.25].forEach(v=>{h+='<line x1="'+X(v)+'" x2="'+X(v)+'" y1="'+m.t+'" y2="'+(H-m.b)+'" stroke="'+(v===1?"var(--ink3)":"var(--rule)")+'"'+(v===1?' stroke-width="1.5"':' stroke-dasharray="2 5"')+'/><text x="'+X(v)+'" y="'+(H-m.b+20)+'" text-anchor="middle" font-size="12" fill="var(--ink3)">'+(v>=1.25?"125%+":pc(v))+'</text>'});
-h+='<text x="'+(X(1)+6)+'" y="'+(m.t+14)+'" font-size="12" fill="var(--ink3)">Grows all it uses</text>';
-h+='<text x="'+((m.l+W-m.r)/2)+'" y="'+(H-14)+'" text-anchor="middle" font-size="12.5" fill="var(--ink2)">How much the UK grows of what it uses →</text><text transform="translate(18,'+((m.t+H-m.b)/2)+') rotate(-90)" text-anchor="middle" font-size="12.5" fill="var(--ink2)">Imports from water-stressed countries →</text>';
-h+='<text x="'+X(.3)+'" y="'+(m.t+20)+'" text-anchor="middle" font-family="var(--serif)" font-size="15" font-weight="600" fill="var(--ink2)">Mostly imported, from stressed places</text>';
-pts.slice().sort((a,b)=>b.dom-a.dom).forEach(r=>{const x=X(r.ss),y=Y(r.ws),rr=rad(r.dom);h+='<g class="gd" data-n="'+r.n+'" tabindex="0" role="img" aria-label="'+r.n+': UK grows '+pc(r.ss)+', '+pc(r.ws)+' of imports from water-stressed countries"><circle cx="'+x+'" cy="'+y+'" r="'+rr+'" fill="'+(GCOL[r.g]||"#888")+'" fill-opacity=".7" stroke="#fff" stroke-width="1.5"/></g>'});
-const lab=pts.filter(r=>r.dom>600||(r.ss<.35&&r.ws>.55)||r.ss>1.05);const placed=[];
-lab.forEach(r=>{const x=X(r.ss),y=Y(r.ws),rr=rad(r.dom);let ly=y+4,lx=x+rr+5,anc="start";if(lx>W-150){lx=x-rr-5;anc="end"}while(placed.some(p=>Math.abs(p[1]-ly)<13&&Math.abs(p[0]-lx)<110))ly+=13;placed.push([lx,ly]);
-h+='<text x="'+lx+'" y="'+ly+'" text-anchor="'+anc+'" font-size="12" font-weight="600" fill="#1C2B2D" paint-order="stroke" stroke="#FFFFFF" stroke-width="3" pointer-events="none">'+r.n+'</text>'});
-svg.innerHTML=h;const tip=document.getElementById("gtip"),wrap=svg.parentNode;
-svg.querySelectorAll(".gd").forEach(g=>{const r=R.find(x=>x.n===g.dataset.n);g.addEventListener("mousemove",e=>{const b=wrap.getBoundingClientRect();tip.style.left=(e.clientX-b.left+wrap.scrollLeft)+"px";tip.style.top=(e.clientY-b.top)+"px";tip.style.display="block";tip.style.whiteSpace="normal";tip.style.maxWidth="260px";
-tip.innerHTML="<b>"+r.n+"</b><br>UK grows "+pc(r.ss)+" of what it uses<br>Uses "+nf.format(r.dom)+" thousand tonnes a year<br>Imports from water-stressed countries: "+pc(r.ws)});g.addEventListener("mouseleave",()=>tip.style.display="none")});
-document.getElementById("glegend").innerHTML='Bubble size shows how much the UK uses. Fish is left off this chart, as its import origins aren\'t in the trade data. '+[...new Set(pts.map(r=>r.g))].map(g=>'<i style="background:'+GCOL[g]+';border-radius:50%"></i>'+GNm[g]).join(" ");
-// bars
+// one stacked bar per food: grown in the UK, imported from water-stressed countries, imported from elsewhere
+const COL={g:"#5E9447",s:"#2F78A8",o:"#BFCBD0",u:"#D9DDD9"};
 const gs=document.getElementById("ggrp");[["all","All foods"]].concat([...new Set(R.map(r=>r.g))].map(g=>[g,GNm[g]||g])).forEach(([v,t])=>{const o=document.createElement("option");o.value=v;o.textContent=t;gs.appendChild(o)});
+let showAll=false;const more=document.getElementById("gmore");
+function parts(r){const g=Math.min(r.ss,1),imp=1-g;return r.ws==null?{g,s:0,o:0,u:imp}:{g,s:imp*r.ws,o:imp*(1-r.ws),u:0}}
 function bars(){const so=document.getElementById("gsort").value,gr=gs.value;let rows=R.filter(r=>r.ss!=null&&(gr==="all"||r.g===gr));
-rows.sort(so==="dom"?(a,b)=>b.dom-a.dom:so==="lo"?(a,b)=>a.ss-b.ss:so==="hi"?(a,b)=>b.ss-a.ss:(a,b)=>(b.ws??-1)-(a.ws??-1));
-const B=document.getElementById("gbars"),scale=1.3;
-B.innerHTML=rows.map(r=>{const w=Math.min(r.ss,scale)/scale*100;return'<div class="gbar"><span>'+r.n+'<small>'+nf.format(r.dom)+' thousand tonnes used'+(r.ws!=null?", "+pc(r.ws)+" of imports from water-stressed countries":"")+'</small></span><div class="tr"><i style="width:0%;background:'+(GCOL[r.g]||"#888")+'"></i><span class="hund" style="left:'+(1/scale*100)+'%"></span></div><b>'+(r.ss>1?pc(r.ss)+", net exporter":pc(r.ss))+'</b></div>'}).join("");
-requestAnimationFrame(()=>requestAnimationFrame(()=>B.querySelectorAll(".tr i").forEach((e,j)=>e.style.width=(Math.min(rows[j].ss,scale)/scale*100)+"%")))}
+rows.sort(so==="dom"?(a,b)=>b.dom-a.dom:so==="lo"?(a,b)=>a.ss-b.ss:so==="hi"?(a,b)=>b.ss-a.ss:(a,b)=>parts(b).s-parts(a).s);
+const total=rows.length,LIM=20;if(!showAll)rows=rows.slice(0,LIM);
+const B=document.getElementById("gbars");
+B.innerHTML=rows.map(r=>{const p=parts(r),seg=(k,v,t)=>v>0?'<i class="sg" style="width:0%;background:'+COL[k]+'" data-w="'+(v*100)+'" title="'+t+'"></i>':'';
+const tip=(lab,v)=>r.n+": "+lab+" "+Math.round(v*100)+"%";
+return'<div class="sbar"><span class="sn">'+r.n+'<small>'+nf.format(r.dom)+' thousand tonnes a year</small></span><div class="st">'+seg("g",p.g,tip("grown in the UK",p.g))+seg("s",p.s,tip("imported from water-stressed countries",p.s))+seg("o",p.o,tip("imported from elsewhere",p.o))+seg("u",p.u,tip("imported, origins not in the trade data",p.u))+'</div><b>'+(r.ss>1?'<span class="nx">Net exporter</span><small style="color:var(--ink3)">grows '+pc(r.ss)+' of what it uses</small>':'Grows '+pc(r.ss)+(p.s>=.005?'<small>'+pc(p.s)+' from stressed places</small>':''))+'</b></div>'}).join("");
+requestAnimationFrame(()=>requestAnimationFrame(()=>B.querySelectorAll(".sg").forEach(e=>e.style.width=e.dataset.w+"%")));
+if(more){more.hidden=total<=LIM;more.textContent=showAll?"Show the top 20 only":"Show all "+total+" foods"}}
+if(more)more.onclick=()=>{showAll=!showAll;bars()};
+document.getElementById("glegend2").innerHTML='<i style="background:'+COL.g+'"></i>Grown in the UK <i style="background:'+COL.s+'"></i>Imported from water-stressed countries <i style="background:'+COL.o+'"></i>Imported from elsewhere <i style="background:'+COL.u+'"></i>Imported, origins not in the trade data (fish and catch-all groups)';
 document.getElementById("gsort").onchange=bars;gs.onchange=bars;bars()})();
 (function(){
 const nf=new Intl.NumberFormat("en-GB"),reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;

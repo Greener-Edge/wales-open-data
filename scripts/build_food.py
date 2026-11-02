@@ -42,8 +42,9 @@ for sh in cx.sheet_names:
     for _, r in pd.read_excel(cx, sheet_name=sh).iterrows():
         if pd.notna(r.iloc[2]): T.setdefault(r["code"], {})[PER[per] + SCN[sc]] = round(float(r.iloc[2]), 2)
 
-u = pd.read_csv(raw("deduce_physical_trade.csv"))
-u = u[(u["Consumer country ISO"] == "GBR") & (u["Producer country ISO"] != "GBR")]
+u_all = pd.read_csv(raw("deduce_physical_trade.csv"))
+u_all = u_all[u_all["Consumer country ISO"] == "GBR"]
+u = u_all[u_all["Producer country ISO"] != "GBR"]
 H = "Deforestation risk, amortized (ha)"
 u23 = u[u["Year"] == DEFOR_YEAR]
 dcom = set(u23["Commodity"])
@@ -79,6 +80,18 @@ for iso in set(v["iso"].dropna()) | set(u23["Producer country ISO"]):
         rec["dt"] = [[k, round(x)] for k, x in dd.groupby("Commodity")[H].sum().sort_values(ascending=False).head(3).items()]
     if iso in T: rec["t"] = T[iso]
     C[iso] = rec
+
+# The UK itself, as an origin for the supply chain checker (UK-grown food). It has no import value,
+# so it doesn't change any import totals; deforestation for UK-grown crops is kept separately in "dl".
+if "GBR" not in C:
+    rec = {"n": "United Kingdom"}
+    for key, src in [("w", W0), ("dr", DR), ("fl", FL)]:
+        if "GBR" in src: rec[key] = src["GBR"]
+    rec["wf"] = {k: WF[k]["GBR"] for k in WF if "GBR" in WF[k]}
+    if "GBR" in T: rec["t"] = T["GBR"]
+    dom = u_all[(u_all["Producer country ISO"] == "GBR") & (u_all["Year"] == DEFOR_YEAR)]
+    rec["dl"] = {k: round(x) for k, x in dom.groupby("Commodity")[H].sum().items() if x >= 1}
+    C["GBR"] = rec
 
 P = []
 for item, x in v.groupby("Item"):
