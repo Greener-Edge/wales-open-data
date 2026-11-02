@@ -21,9 +21,7 @@ table.res td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-
 .flowt{font-family:var(--serif);font-weight:600;margin:0 0 4px 6px}
 #sankey{width:100%;min-width:620px;height:auto;display:block}
 #sankey text{font-family:var(--sans)}
-#sankey .band{transition:opacity .2s}
-#sankey.hl .band{opacity:.15}
-#sankey.hl .band.on{opacity:.85}
+
 .ask{border-top:1px solid var(--rule);padding:10px 0}
 .ask b{display:block;margin-bottom:2px}
 .ask p{margin:0;color:var(--ink2);max-width:74ch}
@@ -96,3 +94,52 @@ body:not(.rep) .snav,body:not(.rep) .getop,body:not(.rep) .gefoot,body:not(.rep)
 .hero1 h1{font-size:clamp(2rem,5vw,3.1rem)}
 .cta{margin-top:40px}
 .tw{position:relative}
+
+/* results redesign: scorecard, heatmap, linked highlighting, flow chart */
+.scard{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:18px 20px;margin:0 0 14px}
+.scard .empty{color:var(--ink3);margin:0}
+.sc-top{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:14px}
+.sc-badge{border-radius:12px;padding:10px 18px;color:#fff;min-width:150px}
+.sc-badge span{display:block;font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.sc-badge b{font-family:var(--serif);font-size:1.7rem;font-weight:600;line-height:1.1}
+.sc-badge.l0{background:#3E8C5A}.sc-badge.l1{background:#B9801A}.sc-badge.l2{background:#B23B26}
+.sc-verdict{margin:0;font-size:1.05rem;max-width:62ch;flex:1;min-width:240px}
+.sc-g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 20px}
+@media (max-width:900px){.sc-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.sc-g{grid-template-columns:minmax(0,1fr)}}
+.g .gh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.g .gh span{font-weight:600;font-size:.92rem}
+.g .gh b{font-family:var(--serif);font-size:1.45rem;font-variant-numeric:tabular-nums}
+.g .gb{height:8px;background:var(--rule);border-radius:4px;overflow:hidden;margin:4px 0 6px}
+.g .gb i{display:block;height:100%;border-radius:4px;transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.g p{margin:0;font-size:.84rem;color:var(--ink2);line-height:1.4}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.hrow h2{margin-bottom:8px}
+table.heat{border-collapse:separate;border-spacing:0 6px;width:100%;min-width:760px;font-size:.88rem}
+table.heat th{font-size:.78rem;color:var(--ink3);font-weight:600;text-align:left;padding:0 6px 2px;white-space:nowrap}
+table.heat td{padding:0 3px;vertical-align:middle}
+table.heat td.ing{padding:8px 12px 8px 4px;min-width:170px}
+table.heat td.ing b{display:block}
+table.heat td.ing small{display:block;color:var(--ink3);font-size:.8rem}
+table.heat tr.hr{cursor:pointer;background:var(--card);transition:opacity .2s}
+table.heat tr.hr td:first-child{border-radius:10px 0 0 10px;border:1px solid var(--rule);border-right:0}
+table.heat tr.hr td:last-child{border-radius:0 10px 10px 0;border:1px solid var(--rule);border-left:0;padding-right:8px}
+table.heat tr.hr td:not(:first-child):not(:last-child){border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+table.heat tr.hr:hover td,table.heat tr.hr:focus-visible td{border-color:var(--ink)}
+table.heat tr.hr:focus{outline:none}
+.hc{display:block;text-align:center;border-radius:6px;padding:7px 6px;font-size:.78rem;font-weight:600;white-space:nowrap}
+.hc.h0{background:#DCEFE2;color:#245A36}.hc.h1{background:#F6E2B8;color:#6E4A0C}.hc.h2{background:#F2C6BB;color:#7E2414}.hc.hn{background:var(--rule);color:var(--ink3);font-weight:400}
+.hc.ov.h0{background:#3E8C5A;color:#fff}.hc.ov.h1{background:#B9801A;color:#fff}.hc.ov.h2{background:#B23B26;color:#fff}
+table.heat tr.hd td{background:var(--paper);padding:4px 14px 12px;font-size:.88rem}
+table.heat tr.hd ul{margin:4px 0 0;padding-left:18px}
+.dim{opacity:.18!important}
+#omap .pin,#omap path[data-c],#sankey .nd,#sankey .band{transition:opacity .2s}
+#omap path[data-c]:hover{stroke:#1C2B2D;stroke-width:1.2}
+#sankey .band:hover{fill-opacity:.85}
+#omap{max-height:420px}
+#report .scp .sc-badge{color:#fff}
+#report .scp .sc-g{grid-template-columns:repeat(5,1fr)}
+#report table.heat{min-width:0;font-size:8pt}
+#report .hc{font-size:7.4pt;padding:3px 4px}
+#report table.heat td.ing small{font-size:7.4pt}
+[hidden]{display:none!important}

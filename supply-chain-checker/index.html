@@ -6,8 +6,8 @@
 <title>Supply chain checker: screen your ingredients for climate risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css">
-<link rel="stylesheet" href="../assets/css/checker.css">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102">
+<link rel="stylesheet" href="../assets/css/checker.css?v=20261102">
 <meta name="description" content="Free tool for food and drink businesses: list your ingredients and origins to see water stress, drought, flooding, warming and deforestation risk. Runs in your browser; nothing is uploaded.">
 </head>
 <body>
@@ -37,23 +37,23 @@
 </section>
 <section id="results" aria-labelledby="rh">
 <h2 id="rh">Your results in brief</h2>
-<div class="summ" id="rsumm" aria-live="polite"></div>
+<div class="scard" id="rsumm" aria-live="polite"></div>
 <div class="rfind" id="rfind" aria-live="polite"></div>
 <div class="actbar"><label>Business name (optional) <input id="bizname" class="search" placeholder="Your business"></label><button class="gebtn primary" id="mkreport" type="button">Create report (PDF)</button><button class="play" id="csv" type="button">Download results (CSV)</button><p class="note">The report opens your browser's print window: choose "Save as PDF". Nothing is uploaded.</p></div>
 </section>
 <section id="where" aria-labelledby="wh">
-<h2 id="wh">Where your ingredients come from</h2>
-<div class="cap"><p><b>What this shows:</b> supply lines from each origin to the UK, and a flow chart linking each ingredient to its origin. Thickness shows your spend, or the number of ingredients if spend isn't entered; colour shows the main risk at that origin.</p><p><b>Why it matters:</b> it shows at a glance where your purchasing is concentrated, and which routes carry the most risk.</p></div>
+<div class="hrow"><h2 id="wh">Where your ingredients come from</h2><button class="gebtn" id="hlclear" type="button" hidden></button></div>
+<div class="cap"><p><b>What this shows:</b> the map zooms to your origins, shading countries by how much you buy there, with a ring showing the risks found in each. The flow chart follows each ingredient to its origin, then to the main risk it carries.</p><p><b>Why it matters:</b> it shows where your purchasing is concentrated, and turns a list of countries into a clear answer: where is my risk? Select any country, ingredient or risk to highlight it across the map, flow chart and table.</p></div>
 <div class="rmap"><svg id="omap" role="img" aria-label="Map of supply routes from your ingredient origins"></svg>
-<div class="flowwrap"><p class="flowt">What comes from where</p><svg id="sankey" role="img" aria-label="Flow chart linking each ingredient to its origin country"></svg></div>
+<div class="flowwrap"><p class="flowt">From ingredient, to origin, to risk</p><svg id="sankey" role="img" aria-label="Flow chart linking each ingredient to its origin country"></svg></div>
 <div class="legend" id="olegend"></div></div>
 </section>
 <section id="table" aria-labelledby="th">
 <h2 id="th">Ingredient by ingredient</h2>
-<div class="cap"><p><b>What this shows:</b> each ingredient's risks at its chosen origin: water stress today and in the future, drought, river flooding, projected warming and deforestation, with an overall rating.</p><p><b>Why it matters:</b> it tells you which ingredients and suppliers to talk to first.</p></div>
+<div class="cap"><p><b>What this shows:</b> each ingredient's risks at its chosen origin, as a heatmap: green is low, amber medium, red high. Select a row to see questions for that supplier.</p><p><b>Why it matters:</b> it tells you which ingredients and suppliers to talk to first.</p></div>
 <div class="controls"><label>Future view <select id="horizon"><option value="2050">2050s</option><option value="2080">2080s</option></select></label>
-<label>Scenario <select id="scen"><option value="opt">Optimistic</option><option value="bau" selected>Business as usual</option><option value="pes">Pessimistic</option></select></label></div>
-<div class="tw"><table class="res" id="res"></table></div>
+<label>Scenario <select id="scen"><option value="opt">Optimistic</option><option value="bau" selected>Business as usual</option><option value="pes">Pessimistic</option></select></label><label>Sort by <select id="hsort"><option value="risk">Highest risk first</option><option value="spend">Biggest spend first</option><option value="name">A to Z</option></select></label></div>
+<div class="tw"><table class="res heat" id="res"></table></div>
 </section>
 <section id="asksec" aria-labelledby="ah">
 <h2 id="ah">Questions to ask your suppliers</h2>
@@ -85,8 +85,8 @@
 <div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
 </div></footer>
 <div id="report" aria-hidden="true"></div>
-<script src="../shared/ge.js"></script>
-<script src="../assets/js/load.js"></script>
-<script>runPage({FD:"../data/food.json",WG:"../data/world-map.json"},"../assets/js/checker.js")</script>
+<script src="../shared/ge.js?v=20261102"></script>
+<script src="../assets/js/load.js?v=20261102"></script>
+<script>runPage({FD:"../data/food.json?v=20261102",WG:"../data/world-map.json?v=20261102"},"../assets/js/checker.js?v=20261102")</script>
 </body>
 </html>
