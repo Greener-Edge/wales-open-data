@@ -6,8 +6,8 @@
 <title>UK food risk: where our food comes from and what's at risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css?v=20261102f">
-<link rel="stylesheet" href="../assets/css/food.css?v=20261102f">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102g">
+<link rel="stylesheet" href="../assets/css/food.css?v=20261102g">
 <meta name="description" content="Where the UK's food imports come from, and the water stress, drought, flooding, warming and deforestation risks they carry. A free open data tool from Greener Edge Sustainability.">
 </head>
 <body>
@@ -64,10 +64,20 @@
 <p class="label" style="margin-top:28px">Deforestation risk in UK food imports, 2005 to 2023 (hectares)</p>
 <svg id="dtrend" viewBox="0 0 760 240" width="100%" role="img" aria-label="Line chart of deforestation risk over time"></svg>
 <p class="note">Figures are amortised over five years, so each year reflects recent clearing, not one season. They count direct imports only. Soy fed to animals abroad and imported as meat isn't included, so the true figure is likely higher.</p>
+<div class="soyp" id="soypanel">
+<h3 class="h3s">Most of that soy feeds animals</h3>
+<div class="cap"><p><b>What this shows:</b> how the soy used in the UK is used, by weight, following whole beans, soybean meal and soybean oil through to their end use.</p><p><b>Why it matters:</b> soy's deforestation risk is mostly about feeding livestock, not people eating soy. Cutting it means looking at animal feed in meat, dairy and egg supply chains.</p></div>
+<div class="minifacts" id="soyfacts"></div>
+<div class="soybar" id="soybar" role="img" aria-label="How soy used in the UK is used"></div>
+<div class="legend" id="soyleg"></div>
+<p class="note" id="soymeals"></p>
+<p class="note">Estimate: we apply the feed share by weight to soy's deforestation risk. Splitting by value instead would give feed a smaller share, as soybean oil is worth more per tonne than meal. Soy fed to animals abroad and imported as meat, dairy or eggs isn't counted here, so the UK's full feed-linked footprint is larger.</p>
+</div>
 </section>
 <div class="group" id="grown"><div class="ghead"><p class="kicker">Context</p><h2>Home-grown or imported?</h2>
 <p class="sub">The UK grows 2% of the tomatoes it eats, but more barley, oats and lamb than it uses. These figures compare how much of each food the UK produces with how much it uses, from FAO food balance sheets: averages for <span class="fbyrs"></span>, by weight.</p>
-<div class="facts" id="gfacts"></div></div>
+<div class="facts" id="gfacts"></div>
+<div class="minifacts" id="kfacts" style="margin-top:14px"></div></div>
 <section id="s-gb" aria-labelledby="gb">
 <h3 id="gb" class="h3s">Grown here, or bought in?</h3><div class="cap"><p><b>What this shows:</b> each bar is everything the UK uses of a food. Green is what the UK grows itself; blue is imported from water-stressed countries; grey is imported from elsewhere.</p><p><b>Why it matters:</b> the longer the blue, the more the UK relies on other countries' scarce water for that food. Tomatoes, citrus, grapes and olive oil stand out. Foods the UK grows more of than it uses are marked as net exporters.</p></div>
 <div class="controls"><label>Sort <select id="gsort"><option value="dom">Biggest foods first</option><option value="ws">Most reliant on water-stressed imports first</option><option value="lo">Least home-grown first</option><option value="hi">Most home-grown first</option></select></label>
@@ -192,7 +202,7 @@
 <h2 id="srch">Sources and licences</h2>
 <ul class="srclist">
 <li><b>UK imports:</b> FAO, FAOSTAT Detailed Trade Matrix, 2024, downloaded 2 October 2026. Values in US dollars, as FAOSTAT reports them.</li>
-<li><b>Grown in the UK:</b> FAO, FAOSTAT Food Balance Sheets, United Kingdom, 2021 to 2023, downloaded 5 October 2026.</li>
+<li><b>Grown in the UK, and how food is used:</b> FAO, FAOSTAT Food Balance Sheets and Supply Utilization Accounts, United Kingdom, 2021 to 2023, downloaded 2 November 2026.</li>
 <li><b>Water stress, drought and river flooding:</b> World Resources Institute, Aqueduct 4.0 country rankings. CC BY 4.0.</li>
 <li><b>Warming:</b> World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections, change in annual mean temperature (median of the model ensemble), downloaded 2 October 2026. Open Database License.</li>
 <li><b>Deforestation:</b> Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, physical trade model, version 2.1, doi.org/10.5281/zenodo.18953516. CC BY.</li>
@@ -217,8 +227,8 @@
 <div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
 </div></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-<script src="../shared/ge.js?v=20261102f"></script>
-<script src="../assets/js/load.js?v=20261102f"></script>
-<script>runPage({FD:"../data/food.json?v=20261102f",WG:"../data/world-map.json?v=20261102f",GLOBE:"../data/globe.json?v=20261102f",FB:"../data/food-balance.json?v=20261102f",A:"../data/farming.json?v=20261102f"},"../assets/js/food.js?v=20261102f")</script>
+<script src="../shared/ge.js?v=20261102g"></script>
+<script src="../assets/js/load.js?v=20261102g"></script>
+<script>runPage({FD:"../data/food.json?v=20261102g",WG:"../data/world-map.json?v=20261102g",GLOBE:"../data/globe.json?v=20261102g",FB:"../data/food-balance.json?v=20261102g",A:"../data/farming.json?v=20261102g",FU:"../data/food-uses.json?v=20261102g"},"../assets/js/food.js?v=20261102g")</script>
 </body>
 </html>

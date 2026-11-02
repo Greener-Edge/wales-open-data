@@ -70,7 +70,7 @@ svg text:not([fill]){fill:var(--ink2)}
 .bub text.lb{pointer-events:none;font-family:var(--sans)}
 .bub text.lb2{font-size:12px;font-weight:600;fill:var(--ink);pointer-events:none}
 .bub text.gl{font-family:var(--serif);font-size:15px;font-weight:600;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:4px;stroke-linejoin:round}
-.bub text.gs{font-size:12px;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:3px}
+.bub text.gs{font-size:12px;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:var(--card);stroke-width:3px;stroke-linejoin:round}
 .bub .ax text{font-size:12px;fill:var(--ink3)}
 .bub .ax .ql{font-family:var(--serif);font-size:15px;font-weight:600;fill:var(--ink2)}
 .crumb{position:absolute;left:14px;top:12px;display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--ink2);pointer-events:none}
@@ -212,3 +212,10 @@ svg .ann{font-size:11px;fill:var(--ink3)}
 @keyframes bubpop{from{opacity:0}to{opacity:1}}
 .bub .node:hover circle.core{filter:drop-shadow(0 3px 6px rgba(0,0,0,.18))}
 @media (prefers-reduced-motion:reduce){.bub .node.pop{animation:none}}
+
+/* soy end uses */
+.soyp{margin-top:34px}
+.soybar{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:6px 0 8px}
+.soybar i{display:flex;align-items:center;justify-content:center;height:100%}
+.soybar i span{color:#fff;font-weight:600;font-size:.88rem}
+.sbar b small.fd{color:#9C4A3E}

@@ -6,8 +6,8 @@
 <title>Methods and sources | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css?v=20261102f">
-<link rel="stylesheet" href="../assets/css/methods.css?v=20261102f">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102g">
+<link rel="stylesheet" href="../assets/css/methods.css?v=20261102g">
 </head>
 <body>
 <div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
@@ -62,6 +62,12 @@
 <section id="grown"><h2>UK food risk: home-grown or imported</h2>
 <h3>Data</h3><p>FAO, FAOSTAT Food Balance Sheets for the United Kingdom: production, imports, exports and domestic supply, 2021 to 2023, downloaded 5 October 2026.</p>
 <h3>What we did</h3><ul><li>Averaged the three years, as harvests vary from year to year.</li><li>"How much the UK grows of what it uses" is production divided by domestic supply, by weight.</li><li>Left out primary crops that FAO also counts as processed products (sugar beet and cane), and non-food or catch-all lines.</li><li>Linked each food to its traded products to show the share of imports, by value, from water-stressed countries. This match is ours and approximate, and isn't shown for catch-all groups or fish.</li></ul>
+<h3>How the UK uses food (soy, animal feed, calories)</h3><ul>
+<li>Uses come from FAOSTAT Food Balance Sheets and Supply Utilization Accounts for the UK, 2021 to 2023 averages, downloaded 2 November 2026.</li>
+<li>Soy is followed through whole beans, soybean meal and soybean oil to its end use. "Animal feed" is the feed use of meal and beans; "food" is food use of oil, beans and soy sauce. The 88% feed share is by weight.</li>
+<li>The feed-linked deforestation figure applies that weight share to all soy deforestation risk in UK imports. It's an estimate: allocating by value would give feed a smaller share, and soy embodied in imported meat, dairy and eggs isn't included.</li>
+<li>In the import data, oilseed meals ("cake") are grouped as animal feed by product type, because the trade data doesn't record end use. The supply utilization accounts confirm that UK soybean meal is used as feed.</li>
+<li>Calorie and protein self-sufficiency weight each food's production-to-supply ratio (capped at 100%) by its share of calories or protein. This is our calculation, not an official statistic.</li></ul>
 <h3>Limits</h3><ul><li>Weights are as FAO records them; milk is in milk equivalent.</li><li>A home-grown food can still rely on imported feed, fertiliser or energy.</li><li>Maize grain excludes maize grown in the UK for silage.</li></ul></section>
 
 <section id="checker"><h2>Supply chain checker</h2>
@@ -88,6 +94,7 @@
 <li>Inspired in part by <a href="https://delwyno.github.io/The-UK-Power-Flow-Llif-Pwer-y-DU/">The UK Power Flow</a>.</li></ul></section>
 
 <section id="changes"><h2>Changes and corrections</h2><ul>
+<li><b>November 2026:</b> added how the UK uses soy and other foods (feed versus food), calorie and protein self-sufficiency, and the UK as an origin in the checker.</li>
 <li><b>November 2026:</b> split into four tools with a shared design; the supply chain checker gained a results scorecard, risk heatmap and linked charts.</li>
 <li><b>October 2026:</b> removed a double-counted rice total from the food imports data. Headline shares moved from 37% to 36% (water stress) and 48% to 47% (drought).</li>
 <li><b>October 2026:</b> first published.</li></ul>

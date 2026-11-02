@@ -206,7 +206,7 @@ L.sort((a,b)=>a.y-b.y);for(let it=0;it<4;it++)for(let i=0;i<L.length;i++)for(let
 L.forEach(l=>l.t.attr("y",l.y-l.d.y))}
 const sim=d3.forceSimulation(top).alphaDecay(0.035).velocityDecay(0.34).on("end",placeLabels).on("tick",()=>{if(mode==="matrix")top.forEach(d=>{d.x=Math.max(d.cr+6,Math.min(W-d.cr-6,d.x));d.y=Math.max(d.cr+6,Math.min(H-d.cr-6,d.y))});nodes.attr("transform",d=>"translate("+d.x+","+d.y+")")}).stop();
 function zoomTo(n,dur){focus=n;let k=1,tx=0,ty=0;if(n){k=Math.min(W,H)*0.86/(2*(n.r+30));tx=W/2-n.x*k;ty=H/2-n.y*k+10}
-const t0=K;world.transition().duration(reduce_?0:dur).ease(d3.easeCubicInOut).attr("transform","translate("+tx+","+ty+") scale("+k+")").tween("k",()=>{const i=d3.interpolate(t0,k);return t=>{K=i(t);rings();glab.style("font-size",(15/K)+"px").attr("y",g=>g.y-g.r-24/K);gsub.style("font-size",(12/K)+"px").attr("y",g=>g.y-g.r-8/K)}}).on("end",()=>{drawLabels()});
+const t0=K;world.transition().duration(reduce_?0:dur).ease(d3.easeCubicInOut).attr("transform","translate("+tx+","+ty+") scale("+k+")").tween("k",()=>{const i=d3.interpolate(t0,k);return t=>{K=i(t);rings();glab.style("font-size",(15/K)+"px").style("stroke-width",(4/K)+"px").attr("y",g=>g.y-g.r-24/K);gsub.style("font-size",(12/K)+"px").style("stroke-width",(3/K)+"px").attr("y",g=>g.y-g.r-8/K)}}).on("end",()=>{drawLabels()});
 gcirc.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);glab.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);gsub.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);nodes.transition().duration(dur).style("opacity",d=>!n||d.p.g===n.g?1:.15);
 nodes.attr("tabindex",d=>n&&d.p.g===n.g?0:-1);
 crumb.innerHTML=n?'<button type="button" class="crumbbtn" id="zback">← All foods</button><span>'+GN[n.g]+': '+n.items.length+' foods, '+money(d3.sum(n.items,d=>d.t))+'</span>':'<span>Select a food group to zoom in</span>';
@@ -497,4 +497,23 @@ const pb_=document.getElementById("hplay");pb_.onclick=()=>{if(timer){clearInter
 if(yi>=Y.length-1)yi=0;pb_.textContent="Pause";timer=setInterval(()=>{yi++;sl.value=yi;render();if(yi>=Y.length-1){clearInterval(timer);timer=null;pb_.textContent="Play"}},reduce?0:45)};
 render()})();
 
+})();
+
+/* How the UK uses food: soy end uses, feed shares and calories (FAOSTAT food balances and supply utilization accounts) */
+(function(){if(typeof FU==="undefined")return;const pc=v=>Math.round(v*100)+"%",mt=v=>(v/1e6).toFixed(1)+" million t";
+const so=FU.soy,tot=so.feed+so.food+so.proc+so.other,soyHa=FD.fam["Soya beans"]?Object.values(FD.fam["Soya beans"]).reduce((a,b)=>a+b,0):null;
+const feedHa=soyHa!=null?Math.round(soyHa*so.feed_share/10)*10:null;
+document.getElementById("soyfacts").innerHTML='<div><b>'+pc(so.feed_share)+'</b><span>of the soy products used in the UK are animal feed, by weight</span></div><div><b>'+mt(so.meal_imports)+'</b><span>of soybean meal imported a year, plus '+mt(so.bean_imports)+' of beans, mostly crushed here into meal and oil</span></div>'+(feedHa!=null?'<div><b>~'+nf.format(feedHa)+' ha</b><span>estimated deforestation risk linked to soy for animal feed, of '+nf.format(soyHa)+' ha for all UK soy in '+FD.dyrs[FD.dyrs.length-1]+'</span></div>':'');
+const parts=[["Animal feed (mostly soybean meal)",so.feed,"#9C4A3E"],["Food (mostly cooking oil)",so.food,"#D9AE4E"],["Processed into other products",so.proc,"#B9C6CC"],["Other uses",so.other,"#8A8A8A"]].filter(p=>p[1]>0);
+document.getElementById("soybar").innerHTML=parts.map(([l,v,c])=>'<i style="width:'+(v/tot*100)+'%;background:'+c+'" title="'+l+': '+pc(v/tot)+'">'+(v/tot>.08?'<span>'+pc(v/tot)+'</span>':'')+'</i>').join("");
+document.getElementById("soyleg").innerHTML=parts.map(([l,v,c])=>'<i style="background:'+c+'"></i>'+l+' '+pc(v/tot)).join(" ");
+const CROP={"Sunflower meal":"Sunflower seed","Palm kernel meal":"Oil palm fruit","Rapeseed meal":"Rape or colza seed"},famHa=c=>FD.fam[c]?Object.values(FD.fam[c]).reduce((x,y)=>x+y,0):0;
+const m=FU.meals.filter(x=>x.n!=="Soybean meal"&&x.imports>100000&&famHa(CROP[x.n])>=100);
+const andL=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+document.getElementById("soymeals").innerHTML=m.length?'Other imported animal feeds linked to deforestation risk include '+andL(m.map(x=>x.n.toLowerCase()+' ('+(x.imports/1e6).toFixed(2)+' million t a year; '+nf.format(Math.round(famHa(CROP[x.n])/10)*10)+' ha for all UK imports of that crop)'))+'.':'';
+const k=FU.kcal,fs=FU.feedshare;
+document.getElementById("kfacts").innerHTML='<div><b>'+pc(k.home_share)+'</b><span>of the UK\'s food calories are grown in the UK, and '+pc(k.protein_home_share)+' of its protein</span></div><div><b>'+pc(k.imported_ws_share)+'</b><span>of imported calories come from water-stressed countries</span></div><div><b>'+pc(fs.Wheat)+' and '+pc(fs.Barley)+'</b><span>of the wheat and barley used in the UK is fed to animals</span></div>';
+/* feed share on the cereal bars */
+const FSN={"Wheat":fs.Wheat,"Barley":fs.Barley,"Maize (grain)":fs.Maize,"Oats":fs.Oats};
+const B=document.getElementById("gbars");if(B){const tag=()=>B.querySelectorAll(".sbar").forEach(r=>{const n=r.querySelector(".sn").firstChild.textContent;if(FSN[n]!=null&&!r.querySelector(".fd")){const b=r.querySelector("b");b.insertAdjacentHTML("beforeend",'<small class="fd">'+pc(FSN[n])+' fed to animals</small>')}});tag();new MutationObserver(tag).observe(B,{childList:true})}
 })();
