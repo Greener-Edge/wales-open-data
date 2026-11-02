@@ -1,4 +1,17 @@
-/* supply-chain-checker page. Data globals: FD, WG (loaded by load.js). */
+const andList=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
+function makeFindings(L){if(!L.items||!L.items.length)return[];
+const it=L.items,useS=L.useSpend,unit=useS?"spend":"ingredients",ukw=FD.ukt[L.key];
+const flagged=k=>[...new Set(it.filter(x=>x.fl[k]).map(x=>x.name))];const clean=[...new Set(it.filter(x=>!["w","dr","fl","d"].some(k=>x.fl[k])).map(x=>x.name))];
+const F=[];
+if(L.topC&&L.topC[1]/L.TW>=.3)F.push(Math.round(L.topC[1]/L.TW*100)+"% of your "+unit+" comes from one country, "+C[L.topC[0]].n+". A poor harvest or disruption there would hit a large share of your purchasing.");
+if(flagged("d").length)F.push(andList(flagged("d"))+(flagged("d").length>1?" are":" is")+" linked to deforestation risk at the chosen origin. Traceability to farm or plantation level is the key question for suppliers.");
+const ws=L.share("w"),dr=L.share("dr");if(ws>=10)F.push(Math.round(ws)+"% of your "+unit+" comes from origins with high or extremely high water stress on farmland"+(flagged("w").length?" ("+andList(flagged("w"))+")":"")+".");
+if(dr>=10)F.push(Math.round(dr)+"% comes from origins with medium-high or high drought risk for farming.");
+if(L.tavg!=null)F.push("Your origins are projected to warm by about "+L.tavg.toFixed(1)+"°C on average by the "+L.lab+(ukw!=null?", compared with "+ukw.toFixed(1)+"°C for the UK":"")+".");
+if(clean.length)F.push("No major flags for "+andList(clean)+" at the chosen origins.");
+return F}
+function renderFindings(){const F=makeFindings(last),el=document.getElementById("rfind");if(el)el.innerHTML=F.length?'<h3>Key findings</h3><ul>'+F.map(f=>"<li>"+f+"</li>").join("")+"</ul>":""}
+/* Supply chain checker site. Data globals: FD, WG (loaded by load.js). */
 const C=FD.c,P=FD.p,FAM=FD.fam,GN=FD.gn,nf=new Intl.NumberFormat("en-GB");
 const WL=["Low","Low to medium","Medium to high","High","Extremely high"],DL=["Low","Low to medium","Medium","Medium to high","High"];
 const PI={};P.forEach((p,i)=>PI[p.n.toLowerCase()]=i);
@@ -35,7 +48,7 @@ let last=[];
 function compute(){const yr=document.getElementById("horizon").value,sc=document.getElementById("scen").value,key=yr+sc,lab=yr+"s, "+document.getElementById("scen").selectedOptions[0].text.toLowerCase();
 const items=rows.map(r=>({r,i:pidx(r.p)})).filter(x=>x.i!=null).map(x=>{const risk=x.r.o?oneRisk(x.i,x.r.o,key):mixRisk(x.i,key);return{name:SHORT[P[x.i].n]||P[x.i].n,full:P[x.i].n,o:x.r.o,spend:parseFloat(x.r.s)||0,risk,fl:flags(risk)}});
 last={items,key,lab,yr};const S=document.getElementById("rsumm"),R=document.getElementById("res"),A=document.getElementById("asks");
-if(!items.length){S.innerHTML="";R.innerHTML='<tr><td class="empty">Add at least one recognised ingredient to see results, or load the example.</td></tr>';A.innerHTML="";drawMap([]);return}
+if(!items.length){S.innerHTML="";const rf=document.getElementById("rfind");if(rf)rf.innerHTML="";R.innerHTML='<tr><td class="empty">Add at least one recognised ingredient to see results, or load the example.</td></tr>';A.innerHTML="";drawMap([]);return}
 const useSpend=items.every(x=>x.spend>0),wt=x=>useSpend?x.spend:1,TW=items.reduce((a,x)=>a+wt(x),0);
 const share=f=>items.reduce((a,x)=>a+(x.risk.mix?(f==="w"?x.risk.w:f==="w5"?x.risk.w5:f==="dr"?x.risk.dr:x.risk.fl):(x.fl[f]?1:0))*wt(x),0)/TW*100;
 const twv=items.filter(x=>x.risk.tw!=null),tavg=twv.length?twv.reduce((a,x)=>a+x.risk.tw*wt(x),0)/twv.reduce((a,x)=>a+wt(x),0):null;
@@ -62,7 +75,7 @@ if(tavg!=null&&tavg>=2)asks.push(["Rising heat","Your origins are projected to w
 if(any("fl").length)asks.push(["River flooding: "+any("fl").join(", "),"Have floods disrupted harvests, processing or transport? How resilient are routes to port?"]);
 A.innerHTML=asks.length?asks.map(([t,q])=>'<div class="ask"><b>'+t+'</b><p>'+q+'</p></div>').join(""):'<p class="note">No major flags for these origins. It\'s still worth asking suppliers about traceability and climate resilience.</p>';
 last.useSpend=useSpend;last.TW=TW;last.share=share;last.tavg=tavg;last.topC=topC;last.byC=byC;last.asks=asks;last.nd=nd;last.wt=wt;
-drawMap(items,wt)}
+drawMap(items,wt);renderFindings()}
 const NS="http://www.w3.org/2000/svg",om=document.getElementById("omap"),sk=document.getElementById("sankey");
 const RISKC=[["d","Deforestation","#B23B26"],["w","Water stress","#2F78A8"],["dr","Drought","#C68A1E"],["fl","River flooding","#6F5FC7"]],NONE="#7FA88B",UNK="#B4B8B4";
 const mainRisk=fl=>{for(const [k,l,c] of RISKC)if(fl[k])return[k,l,c];return[null,"No major flags",NONE]};
@@ -118,18 +131,11 @@ rows_.push([]);rows_.push(["Screening results from Greener Edge's supply chain c
 const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows_.map(r=>r.map(esc).join(",")).join("\n")],{type:"text/csv;charset=utf-8"}));a.download="supply-chain-check.csv";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
 load();renderRows();compute();
 
-const andList=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" and "+a[a.length-1];
 function buildReport(){const L=last;if(!L.items||!L.items.length){alert("Add at least one recognised ingredient first.");return}
 const biz=document.getElementById("bizname").value.trim()||"Your business",today=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
 const it=L.items,useS=L.useSpend,unit=useS?"spend":"ingredients",ukw=FD.ukt[L.key];
 const flagged=k=>[...new Set(it.filter(x=>x.fl[k]).map(x=>x.name))];const clean=[...new Set(it.filter(x=>!["w","dr","fl","d"].some(k=>x.fl[k])).map(x=>x.name))];
-const F=[];
-if(L.topC&&L.topC[1]/L.TW>=.3)F.push(Math.round(L.topC[1]/L.TW*100)+"% of your "+unit+" comes from one country, "+C[L.topC[0]].n+". A poor harvest or disruption there would hit a large share of your purchasing.");
-if(flagged("d").length)F.push(andList(flagged("d"))+(flagged("d").length>1?" are":" is")+" linked to deforestation risk at the chosen origin. Traceability to farm or plantation level is the key question for suppliers.");
-const ws=L.share("w"),dr=L.share("dr");if(ws>=10)F.push(Math.round(ws)+"% of your "+unit+" comes from origins with high or extremely high water stress on farmland"+(flagged("w").length?" ("+andList(flagged("w"))+")":"")+".");
-if(dr>=10)F.push(Math.round(dr)+"% comes from origins with medium-high or high drought risk for farming.");
-if(L.tavg!=null)F.push("Your origins are projected to warm by about "+L.tavg.toFixed(1)+"°C on average by the "+L.lab+(ukw!=null?", compared with "+ukw.toFixed(1)+"°C for the UK":"")+".");
-if(clean.length)F.push("No major flags for "+andList(clean)+" at the chosen origins.");
+const F=makeFindings(L);
 const cards=document.getElementById("rsumm").innerHTML;
 const rows=document.getElementById("res").innerHTML;
 const svg=document.getElementById("omap").outerHTML,flow=document.getElementById("sankey").outerHTML.replace(' class="hl"',"");

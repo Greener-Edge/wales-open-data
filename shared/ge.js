@@ -12,7 +12,7 @@ const pairs=links.map(a=>{const t=document.getElementById(a.getAttribute("href")
 let ticking=false,lastOn=null;
 function current(){if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4){const vis=pairs.filter(([a,s])=>s.offsetParent);if(vis.length)return vis[vis.length-1][0]}const y=nav.getBoundingClientRect().bottom+12;let cur=null;pairs.forEach(([a,s])=>{if(!s.offsetParent)return;if(s.getBoundingClientRect().top<=y+window.innerHeight*.25)cur=a});return cur}
 function upd(){ticking=false;const on=current();if(on===lastOn)return;lastOn=on;links.forEach(a=>a.classList.toggle("on",a===on));
-if(on){const l=on.offsetLeft,r=l+on.offsetWidth;if(l<box.scrollLeft)box.scrollLeft=l-8;else if(r>box.scrollLeft+box.clientWidth)box.scrollLeft=r-box.clientWidth+8}}
+if(!on)box.scrollLeft=0;if(on){const l=on.offsetLeft,r=l+on.offsetWidth;if(l<box.scrollLeft)box.scrollLeft=l-8;else if(r>box.scrollLeft+box.clientWidth)box.scrollLeft=r-box.clientWidth+8}}
 window.addEventListener("scroll",()=>{if(!ticking){ticking=true;requestAnimationFrame(upd)}},{passive:true});upd();
 document.querySelectorAll("a[href^='#']").forEach(a=>{const id=a.getAttribute("href").slice(1);if(!id||id.includes("=")||a.dataset.go)return;
 a.addEventListener("click",e=>{const t=document.getElementById(id);if(!t)return;e.preventDefault();jumpTo(target(t))})})}

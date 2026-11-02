@@ -1,4 +1,4 @@
-/* Supply chain checker styles, on top of site.css and food.css */
+/* Supply chain checker styles, on top of shared/ge.css */
 .privacy{background:var(--card);border:1px solid var(--rule);border-left:3px solid #3E8C5A;border-radius:8px;padding:10px 14px;max-width:68ch;margin:18px 0 0;font-size:.95rem}
 .tw{overflow-x:auto}
 table.ing{border-collapse:collapse;width:100%;min-width:640px}
@@ -37,10 +37,10 @@ table.res td{padding:9px 8px 9px 0;border-bottom:1px solid var(--rule);vertical-
 #report{display:none}
 @media print{
 @page{size:A4;margin:16mm 14mm}
-body.rep main,body.rep .snav{display:none!important}
+body.rep main,body.rep .snav,body.rep .getop,body.rep .gefoot{display:none!important}
 body.rep #report{display:block}
 body{background:#fff!important}
-body:not(.rep) .snav,body:not(.rep) .controls,body:not(.rep) #build,body:not(.rep) .cta,body:not(.rep) .repbox{display:none!important}
+body:not(.rep) .snav,body:not(.rep) .getop,body:not(.rep) .gefoot,body:not(.rep) .controls,body:not(.rep) #build,body:not(.rep) #how,body:not(.rep) .cta,body:not(.rep) .actbar{display:none!important}
 }
 #report{font-family:var(--sans);color:#1C2B2D;font-size:10.5pt;line-height:1.45}
 #report .rp{page-break-after:always;break-after:page}
@@ -69,3 +69,30 @@ body:not(.rep) .snav,body:not(.rep) .controls,body:not(.rep) #build,body:not(.re
 #report .small{font-size:8.3pt;color:#4A5A5C}
 #report .foot{margin-top:14px;border-top:1px solid #D5DBD7;padding-top:8px;font-size:8.3pt;color:#4A5A5C}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.search{font:inherit;padding:7px 10px;border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);width:240px}
+.summ{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 18px}
+.summ div{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:10px 14px}
+.summ b{display:block;font-family:var(--serif);font-size:1.45rem;font-weight:600;line-height:1.15}
+.summ span{font-size:.82rem;color:var(--ink2)}
+.clear{border:0;background:none;color:var(--ink2);font:inherit;text-decoration:underline;cursor:pointer;padding:0 4px}
+.summ b{font-variant-numeric:tabular-nums}
+
+/* restructure: hero badge, steps, findings and action bar */
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--rule);border-left:3px solid #3E8C5A;border-radius:999px;padding:6px 14px;font-size:.9rem;margin:18px 0 0}
+.badge::before{content:"";width:9px;height:9px;border-radius:50%;background:#3E8C5A}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;counter-reset:st;margin-top:8px}
+.steps div{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;counter-increment:st}
+.steps div::before{content:counter(st);display:inline-flex;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--paper);align-items:center;justify-content:center;font-weight:600;font-size:.9rem;margin-bottom:6px}
+.steps b{display:block;font-family:var(--serif);font-size:1.1rem}
+.steps span{font-size:.9rem;color:var(--ink2)}
+@media (max-width:700px){.steps{grid-template-columns:minmax(0,1fr)}}
+.rfind{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:12px;padding:14px 20px;margin:0 0 14px}
+.rfind:empty{display:none}
+.rfind h3{font-family:var(--serif);font-size:1.15rem;margin:0 0 4px}
+.rfind ul{margin:0;padding-left:18px}.rfind li{margin:5px 0}
+.actbar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:12px 16px;margin:0 0 6px}
+.actbar label{font-size:.9rem}
+.actbar .note{margin:0;flex-basis:100%}
+.hero1 h1{font-size:clamp(2rem,5vw,3.1rem)}
+.cta{margin-top:40px}
+.tw{position:relative}

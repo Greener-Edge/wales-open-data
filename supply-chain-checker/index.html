@@ -3,56 +3,89 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Check your supply chain | Greener Edge</title>
+<title>Supply chain checker: screen your ingredients for climate risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/food.css">
+<link rel="stylesheet" href="../shared/ge.css">
 <link rel="stylesheet" href="../assets/css/checker.css">
+<meta name="description" content="Free tool for food and drink businesses: list your ingredients and origins to see water stress, drought, flooding, warming and deforestation risk. Runs in your browser; nothing is uploaded.">
 </head>
 <body>
-<nav class="snav" aria-label="Sections"><div class="snav-in"><a class="brand" href="../">Greener Edge open data</a><span class="links"><a href="../uk-food-imports/">Food imports map</a><a href="#build">Your ingredients</a><a href="#results">Results</a><a href="../methods/">Methods</a></span></div></nav>
+<div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
+<nav class="geswitch" aria-label="Greener Edge open data tools"><a href="../emissions/">Wales emissions</a><a href="../commercial-epc/">Commercial EPC</a><a href="../uk-food-imports/">UK food risk</a><a href="../supply-chain-checker/" aria-current="page">Supply chain checker</a><a href="../methods/">Methods</a></nav></div></div>
+<nav class="snav" id="snav" aria-label="On this page"><div class="snav-in"><span class="snav-t">Supply chain checker</span><span class="links">
+<a href="#how">How it works</a><a href="#build">Your ingredients</a><a href="#results">Your results</a><a href="#where">Where they come from</a><a href="#table">Ingredient by ingredient</a><a href="#asksec">Supplier questions</a><a href="#sources">Sources</a></span></div></nav>
 <main>
-<header>
-<p class="byline">A free tool from Greener Edge Sustainability</p>
+<header class="hero1">
+<p class="byline">Supply chain checker: a free tool from Greener Edge Sustainability</p>
 <h1>Check your supply chain</h1>
-<p class="lede">List the ingredients you buy and where they come from. In seconds you'll see which face water stress, drought, flooding, rising heat or deforestation risk, and where you depend on one country.</p>
-<p class="privacy"><b>Your data stays with you.</b> Everything runs in your browser. Nothing you enter is sent to or stored by Greener Edge. Your list is saved in this browser only, so you can come back to it.</p>
+<p class="lede">See which of your ingredients face water stress, drought, flooding, rising heat or deforestation risk, and where you depend on one country.</p>
+<p class="badge">Runs in your browser. Nothing is uploaded.</p>
 </header>
-
+<section id="how" aria-labelledby="hwh">
+<h2 id="hwh">How it works</h2>
+<div class="steps"><div><b>Add your ingredients</b><span>Pick each ingredient and where it comes from. Spend is optional.</span></div><div><b>See the risks</b><span>Each origin is checked against open climate and deforestation data.</span></div><div><b>Create a report</b><span>Download a short PDF to share with colleagues, buyers or your board.</span></div></div>
+<p class="note">Your list is saved in this browser only, so you can come back to it. Nothing you enter is sent to or stored by Greener Edge.</p>
+</section>
 <section id="build" aria-labelledby="bh">
 <h2 id="bh">Your ingredients</h2>
 <p class="sub">Start typing an ingredient and pick from the list. Choose where it comes from, or leave it as "Origin unknown" to use the UK's average import mix for that food. Spend is optional: if you add it, results are weighted by what you spend.</p>
-<div class="controls"><button class="play" id="addrow" type="button">Add an ingredient</button><button class="play" id="example" type="button">Load an example</button><button class="clear" id="clearall" type="button">Clear all</button></div>
+<div class="controls"><button class="gebtn primary" id="example" type="button">Load an example</button><button class="play" id="addrow" type="button">Add an ingredient</button><button class="clear" id="clearall" type="button">Clear all</button></div>
 <div class="tw"><table class="ing" id="ing"><thead><tr><th>Ingredient</th><th>Origin</th><th>Annual spend (£, optional)</th><th><span class="sr-only">Remove</span></th></tr></thead><tbody></tbody></table></div>
 <datalist id="plist"></datalist>
 <p class="note" id="rowmsg"></p>
 </section>
-
 <section id="results" aria-labelledby="rh">
-<h2 id="rh">Results</h2>
-<div class="controls"><label>Future view <select id="horizon"><option value="2050">2050s</option><option value="2080">2080s</option></select></label>
-<label>Scenario <select id="scen"><option value="opt">Optimistic</option><option value="bau" selected>Business as usual</option><option value="pes">Pessimistic</option></select></label></div>
+<h2 id="rh">Your results in brief</h2>
 <div class="summ" id="rsumm" aria-live="polite"></div>
+<div class="rfind" id="rfind" aria-live="polite"></div>
+<div class="actbar"><label>Business name (optional) <input id="bizname" class="search" placeholder="Your business"></label><button class="gebtn primary" id="mkreport" type="button">Create report (PDF)</button><button class="play" id="csv" type="button">Download results (CSV)</button><p class="note">The report opens your browser's print window: choose "Save as PDF". Nothing is uploaded.</p></div>
+</section>
+<section id="where" aria-labelledby="wh">
+<h2 id="wh">Where your ingredients come from</h2>
+<div class="cap"><p><b>What this shows:</b> supply lines from each origin to the UK, and a flow chart linking each ingredient to its origin. Thickness shows your spend, or the number of ingredients if spend isn't entered; colour shows the main risk at that origin.</p><p><b>Why it matters:</b> it shows at a glance where your purchasing is concentrated, and which routes carry the most risk.</p></div>
 <div class="rmap"><svg id="omap" role="img" aria-label="Map of supply routes from your ingredient origins"></svg>
 <div class="flowwrap"><p class="flowt">What comes from where</p><svg id="sankey" role="img" aria-label="Flow chart linking each ingredient to its origin country"></svg></div>
 <div class="legend" id="olegend"></div></div>
-<h3 class="h3">Ingredient by ingredient</h3>
-<div class="tw"><table class="res" id="res"></table></div>
-<h3 class="h3">Questions you might ask your suppliers</h3>
-<div id="asks"></div>
-<div class="repbox"><h3 class="h3" style="margin-top:0">Create a report</h3><p class="sub" style="margin-bottom:10px">Turn these results into a short, printable Supply Chain Risk Snapshot to share with colleagues, buyers or your board.</p>
-<div class="controls"><label>Business name (optional) <input id="bizname" class="search" placeholder="Your business"></label><button class="play primary" id="mkreport" type="button">Create report (PDF)</button><button class="play" id="csv" type="button">Download results (CSV)</button></div>
-<p class="note">Your browser's print window opens: choose "Save as PDF". Nothing is uploaded.</p></div>
-<div class="cta"><h3>Want to go further?</h3><p>Greener Edge helps food and drink businesses measure product carbon footprints, map supply chain risks and build reduction plans. This checker gives a first view; a proper review uses your actual suppliers and farms.</p><a class="ctab" href="https://www.greener-edge.co.uk/">Talk to Greener Edge</a></div>
 </section>
-
-<footer>
-<p><b>How it works:</b> each origin is scored using the same open datasets as our <a href="../uk-food-imports/">food imports map</a>: WRI Aqueduct 4.0 for water stress, drought and river flooding (CC BY 4.0); the World Bank Climate Change Knowledge Portal for projected warming (ODbL); Singh et al. (2026) for deforestation risk linked to UK imports of each crop from each country (CC BY); and FAOSTAT 2024 for the UK import mix. A flag means: high or extremely high water stress, medium-high or high drought risk, high or extremely high river flood risk, or that UK imports of that crop from that country are linked to deforestation. Full details are on the <a href="../methods/">Methods page</a>.</p>
-<p><b>Limits:</b> scores are country averages, so they can't reflect a specific farm, region or certification. Deforestation flags show risk exposure, not proof. This is a screening tool, not an audit.</p>
-</footer>
+<section id="table" aria-labelledby="th">
+<h2 id="th">Ingredient by ingredient</h2>
+<div class="cap"><p><b>What this shows:</b> each ingredient's risks at its chosen origin: water stress today and in the future, drought, river flooding, projected warming and deforestation, with an overall rating.</p><p><b>Why it matters:</b> it tells you which ingredients and suppliers to talk to first.</p></div>
+<div class="controls"><label>Future view <select id="horizon"><option value="2050">2050s</option><option value="2080">2080s</option></select></label>
+<label>Scenario <select id="scen"><option value="opt">Optimistic</option><option value="bau" selected>Business as usual</option><option value="pes">Pessimistic</option></select></label></div>
+<div class="tw"><table class="res" id="res"></table></div>
+</section>
+<section id="asksec" aria-labelledby="ah">
+<h2 id="ah">Questions to ask your suppliers</h2>
+<p class="sub">Generated from your results. Use them as prompts, not a checklist.</p>
+<div id="asks"></div>
+</section>
+<div class="cta"><h3>Want to go further?</h3><p>Greener Edge helps food and drink businesses measure product carbon footprints, map supply chain risks and build reduction plans. This checker gives a first view; a proper review uses your actual suppliers and farms.</p><a class="ctab" href="https://www.greener-edge.co.uk/">Talk to Greener Edge</a></div>
+<section id="sources" class="sources" aria-labelledby="srch">
+<h2 id="srch">Sources and licences</h2>
+<ul class="srclist">
+<li><b>Water stress, drought and river flooding:</b> World Resources Institute, Aqueduct 4.0 country rankings. CC BY 4.0.</li>
+<li><b>Projected warming:</b> World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections (median of the model ensemble). Open Database License.</li>
+<li><b>Deforestation:</b> Singh, Persson, Croft, Kastner and West (2026), physical trade model, version 2.1, doi.org/10.5281/zenodo.18953516. CC BY.</li>
+<li><b>UK import mix (used where origin is unknown):</b> FAO, FAOSTAT Detailed Trade Matrix, 2024.</li>
+<li><b>Map:</b> Natural Earth (public domain).</li>
+</ul>
+<details class="srcd"><summary>How it works</summary>
+<p>Each origin is scored using the same open datasets as our <a href="../uk-food-imports/">UK food risk</a> site. A flag means high or extremely high water stress, medium-high or high drought risk, high or extremely high river flood risk, or that UK imports of that crop from that country are linked to deforestation (10 ha or more in 2023; 500 ha for the UK import mix).</p>
+<p>Results are weighted by spend when spend is entered for every ingredient; otherwise each ingredient counts equally. Supplier questions are prompts based on the flags, not advice.</p>
+</details>
+<details class="srcd"><summary>Limits</summary>
+<p>Scores are country averages, so they can't reflect a specific farm, region or certification. Deforestation flags show risk exposure, not proof. This is a screening tool, not an audit, a footprint or a compliance assessment.</p>
+</details>
+<p class="note">Full methods for the whole series are on the <a href="../methods/">Methods page</a>.</p>
+</section>
 </main>
+<footer class="gefoot"><div class="gefoot-in">
+<div><p class="gfb">Greener Edge Sustainability</p><p>Free tools built entirely on public, openly licensed data. No client data is used. Greener Edge helps organisations measure and reduce their carbon footprint, including supply chain and product footprints.</p></div>
+<div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
+</div></footer>
 <div id="report" aria-hidden="true"></div>
+<script src="../shared/ge.js"></script>
 <script src="../assets/js/load.js"></script>
 <script>runPage({FD:"../data/food.json",WG:"../data/world-map.json"},"../assets/js/checker.js")</script>
 </body>
