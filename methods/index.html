@@ -6,12 +6,14 @@
 <title>Methods and sources | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/methods.css">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102d">
+<link rel="stylesheet" href="../assets/css/methods.css?v=20261102d">
 </head>
 <body>
+<div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
+<nav class="geswitch" aria-label="Greener Edge open data tools"><a href="../emissions/">Wales emissions</a><a href="../commercial-epc/">Commercial EPC</a><a href="../uk-food-imports/">UK food risk</a><a href="../supply-chain-checker/">Supply chain checker</a><a href="../methods/" aria-current="page">Methods</a></nav></div></div>
 <main class="m">
-<p class="byline"><a href="../" style="color:inherit">Greener Edge open data</a></p>
+<p class="byline">Greener Edge open data</p>
 <h1>Methods and sources</h1>
 <p class="lede">How we built each part of the series: which data we used, what we did to it, what it can and can't tell you, and how it's licensed. Last updated 5 October 2026.</p>
 <div class="toc"><a href="#principles">Principles</a><a href="#emissions">Emissions</a><a href="#epc">Commercial EPCs</a><a href="#food">Food imports</a><a href="#grown">Grown in the UK</a><a href="#checker">Supply chain checker</a><a href="#farming">Wales farming</a><a href="#licences">Licences</a><a href="#changes">Changes</a></div>
@@ -24,17 +26,17 @@
 <li>When we find an error, we fix it and record it below.</li>
 </ul></section>
 
-<section id="emissions"><h2>Where did Wales's emissions go?</h2>
+<section id="emissions"><h2>Wales emissions</h2>
 <h3>Data</h3><p>Department for Energy Security and Net Zero (DESNZ), UK local authority and regional greenhouse gas emissions statistics, 2005 to 2024, published June 2026 (table 1.1, full dataset). Council boundaries from the Office for National Statistics, via the UK-GeoJSON project.</p>
 <h3>What we did</h3><ul><li>Extracted the 22 Welsh local authorities, every sector and year.</li><li>Per person figures divide emissions by mid-year population.</li><li>Grouped DESNZ sub-sectors into drivers (electricity, landfill, large industrial sites, gas and so on) to show what changed between 2005 and 2024. These groupings are ours.</li><li>Checked our Wales totals against the DESNZ statistical release (43.8 to 23.5 MtCO₂e, a 46% fall).</li></ul>
 <h3>Limits</h3><ul><li>These are territorial emissions. Aviation, shipping, military transport and fluorinated gases are excluded.</li><li>Electricity emissions combine a cleaner grid and lower use; the data doesn't separate them.</li><li>Land use and forestry can be negative, where land absorbs more carbon than it releases.</li><li>DESNZ advises caution, as councils have limited influence over some sources.</li></ul></section>
 
-<section id="epc"><h2>Is Wales's commercial property ready for EPC B?</h2>
+<section id="epc"><h2>Commercial EPC</h2>
 <h3>Data</h3><p>Ministry of Housing, Communities and Local Government, Energy Performance of Buildings Data for England and Wales, non-domestic certificates, downloaded 2 October 2026.</p>
 <h3>What we did</h3><ul><li>Filtered to the 22 Welsh councils.</li><li>Kept the most recent certificate per building, matched on property reference (UPRN) where available, otherwise on address.</li><li>Counted certificates lodged in the last 10 years as current.</li><li>"Large" means a floor area over 1,000 m². "Last certified for letting" means the latest certificate was issued because the property was being let.</li><li>Removed all address data before analysis. Only council-level counts are published.</li></ul>
 <h3>Limits</h3><ul><li>The register only covers buildings that have needed an EPC.</li><li>It can't tell us which buildings are rented today, so 2031 figures show buildings that would be in scope if rented.</li><li>The 2031 EPC B standard comes from the UK government's interim response of June 2026 and still needs secondary legislation.</li></ul></section>
 
-<section id="food"><h2>Where does the UK's food come from, and what's at risk?</h2>
+<section id="food"><h2>UK food risk</h2>
 <div class="tw"><table class="src"><tr><th>Layer</th><th>Source</th><th>Measure we show</th></tr>
 <tr><td>Imports</td><td>FAO, FAOSTAT Detailed Trade Matrix, 2024</td><td>Import value by product and partner country</td></tr>
 <tr><td>Water stress</td><td>World Resources Institute, Aqueduct 4.0 country rankings</td><td>Baseline water stress weighted by irrigated agriculture; 2030, 2050 and 2080 projections</td></tr>
@@ -57,12 +59,12 @@
 <li>Deforestation estimates measure risk exposure, not proof that a product caused clearing, and count direct imports only.</li>
 <li>Values are in US dollars, as FAOSTAT reports them.</li></ul></section>
 
-<section id="grown"><h2>Grown in the UK</h2>
+<section id="grown"><h2>UK food risk: home-grown or imported</h2>
 <h3>Data</h3><p>FAO, FAOSTAT Food Balance Sheets for the United Kingdom: production, imports, exports and domestic supply, 2021 to 2023, downloaded 5 October 2026.</p>
 <h3>What we did</h3><ul><li>Averaged the three years, as harvests vary from year to year.</li><li>"How much the UK grows of what it uses" is production divided by domestic supply, by weight.</li><li>Left out primary crops that FAO also counts as processed products (sugar beet and cane), and non-food or catch-all lines.</li><li>Linked each food to its traded products to show the share of imports, by value, from water-stressed countries. This match is ours and approximate, and isn't shown for catch-all groups or fish.</li></ul>
 <h3>Limits</h3><ul><li>Weights are as FAO records them; milk is in milk equivalent.</li><li>A home-grown food can still rely on imported feed, fertiliser or energy.</li><li>Maize grain excludes maize grown in the UK for silage.</li></ul></section>
 
-<section id="checker"><h2>Check your supply chain</h2>
+<section id="checker"><h2>Supply chain checker</h2>
 <h3>How it works</h3><ul><li>Uses the same datasets as the food imports map. Each ingredient is matched to a FAOSTAT product and scored for its chosen origin country.</li>
 <li>Where the origin is unknown, it uses the UK's 2024 import mix for that food and reports the share coming from flagged countries.</li>
 <li>Deforestation is flagged when UK imports of that crop from that country are linked to 10 ha or more of deforestation risk in 2023 (500 ha for the import mix).</li>
@@ -71,7 +73,7 @@
 <h3>Privacy</h3><p>The checker runs entirely in the browser. Nothing entered is sent to Greener Edge or anyone else. Lists are saved in the user's own browser storage so they can return to them.</p>
 <h3>Limits</h3><ul><li>Country averages can't reflect a specific farm, region or certification.</li><li>It's a screening tool, not an audit or a footprint.</li></ul></section>
 
-<section id="farming"><h2>Wales (food hub, Wales tab)</h2>
+<section id="farming"><h2>UK food risk: Wales farming</h2>
 <h3>Data</h3><p>Welsh Government, Survey of agriculture and horticulture: June 2025, including the historical series from 1867.</p>
 <h3>What we did</h3><ul><li>Grouped land use into grass and grazing, arable, farm woodland, fruit and vegetables, and other land.</li><li>Sheep per person uses the 2024 mid-year population of Welsh councils.</li></ul>
 <h3>Limits</h3><ul><li>Survey estimates are scaled up from responding farms (a 50% response rate in 2025).</li><li>Council-level farm figures aren't currently published online. We've asked Welsh Government for them.</li></ul></section>
@@ -86,8 +88,13 @@
 <li>Inspired in part by <a href="https://delwyno.github.io/The-UK-Power-Flow-Llif-Pwer-y-DU/">The UK Power Flow</a>.</li></ul></section>
 
 <section id="changes"><h2>Changes and corrections</h2><ul>
+<li><b>November 2026:</b> split into four tools with a shared design; the supply chain checker gained a results scorecard, risk heatmap and linked charts.</li>
 <li><b>October 2026:</b> removed a double-counted rice total from the food imports data. Headline shares moved from 37% to 36% (water stress) and 48% to 47% (drought).</li>
 <li><b>October 2026:</b> first published.</li></ul>
 <p>Spotted something? Contact Greener Edge Sustainability.</p></section>
-<footer><p>Greener Edge Sustainability helps organisations measure and reduce their carbon footprint.</p></footer>
-</main></body></html>
+</main>
+<footer class="gefoot"><div class="gefoot-in">
+<div><p class="gfb">Greener Edge Sustainability</p><p>Free tools built entirely on public, openly licensed data. No client data is used. Greener Edge helps organisations measure and reduce their carbon footprint, including supply chain and product footprints.</p></div>
+<div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
+</div></footer>
+</body></html>

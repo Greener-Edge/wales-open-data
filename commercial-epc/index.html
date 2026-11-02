@@ -3,29 +3,62 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Is Wales's commercial property ready for EPC B? | Greener Edge</title>
+<title>Commercial EPC: is Wales's commercial property ready for EPC B? | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/site.css">
-<link rel="stylesheet" href="../assets/css/epc.css">
+<link rel="stylesheet" href="../shared/ge.css?v=20261102d">
+<link rel="stylesheet" href="../assets/css/epc.css?v=20261102d">
+<meta name="description" content="59% of large commercial buildings in Wales are below EPC B, the planned 2031 standard for rented buildings over 1,000 m². Explore every council and building type. A free open data tool from Greener Edge Sustainability.">
 </head>
 <body>
+<div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
+<nav class="geswitch" aria-label="Greener Edge open data tools"><a href="../emissions/">Wales emissions</a><a href="../commercial-epc/" aria-current="page">Commercial EPC</a><a href="../uk-food-imports/">UK food risk</a><a href="../supply-chain-checker/">Supply chain checker</a><a href="../methods/">Methods</a></nav></div></div>
+<nav class="snav" id="snav" aria-label="On this page"><div class="snav-in"><span class="snav-t">Commercial EPC</span><span class="links">
+<a href="#inbrief">In brief</a><a href="#s-ru">What the rules say</a><a href="#s-ty">Furthest to go</a><a href="#s-fu">The heating question</a><a href="#s-ex">Explore every council</a><a href="#sources">Sources</a></span></div></nav>
 <main>
-<header>
-<p class="byline">Analysis by Greener Edge Sustainability, using official EPC register data</p>
-<h1>Most of Wales's big commercial buildings aren't at EPC B. By 2031, rented ones will need to be.</h1>
+<header class="hero hero-solo">
+<div class="hero-text">
+<p class="byline">Commercial EPC: a free open data tool from Greener Edge Sustainability</p>
+<h1>Most of Wales's large commercial buildings aren't at EPC B. By 2031, rented ones are set to need to be.</h1>
 <p class="lede">The UK government plans to require privately rented commercial buildings over 1,000 m² in England and Wales to reach EPC B from 2031. We looked at every current non-domestic EPC in Wales to see how far there is to go.</p>
-<div class="facts">
-<div class="fact"><b>59%</b><span>of large buildings (over 1,000 m²) are rated below B. That's 2,572 buildings.</span></div>
-<div class="fact"><b>65%</b><span>of large buildings last certified for letting are below B</span></div>
-<div class="fact"><b>74%</b><span>of large industrial and warehouse buildings are below B, the highest of any type</span></div>
-<div class="fact"><b>61%</b><span>of large buildings below B are heated mainly by gas</span></div>
+<div class="hnums">
+<div><b>59%</b><span>of large buildings (over 1,000 m²) are rated below B: 2,572 buildings</span><small>If rented, each would need upgrading by 2031, where cost-effective, to keep being let.</small></div>
+<div><b>65%</b><span>of large buildings last certified for letting are below B</span><small>The rented stock, where the rule bites, is further behind than the average.</small></div>
+<div><b>74%</b><span>of large industrial and warehouse buildings are below B, the highest of any type</span><small>Industrial units and warehouses face the biggest upgrade task.</small></div>
+</div>
 </div>
 </header>
+<section id="inbrief" class="inbrief solo" aria-labelledby="ibh">
+<div class="ib">
+<h2 id="ibh">In brief</h2>
+<p><b>What we found.</b> Most large commercial buildings in Wales are rated below EPC B, and rented ones are further behind. Industrial units, warehouses and offices have the furthest to go, and most of the large buildings below B are heated by gas.</p>
+<p><b>Why it matters.</b> Under the planned rules, a rented building over 1,000 m² rated below B could not be let from 2031 unless upgrading isn't cost-effective. That puts rental income and property values at stake, and upgrades take time to plan and fund.</p>
+<p><b>What you can do here.</b> Read the rules, see which building types have furthest to go, then explore every council.</p>
+<div class="start"><button class="gebtn primary" type="button" data-jump="s-ex">Explore every council</button><button class="gebtn" type="button" data-jump="s-ru">Read what the rules say</button></div>
+</div>
+</section>
+<section id="s-ru" aria-labelledby="ru">
+<h2 id="ru">What the rules say</h2><div class="cap"><p><b>What this shows:</b> The current minimum standard for letting commercial buildings, and the change planned for 2031.</p><p><b>Why it matters:</b> Every number on this page is measured against this planned standard, so it's the context for everything below.</p></div>
+<div class="rule">
+<p><b>Today:</b> landlords can't grant or continue a lease on a commercial building rated F or G, unless an exemption applies.</p>
+<p><b>From 2031 (planned):</b> privately rented non-domestic buildings over 1,000 m² must reach EPC B, where cost-effective.</p>
+<p><b>Smaller buildings:</b> the minimum stays at E, with no deadline to go further.</p>
+<p><b>Not final:</b> this comes from the government's <a href="https://www.gov.uk/government/consultations/non-domestic-private-rented-sector-minimum-energy-efficiency-standards-epc-b-implementation/outcome/minimum-energy-efficiency-standards-mees-in-the-non-domestic-private-rented-sector-interim-response">interim response of 18 June 2026</a>. It still needs secondary legislation before it takes effect.</p>
+</div>
+</section>
+<section id="s-ty" aria-labelledby="ty">
+<h2 id="ty">Which buildings have furthest to go?</h2><div class="cap"><p><b>What this shows:</b> Large buildings across Wales by type, split by EPC rating. The darker the bar, the lower the rating; everything right of the line is below B.</p><p><b>Why it matters:</b> It shows which kinds of property face the biggest upgrade task, and where landlords and advisers should look first.</p></div>
 
-<section aria-labelledby="ex">
+<div id="types"></div>
+</section>
+<section id="s-fu" aria-labelledby="fu">
+<h2 id="fu">The heating question</h2><div class="minifacts"><div><b>61%</b><span>of large buildings below B are heated mainly by gas</span></div></div><div class="cap"><p><b>What this shows:</b> How the 2,572 large buildings below B are mainly heated.</p><p><b>Why it matters:</b> Getting to B often means tackling heating, not just lighting and insulation, which is usually the bigger, slower job.</p></div>
+
+<div id="fuel"></div>
+</section>
+<section id="s-ex" aria-labelledby="ex">
 <h2 id="ex">Explore every council</h2>
-<p class="sub">Based on 37,795 commercial buildings with an EPC issued in the last 10 years. Pick a measure and building type, then select a council to see its ratings.</p>
+<p class="howto"><b>How to read this:</b> each council is shaded by the measure and building type you choose. Select a council on the map, or from the list, to see its buildings by EPC rating.</p><p class="sub">Based on 37,795 commercial buildings with an EPC issued in the last 10 years.</p>
 <div class="controls">
 <label>Show <select id="measure">
 <option value="bigPct">Large buildings below B (%)</option>
@@ -53,37 +86,30 @@
 </div>
 </div>
 </section>
-
-<section aria-labelledby="ty">
-<h2 id="ty">Which buildings have furthest to go?</h2>
-<p class="sub">Large buildings across Wales, by type. The darker the bar, the lower the rating. Everything right of the line is below B.</p>
-<div id="types"></div>
+<section id="sources" class="sources" aria-labelledby="srch">
+<h2 id="srch">Sources and licences</h2>
+<ul class="srclist">
+<li><b>EPCs:</b> Ministry of Housing, Communities and Local Government, Energy Performance of Buildings Data for England and Wales, non-domestic certificates, downloaded 2 October 2026. No address data is shown or published here.</li>
+<li><b>Rules:</b> UK Government, Minimum Energy Efficiency Standards (MEES) in the non-domestic private rented sector: interim response, 18 June 2026.</li>
+<li><b>Boundaries:</b> Office for National Statistics local authority districts, via the UK-GeoJSON project. Contains OS data © Crown copyright and database right.</li>
+</ul>
+<details class="srcd"><summary>How we worked</summary>
+<p>We kept the most recent certificate for each building, matched on property reference (UPRN) where available, otherwise on address, and counted certificates lodged in the 10 years before download as current. "Large" means a floor area over 1,000 m². "Last certified for letting" means the latest certificate was issued because the property was being let. Building types are our grouping of the register's property categories.</p>
+</details>
+<details class="srcd"><summary>Limits</summary>
+<p>The register only holds buildings that have needed an EPC, so it isn't every building in Wales. The data can't tell us which buildings are rented today, so the 2031 figures show buildings that would be in scope if rented. Certificates may be out of date where work has been done since. The 2031 standard is planned, not yet law. Figures for councils with few buildings of a type are shown as not enough data.</p>
+</details>
+<p class="note">Full methods for the whole series are on the <a href="../methods/">Methods page</a>.</p>
 </section>
-
-<section aria-labelledby="fu">
-<h2 id="fu">The heating question</h2>
-<p class="sub">How the 2,572 large buildings below B are mainly heated. Getting to B often means tackling heating, not just lighting and insulation.</p>
-<div id="fuel"></div>
-</section>
-
-<section aria-labelledby="ru">
-<h2 id="ru">What the rules say</h2>
-<div class="rule">
-<p><b>Today:</b> landlords can't grant or continue a lease on a commercial building rated F or G, unless an exemption applies.</p>
-<p><b>From 2031 (planned):</b> privately rented non-domestic buildings over 1,000 m² must reach EPC B, where cost-effective.</p>
-<p><b>Smaller buildings:</b> the minimum stays at E, with no deadline to go further.</p>
-<p><b>Not final:</b> this comes from the government's interim response of June 2026. It still needs secondary legislation, and a full response is expected.</p>
-</div>
-</section>
-
-<footer>
-<p><b>Source:</b> Ministry of Housing, Communities and Local Government, Energy Performance of Buildings Data for England and Wales, non-domestic certificates, downloaded 2 October 2026. No address data is shown or published here.</p>
-<p><b>Our working:</b> we kept the most recent certificate for each building, matched on property reference (UPRN) where available, otherwise on address. We counted certificates lodged in the last 10 years as current. "Large" means a floor area over 1,000 m². "Last certified for letting" means the latest certificate was issued because the property was being let. Building types are our grouping of the register's property categories.</p>
-<p><b>Limits:</b> the register only holds buildings that have needed an EPC, so it isn't every building in Wales. The data can't tell us which buildings are rented today, so the 2031 figures show buildings that would be in scope if rented. Certificates may be out of date where work has been done since. Figures for councils with few buildings of a type are shown as not enough data.</p>
-<p>Greener Edge Sustainability helps organisations measure and reduce their carbon footprint, including energy audits for commercial buildings.</p>
-</footer>
 </main>
-<script src="../assets/js/load.js"></script>
-<script>runPage({E:"../data/epc.json",G:"../data/wales-boundaries.json"},"../assets/js/epc.js")</script>
+<footer class="gefoot"><div class="gefoot-in">
+<div><p class="gfb">Greener Edge Sustainability</p><p>Free tools built entirely on public, openly licensed data. No client data is used. Greener Edge helps organisations measure and reduce their carbon footprint, including supply chain and product footprints.</p></div>
+<div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
+</div></footer>
+<script src="../shared/ge.js?v=20261102d"></script>
+<script src="../shared/wales-map.js?v=20261102d"></script>
+<script src="../assets/js/load.js?v=20261102d"></script>
+<script>runPage({E:"../data/epc.json?v=20261102d",G:"../data/wales-boundaries.json?v=20261102d"},"../assets/js/epc.js?v=20261102d")</script>
+<script>document.querySelectorAll("[data-jump]").forEach(b=>b.addEventListener("click",()=>GE.jump(b.dataset.jump)))</script>
 </body>
 </html>

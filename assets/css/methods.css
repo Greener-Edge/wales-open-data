@@ -1,5 +1,4 @@
-/* Styles specific to this page; shared styles are in site.css */
-svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+/* Methods page styles, on top of shared/ge.css */
 .toc{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}
 .toc a{border:1px solid var(--rule);background:var(--card);color:var(--ink);text-decoration:none;border-radius:999px;padding:6px 13px;font-size:.88rem}
 .m h3{font-family:var(--serif);font-size:1.15rem;margin:22px 0 6px}

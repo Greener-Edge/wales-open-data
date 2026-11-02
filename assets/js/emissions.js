@@ -17,18 +17,9 @@ function color(v,r){if(v===null)return{bg:"#C9CFCB",fg:"#1C2B2D"};
 if(st.m==="chg"){if(v<=0){const t=Math.min(1,-v/Math.max(1,-r.mn));return{bg:mix(SINK,t),fg:t>.65?"#FFFFFF":"#1C2B2D"}}const t=Math.min(1,v/Math.max(1,r.mx));return{bg:mix(RAMP.slice(1),t),fg:t>.55?"#FFFFFF":"#1C2B2D"}}
 if(v<0){const t=Math.min(1,-v/Math.max(1e-9,-r.mn));return{bg:mix(SINK,.25+.75*t),fg:t>.6?"#FFFFFF":"#1C2B2D"}}
 const t=Math.min(1,v/Math.max(1e-9,r.mx));return{bg:mix(RAMP,t),fg:t>.62?"#FFFFFF":"#1C2B2D"}}
-const map=document.getElementById("map"),tip=document.getElementById("tip"),NS="http://www.w3.org/2000/svg";
-map.setAttribute("viewBox","0 0 "+G.w+" "+G.h);
-const LBL=["ANG","GWY","CNW","DEN","FLN","WRX","CER","POW","PEM","CMN","SWA","NPT","RCT","MON","BGE","VGL","CRF","NWP"];
-const pathEl={};
-for(const c in G.p){const p=document.createElementNS(NS,"path");p.setAttribute("d",G.p[c].d);p.setAttribute("tabindex","0");p.setAttribute("role","button");p.dataset.c=c;
-p.addEventListener("click",()=>{st.sel=c;draw()});p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();st.sel=c;draw()}});
-p.addEventListener("mousemove",e=>{const r=map.parentNode.getBoundingClientRect();tip.style.left=(e.clientX-r.left)+"px";tip.style.top=(e.clientY-r.top)+"px";tip.textContent=LA[c].name+": "+fmt(val(c,st.y));tip.style.display="block"});
-p.addEventListener("mouseleave",()=>tip.style.display="none");
-map.appendChild(p);pathEl[c]=p}
-LBL.forEach(c=>{const t=document.createElementNS(NS,"text");t.setAttribute("x",G.p[c].cx);t.setAttribute("y",G.p[c].cy);t.setAttribute("text-anchor","middle");t.setAttribute("dominant-baseline","middle");t.textContent=c;map.appendChild(t)});
-const pick=document.getElementById("pick");Object.keys(LA).sort((a,b)=>LA[a].name.localeCompare(LA[b].name)).forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=LA[c].name;pick.appendChild(o)});
-pick.onchange=()=>{st.sel=pick.value;draw()};
+const map=document.getElementById("map"),tip=document.getElementById("tip"),NS="http://www.w3.org/2000/svg",pick=document.getElementById("pick");
+const names={};for(const c in LA)names[c]=LA[c].name;
+const {pathEl}=GEWales.draw({map,tip,G,names,pick,tipText:c=>LA[c].name+": "+fmt(val(c,st.y)),onSelect:c=>{st.sel=c;draw()}});
 function legend(r){const L=document.getElementById("legend");if(st.m==="chg"){L.innerHTML='<i style="background:'+SINK[2]+'"></i>Bigger fall <i style="background:'+SINK[0]+'"></i>Small fall <i style="background:'+RAMP[3]+'"></i>Increase';return}
 L.innerHTML='<i style="background:'+RAMP[0]+'"></i>Lower <i style="background:'+RAMP[2]+'"></i> <i style="background:'+RAMP[4]+'"></i>Higher'+(r.mn<0?' <i style="background:'+SINK[2]+'"></i>Net carbon sink':'')+' <span>Scale fixed across all years. The very highest values share the darkest shade.</span>'}
 function panel(){const c=st.sel,d=LA[c],yi=st.y,v=val(c,yi);

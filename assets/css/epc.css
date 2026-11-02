@@ -1,5 +1,5 @@
-/* Styles specific to this page; shared styles are in site.css */
-svg text{font-family:var(--sans);fill:var(--ink2);font-size:12px}
+/* Commercial EPC site styles, on top of shared/ge.css */
+svg text:not([fill]){font-family:var(--sans);fill:var(--ink2);font-size:12px}
 .bands{display:flex;height:18px;border-radius:4px;overflow:hidden;margin:6px 0 4px}
 .bandkey{display:flex;justify-content:space-between;font-size:.75rem;color:var(--ink3)}
 .rule{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:18px 20px;max-width:72ch}

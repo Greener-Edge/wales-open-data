@@ -1,4 +1,4 @@
-# Wales and the UK, in open data
+# Greener Edge open data
 
 Interactive pages by Greener Edge Sustainability, built entirely on public, openly licensed data. Live at **greener-edge.github.io/wales-open-data**.
 
@@ -16,9 +16,13 @@ Interactive pages by Greener Edge Sustainability, built entirely on public, open
 ```
 index.html                 landing page
 <page>/index.html          each page: layout and text only
-assets/css/site.css        styles shared by every page
-assets/css/<page>.css      styles for one page
-assets/js/load.js          loads a page's data files, then its script
+shared/ge.css              Greener Edge design system shared by every site (top bar, hero, captions, sources, footer)
+shared/ge.js               shared behaviour: section menu, smooth jumps, supply-line helper
+shared/wales-map.js        shared Wales council map (emissions and EPC)
+shared/topbar.html, footer.html   templates the page builders copy into each site
+assets/css/<site>.css      styles for one site
+assets/js/load.js          loads a site's data files, then its script
+                           (links carry ?v=YYYYMMDD tags; bump them after changes, see scripts/README-versions.md)
 assets/js/<page>.js        the page's interactive code
 data/*.json                processed data the pages read (generated, don't edit by hand)
 scripts/                   Python that turns raw downloads into data/*.json

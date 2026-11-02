@@ -16,16 +16,9 @@ function fmt(v){return v===null?"Not enough data":isPct()?Math.round(v)+"%":nf.f
 const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
 function mix(s,t){t=Math.max(0,Math.min(1,t));const p=t*(s.length-1),i=Math.min(s.length-2,Math.floor(p)),f=p-i,a=hex(s[i]),b=hex(s[i+1]);return"rgb("+a.map((v,k)=>Math.round(v+(b[k]-v)*f)).join(",")+")"}
 function range(){const v=Object.keys(LA).map(stat).filter(x=>x!==null);return{mn:Math.min(...v),mx:Math.max(...v)}}
-const map=document.getElementById("map"),tip=document.getElementById("tip"),NS="http://www.w3.org/2000/svg";
-map.setAttribute("viewBox","0 0 "+G.w+" "+G.h);
-const LBL=["ANG","GWY","CNW","DEN","FLN","WRX","CER","POW","PEM","CMN","SWA","NPT","RCT","MON","BGE","VGL","CRF","NWP"],pathEl={};
-for(const c in G.p){const p=document.createElementNS(NS,"path");p.setAttribute("d",G.p[c].d);p.setAttribute("tabindex","0");p.setAttribute("role","button");
-p.addEventListener("click",()=>{st.sel=c;draw()});p.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();st.sel=c;draw()}});
-p.addEventListener("mousemove",e=>{const r=map.parentNode.getBoundingClientRect();tip.style.left=(e.clientX-r.left)+"px";tip.style.top=(e.clientY-r.top)+"px";tip.textContent=LA[c].name+": "+fmt(stat(c));tip.style.display="block"});
-p.addEventListener("mouseleave",()=>tip.style.display="none");map.appendChild(p);pathEl[c]=p}
-LBL.forEach(c=>{const t=document.createElementNS(NS,"text");t.setAttribute("x",G.p[c].cx);t.setAttribute("y",G.p[c].cy);t.setAttribute("text-anchor","middle");t.setAttribute("dominant-baseline","middle");t.textContent=c;map.appendChild(t)});
-const pick=document.getElementById("pick");Object.keys(LA).sort((a,b)=>LA[a].name.localeCompare(LA[b].name)).forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=LA[c].name;pick.appendChild(o)});
-pick.onchange=()=>{st.sel=pick.value;draw()};
+const map=document.getElementById("map"),tip=document.getElementById("tip"),NS="http://www.w3.org/2000/svg",pick=document.getElementById("pick");
+const names={};for(const c in LA)names[c]=LA[c].name;
+const {pathEl}=GEWales.draw({map,tip,G,names,pick,tipText:c=>LA[c].name+": "+fmt(stat(c)),onSelect:c=>{st.sel=c;draw()}});
 function bands(id,kid,a){const n=sum(a),el=document.getElementById(id);
 if(!n){el.innerHTML="";document.getElementById(kid).textContent="No buildings";return}
 el.innerHTML=a.map((v,i)=>v?'<span title="'+BN[i]+": "+v+'" style="width:'+(v/n*100)+'%;background:'+BC[i]+'"></span>':"").join("");
