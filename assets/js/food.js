@@ -149,15 +149,18 @@ const tv=p=>Object.values(p.c).reduce((a,b)=>a+b,0);
 const top=P.map((p,i)=>({i,p,t:tv(p)})).sort((a,b)=>b.t-a.t).slice(0,70);
 top.forEach(o=>{let w=0,dr=0,mx=0,mk=null;for(const k in o.p.c){const v=o.p.c[k];if(C[k]&&C[k].w>=3)w+=v;if(C[k]&&C[k].dr>=3)dr+=v;if(v>mx){mx=v;mk=k}}
 o.ws=w/o.t;o.ds=dr/o.t;o.cs=mx/o.t;o.top=mk;o.dh=o.p.f?Object.values(FAM[o.p.f]||{}).reduce((a,b)=>a+b,0):0;o.fl={w:o.ws>.5,dr:o.ds>.5,c:o.cs>.5,d:o.dh>500};o.n=Object.values(o.fl).filter(Boolean).length;o.name=short(o.p.n);o.col=GC[o.p.g]||"#888"});
-const W=960,H=640,svg=d3.select("#bub"),tip=document.getElementById("btip"),wrap=document.querySelector(".bubwrap");
+const W=960,svg=d3.select("#bub"),tip=document.getElementById("btip"),wrap=document.querySelector(".bubwrap");let H=640;
 svg.append("rect").attr("class","bg").attr("width",W).attr("height",H).attr("fill","transparent");
 const world=svg.append("g");
 const groups=[...new Set(top.map(d=>d.p.g))];
-const root=d3.hierarchy({children:groups.map(g=>({g,children:top.filter(d=>d.p.g===g).map(d=>({d}))}))}).sum(x=>x.d?Math.max(x.d.t,60000):0).sort((a,b)=>b.value-a.value);
-d3.pack().size([H-30,H-30]).padding(n=>n.depth===0?44:4)(root);
-const SX=1.5,cx0=(H-30)/2,stretch=x=>W/2+(x-cx0)*SX;
-const gnodes=root.children.map(n=>({g:n.data.g,x:stretch(n.x),y:n.y+18,r:n.r,col:GC[n.data.g],items:n.leaves().map(l=>l.data.d)}));
-root.children.forEach((n,k)=>n.leaves().forEach(l=>{const d=l.data.d;d.r=l.r;d.px=gnodes[k].x+(l.x-n.x);d.py=l.y+18}));
+/* tidy layout: one cluster per food group, laid out in rows (biggest group first), sizes on one shared scale */
+const gTot=g=>d3.sum(top.filter(d=>d.p.g===g),d=>Math.max(d.t,60000));groups.sort((a,b)=>gTot(b)-gTot(a));
+const kk=Math.sqrt(0.29*W*600/(Math.PI*d3.sum(top,d=>Math.max(d.t,60000))));top.forEach(d=>d.r=kk*Math.sqrt(Math.max(d.t,60000)));
+const packs=groups.map(g=>{const it=top.filter(d=>d.p.g===g).sort((a,b)=>b.r-a.r),arr=it.map(d=>({r:d.r+2.5,d}));d3.packSiblings(arr);const enc=d3.packEnclose(arr);return{g,it,arr,enc,R:enc.r+10}});
+const HEAD=46,GAP=26,PADX=24;let rowsL=[],cur=[],cw=PADX;packs.forEach(p=>{const w=2*p.R;if(cur.length&&cw+w>W-PADX){rowsL.push(cur);cur=[];cw=PADX}cur.push(p);cw+=w+GAP});if(cur.length)rowsL.push(cur);
+let yy=38;const gnodes=[];rowsL.forEach(row=>{const rh=d3.max(row,p=>2*p.R),rw=d3.sum(row,p=>2*p.R)+GAP*(row.length-1);let xx=(W-rw)/2;
+row.forEach(p=>{const cx=xx+p.R,cy=yy+HEAD+rh/2;gnodes.push({g:p.g,x:cx,y:cy,r:p.R,col:GC[p.g],items:p.it});p.arr.forEach(a=>{a.d.px=cx+(a.x-p.enc.x);a.d.py=cy+(a.y-p.enc.y)});xx+=2*p.R+GAP});yy+=HEAD+rh+GAP});
+H=Math.max(600,Math.round(yy));svg.attr("viewBox","0 0 "+W+" "+H);svg.select("rect.bg").attr("height",H);
 const mx={l:78,r:30,t:44,b:58},xs=d3.scaleLinear().domain([0,1]).range([mx.l,W-mx.r]),ys=d3.scaleLinear().domain([0,1]).range([H-mx.b,mx.t]);
 const ax=world.append("g").attr("class","ax").style("opacity",0).style("pointer-events","none");
 ax.append("rect").attr("x",xs(.5)).attr("y",ys(1)).attr("width",xs(1)-xs(.5)).attr("height",ys(.5)-ys(1)).attr("fill","#B23B26").attr("opacity",.06).attr("rx",6);
@@ -170,24 +173,25 @@ ax.append("text").attr("class","ql").attr("x",xs(1)-12).attr("y",ys(1)+24).attr(
 ax.append("text").attr("class","ql").attr("x",xs(0)+12).attr("y",ys(0)-14).attr("text-anchor","start").text("Spread out, lower stress");
 const gl=world.append("g").attr("class","glayer");
 const gcirc=gl.selectAll("g").data(gnodes).join("g").attr("class","gnode").attr("tabindex",0).attr("role","button").attr("aria-label",n=>"Zoom into "+GN[n.g]);
-gcirc.append("circle").attr("cx",n=>n.x).attr("cy",n=>n.y).attr("r",n=>n.r+6).attr("fill",n=>tint(n.col,.09)).attr("stroke",n=>tint(n.col,.45)).attr("stroke-width",1.2);
-const GLL=[];const glab=gcirc.append("text").attr("class","gl").attr("x",n=>n.x).attr("y",n=>n.y-n.r-28).attr("fill",n=>d3.color(n.col).darker(1.2)).text(n=>GN[n.g]);
-const gsub=gcirc.append("text").attr("class","gs").attr("x",n=>n.x).attr("y",n=>n.y-n.r-13).attr("fill",n=>d3.color(n.col).darker(.6)).text(n=>money(d3.sum(n.items,d=>d.t)));
+gcirc.append("circle").attr("cx",n=>n.x).attr("cy",n=>n.y).attr("r",n=>n.r).attr("fill",n=>tint(n.col,.08)).attr("stroke",n=>tint(n.col,.22)).attr("stroke-width",1);
+const GLL=[];const glab=gcirc.append("text").attr("class","gl").attr("x",n=>n.x).attr("y",n=>n.y-n.r-24).attr("fill",n=>d3.color(n.col).darker(1.2)).text(n=>GN[n.g]);
+const gsub=gcirc.append("text").attr("class","gs").attr("x",n=>n.x).attr("y",n=>n.y-n.r-8).attr("fill",n=>d3.color(n.col).darker(.6)).text(n=>money(d3.sum(n.items,d=>d.t)));
 const arc=d3.arc();
 const nodes=world.append("g").selectAll("g").data(top).join("g").attr("class","node").attr("tabindex",-1).attr("role","button").attr("aria-label",d=>d.p.n+", "+money(d.t)+", "+d.n+" of 4 risks");
-nodes.append("circle").attr("class","core").attr("r",d=>d.r).attr("fill",d=>tint(d.col,.22+d.n*.19)).attr("stroke","#FFFFFF").attr("stroke-width",1.2);
-let K=1;const th=()=>Math.max(2.2,4.5/K);
+nodes.classed("pop",true).style("animation-delay",(d,i)=>(i*14)+"ms");
+nodes.append("circle").attr("class","core").attr("r",d=>d.r).attr("fill",d=>tint(d.col,.16+d.n*.2)).attr("stroke","#FFFFFF").attr("stroke-width",2);
+let K=1;const th=()=>Math.max(2.8,5.5/K);
 const ringD=(r,j)=>arc({innerRadius:r+1.5/K,outerRadius:r+1.5/K+th(),startAngle:j*Math.PI/2+0.1,endAngle:(j+1)*Math.PI/2-0.1});
 top.forEach(d=>d.cr=d.r);
-nodes.each(function(d){const g=d3.select(this);RK.forEach(([k,lab,col],j)=>{g.append("path").attr("class","seg seg-"+k).attr("data-j",j).attr("d",ringD(d.r,j)).attr("fill",d.fl[k]?col:"#D9DDD9").attr("opacity",d.fl[k]?1:.7)})});
+nodes.each(function(d){const g=d3.select(this);RK.forEach(([k,lab,col],j)=>{g.append("path").attr("class","seg seg-"+k).attr("data-j",j).attr("d",ringD(d.r,j)).attr("fill",col).attr("opacity",d.fl[k]?1:0)})});
 const glayer2=world.append("g").attr("class","glabels").style("pointer-events","none");glab.each(function(){glayer2.node().appendChild(this)});gsub.each(function(){glayer2.node().appendChild(this)});
 const lb=nodes.append("text").attr("class","lb").attr("text-anchor","middle");
 const lb2=nodes.append("text").attr("class","lb2").attr("dy","0.35em").style("text-anchor","start").style("paint-order","stroke").style("stroke","var(--card)").style("stroke-width","3px").style("opacity",0).text(d=>d.name);
 function fitLines(d,px){const avail=px*1.72;for(let fs=Math.max(9,Math.min(14,px/3));fs>=8.5;fs-=0.5){const cw=fs*0.56;const words=d.name.split(" ");let lines=[],cur="";
 words.forEach(w=>{const t=cur?cur+" "+w:w;if(t.length*cw<=avail)cur=t;else{if(cur)lines.push(cur);cur=w}});if(cur)lines.push(cur);
 if(!(lines.some(l=>l.length*cw>avail)||lines.length*fs*1.15>px*1.35||lines.length>3))return{lines,fs}}return null}
-function drawLabels(){lb.each(function(d){const t=d3.select(this);t.selectAll("tspan").remove();if(mode==="matrix")return;const px=d.cr*K;if(px<17)return;const f=fitLines(d,px);if(!f)return;
-const fs=f.fs/K,n=f.lines.length,showV=K>1.2&&px>34;const tot=n+(showV?1:0);t.attr("fill",d.n>=3?"#FFFFFF":d3.color(d.col).darker(2.2)).style("font-size",fs+"px");
+function drawLabels(){lb.each(function(d){const t=d3.select(this);t.selectAll("tspan").remove();if(mode==="matrix")return;const px=d.cr*K;if(px<14)return;const f=fitLines(d,px);if(!f)return;
+const fs=f.fs/K,n=f.lines.length,showV=px>30;const tot=n+(showV?1:0);t.attr("fill",d.n>=3?"#FFFFFF":d3.color(d.col).darker(2.2)).style("font-size",fs+"px");
 f.lines.forEach((l,i)=>t.append("tspan").attr("x",0).attr("y",(i-(tot-1)/2)*fs*1.15).attr("dy","0.35em").style("font-weight",600).text(l));
 if(showV)t.append("tspan").attr("x",0).attr("y",(n-(tot-1)/2)*fs*1.15).attr("dy","0.35em").style("font-weight",400).style("font-size",(fs*0.9)+"px").text(money(d.t))})}
 const outside=d=>d.n>=3||(d.ws>.5&&d.cs>.5)||d.t>2.5e6||d.cs>.7;
@@ -201,8 +205,8 @@ function placeLabels(){if(mode!=="matrix")return;const L=[];nodes.each(function(
 L.sort((a,b)=>a.y-b.y);for(let it=0;it<4;it++)for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i],b=L[j];if(a.x1<b.x0||b.x1<a.x0)continue;if(Math.abs(b.y-a.y)<14)b.y=a.y+14}
 L.forEach(l=>l.t.attr("y",l.y-l.d.y))}
 const sim=d3.forceSimulation(top).alphaDecay(0.035).velocityDecay(0.34).on("end",placeLabels).on("tick",()=>{if(mode==="matrix")top.forEach(d=>{d.x=Math.max(d.cr+6,Math.min(W-d.cr-6,d.x));d.y=Math.max(d.cr+6,Math.min(H-d.cr-6,d.y))});nodes.attr("transform",d=>"translate("+d.x+","+d.y+")")}).stop();
-function zoomTo(n,dur){focus=n;let k=1,tx=0,ty=0;if(n){k=Math.min(W,H)*0.86/(2*(n.r+6));tx=W/2-n.x*k;ty=H/2-n.y*k+10}
-const t0=K;world.transition().duration(reduce_?0:dur).ease(d3.easeCubicInOut).attr("transform","translate("+tx+","+ty+") scale("+k+")").tween("k",()=>{const i=d3.interpolate(t0,k);return t=>{K=i(t);rings();glab.style("font-size",(15/K)+"px").attr("y",g=>g.y-g.r-6-22/K);gsub.style("font-size",(12/K)+"px").attr("y",g=>g.y-g.r-6-7/K)}}).on("end",()=>{drawLabels()});
+function zoomTo(n,dur){focus=n;let k=1,tx=0,ty=0;if(n){k=Math.min(W,H)*0.86/(2*(n.r+30));tx=W/2-n.x*k;ty=H/2-n.y*k+10}
+const t0=K;world.transition().duration(reduce_?0:dur).ease(d3.easeCubicInOut).attr("transform","translate("+tx+","+ty+") scale("+k+")").tween("k",()=>{const i=d3.interpolate(t0,k);return t=>{K=i(t);rings();glab.style("font-size",(15/K)+"px").attr("y",g=>g.y-g.r-24/K);gsub.style("font-size",(12/K)+"px").attr("y",g=>g.y-g.r-8/K)}}).on("end",()=>{drawLabels()});
 gcirc.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);glab.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);gsub.transition().duration(dur).style("opacity",g=>!n||g===n?1:.25);nodes.transition().duration(dur).style("opacity",d=>!n||d.p.g===n.g?1:.15);
 nodes.attr("tabindex",d=>n&&d.p.g===n.g?0:-1);
 crumb.innerHTML=n?'<button type="button" class="crumbbtn" id="zback">← All foods</button><span>'+GN[n.g]+': '+n.items.length+' foods, '+money(d3.sum(n.items,d=>d.t))+'</span>':'<span>Select a food group to zoom in</span>';
@@ -222,11 +226,11 @@ gcirc.on("click",(e,n)=>{e.stopPropagation();if(mode!=="cluster")return;hideCard
 svg.select("rect.bg").on("click",()=>{if(focus){hideCard();zoomTo(null,750)}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&focus){hideCard();zoomTo(null,750)}});
 function setMode(m){mode=m;const cl=m==="cluster";hideCard();if(focus)zoomTo(null,500);
-resize(cl?1:0.5,700);
-sim.force("x",d3.forceX(d=>cl?d.px:xs(d.ws)).strength(cl?0.4:0.6)).force("y",d3.forceY(d=>cl?d.py:ys(d.cs)).strength(cl?0.4:0.6)).force("collide",d3.forceCollide(d=>(cl?d.r:d.r*0.5)+2.5).strength(0.85).iterations(2));
+resize(cl?1:0.42,700);
+sim.force("x",d3.forceX(d=>cl?d.px:xs(d.ws)).strength(cl?0.4:0.6)).force("y",d3.forceY(d=>cl?d.py:ys(d.cs)).strength(cl?0.4:0.6)).force("collide",d3.forceCollide(d=>(cl?d.r:d.r*0.42)+2.5).strength(0.85).iterations(2));
 ax.transition().duration(600).style("opacity",cl?0:1);gl.transition().duration(500).style("opacity",cl?1:0).style("pointer-events",cl?"auto":"none");glayer2.transition().duration(500).style("opacity",cl?1:0);
 crumb.style.visibility=cl?"visible":"hidden";lb.selectAll("tspan").remove();
-nodes.select("circle.core").transition("fill").duration(600).attr("fill",d=>cl?tint(d.col,.22+d.n*.19):d.col).attr("stroke",cl?"#FFFFFF":"var(--card)");
+nodes.select("circle.core").transition("fill").duration(600).attr("fill",d=>cl?tint(d.col,.16+d.n*.2):d.col).attr("stroke",cl?"#FFFFFF":"var(--card)");
 const done=()=>{placeLabels();if(cl)drawLabels()};
 if(reduce_){sim.alpha(1);for(let k=0;k<300;k++)sim.tick();sim.on("tick")();done()}else{sim.alpha(0.9).restart();setTimeout(done,1700)}}
 document.querySelectorAll("#bmode button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#bmode button").forEach(x=>x.setAttribute("aria-pressed",x===b));setMode(b.dataset.v)});
@@ -234,7 +238,7 @@ const KE=document.getElementById("rkeys");let hi=null;
 KE.innerHTML=RK.map(([k,l,c])=>'<button class="rkey" data-k="'+k+'" aria-pressed="false" style="--c:'+c+'"><i></i>'+l+'</button>').join("");
 KE.querySelectorAll(".rkey").forEach(b=>b.onclick=()=>{hi=hi===b.dataset.k?null:b.dataset.k;KE.querySelectorAll(".rkey").forEach(x=>x.setAttribute("aria-pressed",x.dataset.k===hi));
 nodes.select("circle.core").style("opacity",d=>!hi||d.fl[hi]?1:.2);nodes.select("text.lb").style("opacity",d=>!hi||d.fl[hi]?1:.25);
-nodes.selectAll(".seg").style("opacity",function(){const k=[...this.classList].find(c=>c.startsWith("seg-")).slice(4),d=d3.select(this.parentNode).datum();if(!hi)return d.fl[k]?1:.7;return d.fl[hi]?(d.fl[k]?1:.7):.12})});
+nodes.selectAll(".seg").style("opacity",function(){const k=[...this.classList].find(c=>c.startsWith("seg-")).slice(4),d=d3.select(this.parentNode).datum();if(!hi)return d.fl[k]?1:0;return d.fl[hi]?(d.fl[k]?1:0):(d.fl[k]?.12:0)})});
 document.getElementById("gkeys").innerHTML=groups.map(g=>'<span style="--c:'+GC[g]+'">'+GN[g]+'</span>').join("");
 top.forEach(d=>{d.x=W/2+(Math.random()-.5)*80;d.y=H/2+(Math.random()-.5)*80});nodes.attr("transform",d=>"translate("+d.x+","+d.y+")");
 zoomTo(null,0);
