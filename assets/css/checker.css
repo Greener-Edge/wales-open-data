@@ -143,3 +143,35 @@ table.heat tr.hd ul{margin:4px 0 0;padding-left:18px}
 #report .hc{font-size:7.4pt;padding:3px 4px}
 #report table.heat td.ing small{font-size:7.4pt}
 [hidden]{display:none!important}
+/* printed report: keep the redesigned visuals tidy on A4 */
+table.heat tr.hp td{background:#fff}
+table.heat tr.hp td:first-child{border-radius:6px 0 0 6px;border:1px solid #D5DBD7;border-right:0}
+table.heat tr.hp td:last-child{border-radius:0 6px 6px 0;border:1px solid #D5DBD7;border-left:0;padding-right:4px}
+table.heat tr.hp td:not(:first-child):not(:last-child){border-top:1px solid #D5DBD7;border-bottom:1px solid #D5DBD7}
+#report table.heat{border-spacing:0 3px}
+#report table.heat th{font-size:7.2pt;padding:0 3px 2px;white-space:normal}
+#report table.heat td.ing{padding:4px 6px;min-width:0}
+#report .pmap svg{max-height:95mm;width:100%}
+#report .pflow svg{max-height:120mm}
+#report h2{break-after:avoid;page-break-after:avoid}
+#report .mapimg,#report .scp,#report table{break-inside:avoid}
+#report table.heat td.ing{width:24%}
+#report .q{break-inside:avoid}
+#report .pflow svg{width:100%;height:auto}
+#report .plg{font-size:7.8pt;color:#4A5A5C;margin:4px 0 0;line-height:1.6}
+#report .plg i{display:inline-block;width:14px;height:7px;border-radius:2px;margin:0 4px 0 6px;vertical-align:0}
+#report .scp{border:1px solid #D5DBD7;border-radius:8px;padding:10px 12px}
+#report .scp .sc-top{gap:12px;padding-bottom:8px;margin-bottom:8px}
+#report .scp .sc-badge{min-width:0;padding:6px 12px}
+#report .scp .sc-badge b{font-size:15pt}
+#report .scp .sc-verdict{font-size:9.5pt;min-width:0}
+#report .scp .sc-g{gap:8px 12px}
+#report .scp .g .gh{flex-direction:column;align-items:flex-start;gap:0}
+#report .scp .g .gh span{font-size:8pt}
+#report .scp .g .gh b{font-size:13pt}
+#report .scp .g p{font-size:7.4pt}
+#report .scp .g .gb{height:5px;margin:2px 0 4px}
+#report table.heat{table-layout:fixed;width:100%}
+#report table.heat th:first-child,#report table.heat td.ing{width:21%}
+#report .hc{white-space:normal;line-height:1.25}
+#report .q p{margin:2px 0 6px}
