@@ -1,4 +1,4 @@
-/* Food page (imports, grown in the UK, Wales tabs). Data globals: FD, WG, GLOBE, FB, A (loaded by load.js). */
+/* UK food risk site. Sections: risk bubbles, future, deforestation, grown in the UK, Wales, explorer, quiz, plate, simulator. Data globals: FD, WG, GLOBE, FB, A (loaded by load.js). */
 const _initHash=location.hash;
 const C=FD.c,P=FD.p,FAM=FD.fam,GN=FD.gn;
 const LAB={tw:["Under 1°C","1 to 2°C","2 to 3°C","3 to 4°C","4°C or more"],w:["Low","Low to medium","Medium to high","High","Extremely high"],dr:["Low","Low to medium","Medium","Medium to high","High"],fl:["Low","Low to medium","Medium to high","High","Extremely high"]};
@@ -7,7 +7,7 @@ const NOD="#D5D9D6",nf=new Intl.NumberFormat("en-GB");
 const SCN={opt:"optimistic",bau:"business as usual",pes:"pessimistic"};
 let st={q:null,g:"all",lens:"w",yr:"now",sc:"bau",sel:"ESP",dy:18};
 const GV={};P.forEach(p=>{for(const k in p.c){GV[k]=GV[k]||{};GV[k][p.g]=(GV[k][p.g]||0)+p.c[k];GV[k].all=(GV[k].all||0)+p.c[k]}});
-function writeHash(){const p=new URLSearchParams();if(window._tab&&window._tab!=="imports")p.set("tab",window._tab);if(st.q!==null)p.set("q",P[st.q].n);else if(st.g!=="all")p.set("g",st.g);if(st.lens!=="w")p.set("lens",st.lens);if(st.yr!=="now"){p.set("yr",st.yr);p.set("sc",st.sc)}p.set("c",st.sel);try{history.replaceState(null,"","#"+p.toString())}catch(e){}}
+function writeHash(){const p=new URLSearchParams();if(st.q!==null)p.set("q",P[st.q].n);else if(st.g!=="all")p.set("g",st.g);if(st.lens!=="w")p.set("lens",st.lens);if(st.yr!=="now"){p.set("yr",st.yr);p.set("sc",st.sc)}p.set("c",st.sel);try{history.replaceState(null,"","#"+p.toString())}catch(e){}}
 function readHash(){const p=new URLSearchParams(location.hash.slice(1));if(p.get("lens")&&["w","tw","dr","fl","d"].includes(p.get("lens")))st.lens=p.get("lens");if(p.get("yr")&&["2030","2050","2080"].includes(p.get("yr"))){st.yr=p.get("yr");st.sc=["opt","bau","pes"].includes(p.get("sc"))?p.get("sc"):"bau"}if(p.get("g")&&GN[p.get("g")])st.g=p.get("g");if(p.get("c")&&C[p.get("c")])st.sel=p.get("c");return p.get("q")}
 const PI={};P.forEach((p,i)=>PI[p.n]=i);
 function sv(iso){if(st.q!==null)return P[st.q].c[iso]||0;return(GV[iso]&&GV[iso][st.g])||0}
@@ -73,7 +73,7 @@ function tipText(iso){const c=C[iso];if(!c)return"No UK food imports recorded";c
 const pick=document.getElementById("pick");isos().sort((a,b)=>C[a].n.localeCompare(C[b].n)).forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=C[k].n;pick.appendChild(o)});
 pick.onchange=()=>{st.sel=pick.value;draw()};
 function topList(){return isos().map(k=>[k,sv(k)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1])}
-function arcPath(p){const [ux,uy]=WG.uk,dx=ux-p.x,dy=uy-p.y,dist=Math.hypot(dx,dy);return dist<8?null:["M"+p.x+","+p.y+" Q"+((p.x+ux)/2-dy*0.22)+","+((p.y+uy)/2+dx*0.22-dist*0.12)+" "+ux+","+uy,dist]}
+function arcPath(p){const a=GE.arc(p,WG.uk);return a.dist<8?null:[a.d,a.dist]}
 function hoverArc(iso){harc.innerHTML="";if(!iso)return;const v=sv(iso),p=WG.p[iso];if(!v||!p)return;const ap=arcPath(p);if(!ap)return;const tl=topList(),mx=tl.length?tl[0][1]:1,w=(0.8+5*Math.sqrt(v/mx));
 const a=document.createElementNS(NS,"path");a.setAttribute("d",ap[0]);a.setAttribute("class","arc");a.setAttribute("stroke-width",w.toFixed(1));a.style.opacity=.9;a.style.stroke="var(--ink)";a.setAttribute("stroke-width",(w+1.2).toFixed(1));harc.appendChild(a);
 const f=document.createElementNS(NS,"path");f.setAttribute("d",ap[0]);f.setAttribute("class","flow");f.setAttribute("stroke-width",Math.max(1.2,w*.55).toFixed(1));harc.appendChild(f)}
@@ -214,7 +214,7 @@ function showCard(d){const bar=(lab,v,col,txt)=>'<div class="cb"><span>'+lab+'</
 card.innerHTML='<button type="button" class="cx" aria-label="Close">×</button><p class="ck" style="color:'+d3.color(d.col).darker(1)+'">'+GN[d.p.g]+'</p><h4>'+d.p.n+'</h4><p class="cv">'+money(d.t)+' a year</p>'+
 bar("Water stress",d.ws,RK[0][2],Math.round(d.ws*100)+"%")+bar("Drought",d.ds,RK[1][2],Math.round(d.ds*100)+"%")+bar("Biggest supplier",d.cs,RK[2][2],Math.round(d.cs*100)+"%")+
 '<p class="cs">Biggest supplier: '+(C[d.top]?C[d.top].n:"")+'</p><p class="cs">Deforestation risk: <b>'+(d.dh?nf.format(Math.round(d.dh))+' ha':'none linked')+'</b>'+(d.p.f&&d.dh?' (whole '+d.p.f.toLowerCase()+' crop)':'')+'</p><button type="button" class="cgo">Open on the map</button>';
-card.style.display="block";card.querySelector(".cx").onclick=hideCard;card.querySelector(".cgo").onclick=()=>{setQ(d.i);window._jump("ex")}}
+card.style.display="block";card.querySelector(".cx").onclick=hideCard;card.querySelector(".cgo").onclick=()=>{setQ(d.i);GE.jump("ex")}}
 function showTip(e,d){const b=wrap.getBoundingClientRect();tip.style.left=(e.clientX-b.left+wrap.scrollLeft)+"px";tip.style.top=(e.clientY-b.top)+"px";tip.style.display="block";tip.innerHTML="<b>"+d.name+"</b>, "+money(d.t)+(d.n?" · "+d.n+" of 4 risks":"")}
 nodes.on("mousemove",showTip).on("mouseleave",()=>tip.style.display="none").on("click",(e,d)=>{e.stopPropagation();tip.style.display="none";if(mode==="cluster"&&(!focus||focus.g!==d.p.g)){zoomTo(gnodes.find(g=>g.g===d.p.g),750);showCard(d);return}showCard(d)})
 .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showCard(d)}});
@@ -374,7 +374,7 @@ const words=it.lab.split(" "),l1=words.length>2?words.slice(0,2).join(" "):it.la
 h+='<g class="chip" tabindex="0" role="button" data-i="'+it.i+'" aria-label="'+it.lab+', open on the map" transform="translate('+cx+','+cy+') scale(0)" style="transition:transform .45s cubic-bezier(.3,1.4,.5,1) '+(j*70)+'ms"><circle class="cc" r="'+rr+'" fill="'+tint(it.s.col,.25+nf_*.17)+'" stroke="#FFFFFF" stroke-width="2"/>'+segs+
 '<text y="'+(l2?-4:4)+'" style="font-size:'+(rr>48?13:11.5)+'px;font-weight:600" fill="'+(nf_>=3?"#FFFFFF":"#1F2E30")+'">'+l1+'</text>'+(l2?'<text y="11" style="font-size:'+(rr>48?13:11.5)+'px;font-weight:600" fill="'+(nf_>=3?"#FFFFFF":"#1F2E30")+'">'+l2+'</text>':"")+'</g>'});
 plate.innerHTML=h;requestAnimationFrame(()=>requestAnimationFrame(()=>plate.querySelectorAll(".chip").forEach((g,j)=>{const a=j/n*Math.PI*2;g.setAttribute("transform","translate("+(220+ring*Math.sin(a))+","+(220-ring*Math.cos(a))+") scale(1)");g.style.transform=""})));
-plate.querySelectorAll(".chip").forEach(g=>{const go=()=>{setQ(+g.dataset.i);window._jump("ex")};g.onclick=go;g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
+plate.querySelectorAll(".chip").forEach(g=>{const go=()=>{setQ(+g.dataset.i);GE.jump("ex")};g.onclick=go;g.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();go()}}});
 const nw=items.filter(x=>x.s.fl.w).length,nd=items.filter(x=>x.s.fl.d).length,ctry=new Set();items.forEach(x=>x.s.tops.forEach(([k,sh])=>{if(sh>=.05)ctry.add(k)}));
 const tw=items.reduce((a,x)=>a+x.s.tw,0)/items.length;
 document.getElementById("mname").textContent=name;
@@ -384,16 +384,6 @@ bt.querySelectorAll(".preset").forEach(b=>b.onclick=()=>show(+b.dataset.i));
 let shown=false;const startM=()=>{if(!shown){shown=true;show(0)}};
 if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>{if(es.some(x=>x.isIntersecting)){startM();io.disconnect()}},{threshold:.2});io.observe(plate)}else startM()})();
 
-(function(){const nav=document.getElementById("snav"),box=nav.querySelector(".links"),links=[...box.querySelectorAll("a[href^='#']")];
-const pairs=links.map(a=>{const t=document.getElementById(a.getAttribute("href").slice(1));return t?[a,t.closest("section")||t]:null}).filter(Boolean);
-function current(){const y=nav.getBoundingClientRect().bottom+12;let cur=null;pairs.forEach(([a,s])=>{if(!s.offsetParent||a.hidden)return;if(s.getBoundingClientRect().top<=y+window.innerHeight*0.25)cur=a});return cur}
-let ticking=false,lastOn=null;function upd(){ticking=false;const on=current();if(on===lastOn)return;lastOn=on;links.forEach(a=>a.classList.toggle("on",a===on));
-if(on){const l=on.offsetLeft,r=l+on.offsetWidth;if(l<box.scrollLeft)box.scrollLeft=l-8;else if(r>box.scrollLeft+box.clientWidth)box.scrollLeft=r-box.clientWidth+8}}
-window.addEventListener("scroll",()=>{if(!ticking){ticking=true;requestAnimationFrame(upd)}},{passive:true});upd();
-function jump(t){const top=t.getBoundingClientRect().top+window.scrollY-nav.offsetHeight-10;window.scrollTo({top,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
-document.querySelectorAll("a[href^='#']").forEach(a=>{const id=a.getAttribute("href").slice(1);if(!id||id.includes("=")||a.dataset.tabgo)return;a.addEventListener("click",e=>{const t=document.getElementById(id);if(!t)return;e.preventDefault();jump(t.closest("section")||t);
-if(a.dataset.play)setTimeout(()=>document.getElementById("fplay").click(),700)})});
-window._jump=id=>{const t=document.getElementById(id);if(t){const tp=t.closest('.tabpanel');if(tp&&tp.hidden&&window._showTab)window._showTab(tp.dataset.tab);jump(t.closest("section")||t)}};window._navUpd=()=>{lastOn=null;upd()}})();
 (function(){const tv=p=>Object.values(p.c).reduce((a,b)=>a+b,0),PI={};P.forEach((p,i)=>PI[p.n]=i);
 function topOf(n){const p=P[PI[n]],t=tv(p),e=Object.entries(p.c).sort((a,b)=>b[1]-a[1]);return{k:e[0][0],sh:e[0][1]/t}}
 const T=isos().reduce((a,k)=>a+((GV[k]&&GV[k].all)||0),0),W=isos().reduce((a,k)=>a+(C[k].w>=3?((GV[k]&&GV[k].all)||0):0),0);
@@ -406,7 +396,7 @@ const Q=[
 {q:"Where do most of the UK's avocados come from?",o:["Mexico","Spain","Peru","Kenya"],a:C[Av.k].n,x:C[Av.k].n+" is the biggest supplier, at "+Math.round(Av.sh*100)+"%. Overall, 83% of UK avocado imports come from water-stressed countries.",go:{q:"Avocados",lens:"w"}}];
 Q.forEach(x=>{if(!x.o.includes(x.a))x.o[0]=x.a});
 let i=0,score=0;const B=document.getElementById("qbody"),PR=document.getElementById("qprog");
-function goMap(g){st.lens=g.lens;document.getElementById("lens").value=g.lens;setQ(g.q?PI[g.q]:null);window._jump("ex")}
+function goMap(g){st.lens=g.lens;document.getElementById("lens").value=g.lens;setQ(g.q?PI[g.q]:null);GE.jump("ex")}
 function ask(){if(i>=Q.length)return done();const x=Q[i];PR.textContent="Question "+(i+1)+" of "+Q.length;
 B.innerHTML='<p class="qq">'+x.q+'</p><div class="qopts">'+x.o.map(o=>'<button class="qopt" type="button">'+o+'</button>').join("")+'</div><div id="qafter"></div>';
 B.querySelectorAll(".qopt").forEach(btn=>btn.onclick=()=>{const ok=btn.textContent===x.a;if(ok)score++;B.querySelectorAll(".qopt").forEach(b=>{b.disabled=true;if(b.textContent===x.a)b.classList.add("right");else if(b===btn)b.classList.add("wrong")});
@@ -431,14 +421,15 @@ P.forEach(p=>Object.entries(p.c).forEach(([k,v])=>{const c=C[k]||{};rows.push([p
 rows.push([]);rows.push(["Sources: FAOSTAT Detailed Trade Matrix 2024; WRI Aqueduct 4.0 (CC BY 4.0); World Bank CCKP CMIP6 (ODbL). Compiled by Greener Edge Sustainability. Non-food items removed; see the Methods page."]);
 dl("greener-edge-uk-food-imports-2024.csv",rows)}})();
 
-(function(){const tabs=[...document.querySelectorAll('.tabs [role="tab"]')],panels=[...document.querySelectorAll('.tabpanel')],navl=[...document.querySelectorAll('#snav .links a[data-t]')];
-function showTab(t,push){window._tab=t;tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));panels.forEach(p=>p.hidden=p.dataset.tab!==t);navl.forEach(a=>a.hidden=a.dataset.t!==t);
-if(typeof writeHash==="function")writeHash();if(window._navUpd)window._navUpd();window.dispatchEvent(new Event("resize"))}
-window._showTab=showTab;
-tabs.forEach(b=>b.onclick=()=>{showTab(b.dataset.tab);const tp=document.getElementById("tp-"+b.dataset.tab);const top=tp.getBoundingClientRect().top+window.scrollY-70;if(window.scrollY>top)window.scrollTo({top})});
-tabs.forEach((b,i)=>b.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key==="ArrowLeft"){const j=(i+(e.key==="ArrowRight"?1:tabs.length-1))%tabs.length;tabs[j].focus();tabs[j].click()}}));
-document.querySelectorAll("[data-tabgo]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();showTab(a.dataset.tabgo);if(a.dataset.q&&typeof PI!=="undefined"){}const q=a.dataset.q;if(q){const i=P.findIndex(p=>p.n===q);if(i>=0)setQ(i)}window._jump("ex")}));
-const t0=new URLSearchParams(_initHash.slice(1)).get("tab");showTab(["imports","grown","wales"].includes(t0)?t0:"imports")})();
+/* Page actions: "start here" buttons, section shortcuts and old tab links (tabs were replaced by sections). */
+(function(){const PIx={};P.forEach((p,i)=>PIx[p.n]=i);
+function setLens(l){st.lens=l;document.getElementById("lens").value=l;draw()}
+const go={search:b=>{const q=b&&b.dataset.q;if(q&&PIx[q]!=null){setLens("w");setQ(PIx[q])}GE.jump("ex");if(!q)setTimeout(()=>document.getElementById("q").focus({preventScroll:true}),650)},
+quiz:()=>GE.jump("quizsec"),
+future:()=>{setLens("w");GE.jump("ex");setTimeout(()=>document.getElementById("fplay").click(),700)},
+timelapse:()=>{setQ(null);setLens("d");GE.jump("ex");setTimeout(()=>document.getElementById("dplay").click(),700)}};
+document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",e=>{e.preventDefault();const f=go[b.dataset.go];if(f)f(b)}));
+const t0=new URLSearchParams(_initHash.slice(1)).get("tab");if(t0==="grown"||t0==="wales")setTimeout(()=>GE.jump(t0),400)})();
 (function(){if(typeof FB==="undefined")return;const R=FB.rows,NS="http://www.w3.org/2000/svg",GCOL={fru:"#D2604A",veg:"#5E9447",mt:"#9C4A3E",dai:"#D9AE4E",cer:"#B98E52",oil:"#8F9A3A",cof:"#6E4B35",drk:"#7D4F86",spi:"#C56E2E",fish:"#3E7C9A",oth:"#8A8A8A"};
 const GNm=Object.assign({},GN,{fish:"Fish and seafood"});
 document.querySelectorAll(".fbyrs").forEach(e=>e.textContent=FB.years[0]+" to "+FB.years[FB.years.length-1]);
