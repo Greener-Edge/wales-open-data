@@ -219,3 +219,9 @@ svg .ann{font-size:11px;fill:var(--ink3)}
 .soybar i{display:flex;align-items:center;justify-content:center;height:100%}
 .soybar i span{color:#fff;font-weight:600;font-size:.88rem}
 .sbar b small.fd{color:#9C4A3E}
+
+/* how it travels */
+.twrap{background:var(--card);border:1px solid var(--rule);border-radius:12px;overflow:hidden;margin:8px 0}
+#tmap{width:100%;height:auto;display:block;max-height:380px}
+.tbh{font-family:var(--serif);font-size:1.05rem;margin:18px 0 6px}
+.sbar .st.tr2{background:transparent}

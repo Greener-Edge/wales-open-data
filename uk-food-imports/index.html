@@ -6,15 +6,15 @@
 <title>UK food risk: where our food comes from and what's at risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css?v=20261102h">
-<link rel="stylesheet" href="../assets/css/food.css?v=20261102h">
+<link rel="stylesheet" href="../shared/ge.css?v=20261111b">
+<link rel="stylesheet" href="../assets/css/food.css?v=20261111b">
 <meta name="description" content="Where the UK's food imports come from, and the water stress, drought, flooding, warming and deforestation risks they carry. A free open data tool from Greener Edge Sustainability.">
 </head>
 <body>
 <div class="getop"><div class="getop-in"><a class="gebrand" href="../">Greener Edge <span>open data</span></a>
 <nav class="geswitch" aria-label="Greener Edge open data tools"><a href="../emissions/">Wales emissions</a><a href="../commercial-epc/">Commercial EPC</a><a href="../uk-food-imports/" aria-current="page">UK food risk</a><a href="../supply-chain-checker/">Supply chain checker</a><a href="../methods/">Methods</a></nav></div></div>
 <nav class="snav" id="snav" aria-label="On this page"><div class="snav-in"><span class="snav-t">UK food risk</span><span class="links">
-<a href="#inbrief">In brief</a><a href="#s-mr">Where the risk sits</a><a href="#s-ty">The future</a><a href="#s-df">Deforestation</a><a href="#grown">Home-grown or imported</a><a href="#uses">People or animals</a><a href="#wales">Wales</a><a href="#s-ex">Explore the data</a><a href="#try">Try it yourself</a><a href="#sources">Sources</a></span></div></nav>
+<a href="#inbrief">In brief</a><a href="#s-mr">Where the risk sits</a><a href="#s-ty">The future</a><a href="#s-df">Deforestation</a><a href="#grown">Home-grown or imported</a><a href="#uses">People or animals</a><a href="#travel">How it travels</a><a href="#wales">Wales</a><a href="#s-ex">Explore the data</a><a href="#try">Try it yourself</a><a href="#sources">Sources</a></span></div></nav>
 <main>
 <header class="hero">
 <div class="hero-text">
@@ -105,6 +105,24 @@
 <p class="note" id="soymeals"></p>
 <p class="note">Estimate: we apply the feed share by weight to soy's deforestation risk. Splitting by value instead would give feed a smaller share, as soybean oil is worth more per tonne than meal. Soy fed to animals abroad and imported as meat, dairy or eggs isn't counted here, so the UK's full feed-linked footprint is larger.</p>
 </div>
+</div>
+<div class="group" id="travel"><div class="ghead"><p class="kicker">Carbon</p><h2>How it travels</h2>
+<p class="sub">How UK food imports arrive, from HMRC's 2025 import records, and an estimate of the carbon from getting them here, using DESNZ 2026 freight factors. Flying is a tiny share of the weight but a big share of the transport emissions.</p>
+<div class="minifacts" id="tfacts"></div></div>
+<section id="s-tc" aria-labelledby="tc">
+<h3 id="tc" class="h3s">Same food, different footprint</h3>
+<div class="cap"><p><b>What this shows:</b> the estimated transport emissions for each kilogram of a food, by the country it comes from, and how it arrives in the UK.</p><p><b>Why it matters:</b> where a food comes from can change its transport carbon many times over, mostly because some of it is flown. For a business, switching origin or mode can cut transport emissions far more than switching supplier within a country.</p></div>
+<div class="controls"><label>Food <select id="tfood"></select></label></div>
+<div class="twrap"><svg id="tmap" role="img" aria-label="Map of transport emissions by origin for the chosen food"></svg></div>
+<div class="legend" id="tleg"></div>
+<div id="tbars"></div>
+</section>
+<section id="s-ta" aria-labelledby="ta">
+<h3 id="ta" class="h3s">The foods that fly</h3>
+<div class="cap"><p><b>What this shows:</b> the food products the UK imports most by air, and the share of each that arrives by plane.</p><p><b>Why it matters:</b> these are mostly fresh, perishable foods from a few countries. They're where transport carbon is concentrated.</p></div>
+<div id="tair"></div>
+<p class="note">Transport emissions are estimates of average emissions per tonne, not a route-by-route model. Modes are as recorded at the UK border; we add a 300 km lorry leg at origin for sea and air, use shipping lanes for sea, great-circle distance plus 8% for air and straight-line distance plus 20% for road, and match ship type to the food (refrigerated, bulk or container). Air includes radiative forcing, the extra warming effect of emissions at altitude; figures without it are shown in brackets. EU goods arriving into Northern Ireland don't record their mode, so they're left out.</p>
+</section>
 </div>
 <div class="group" id="wales"><div class="ghead"><p class="kicker">Closer to home</p><h2>Wales: what we grow</h2>
 <p class="sub">85% of Welsh farmland is grass, and fruit and vegetables use less than 0.1%. Wales farms 1.77 million hectares, mostly feeding sheep and cattle, because that's what the land, soil and rain suit best.</p>
@@ -225,6 +243,8 @@
 <li><b>Warming:</b> World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections, change in annual mean temperature (median of the model ensemble), downloaded 2 October 2026. Open Database License.</li>
 <li><b>Deforestation:</b> Singh, Persson, Croft, Kastner and West (2026), Commodity-driven deforestation, associated carbon emissions and trade 2001-2023, physical trade model, version 2.1, doi.org/10.5281/zenodo.18953516. CC BY.</li>
 <li><b>Wales:</b> Welsh Government, Survey of agriculture and horticulture: June 2025, including the historical series from 1867. Open Government Licence v3.0.</li>
+<li><b>How food travels:</b> HM Revenue and Customs, Overseas Trade Statistics bulk import data sets, 2025 (mode of transport at the UK border, net mass). Open Government Licence v3.0.</li>
+<li><b>Transport emission factors:</b> Department for Energy Security and Net Zero, Greenhouse gas reporting: conversion factors 2026 (flat file, version 1.2), Freighting goods. Open Government Licence v3.0.</li>
 <li><b>Boundaries:</b> Natural Earth (public domain).</li>
 </ul>
 <details class="srcd"><summary>How we worked</summary>
@@ -245,8 +265,8 @@
 <div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
 </div></footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
-<script src="../shared/ge.js?v=20261102h"></script>
-<script src="../assets/js/load.js?v=20261102h"></script>
-<script>runPage({FD:"../data/food.json?v=20261102h",WG:"../data/world-map.json?v=20261102h",GLOBE:"../data/globe.json?v=20261102h",FB:"../data/food-balance.json?v=20261102h",A:"../data/farming.json?v=20261102h",FU:"../data/food-uses.json?v=20261102h"},"../assets/js/food.js?v=20261102h")</script>
+<script src="../shared/ge.js?v=20261111b"></script>
+<script src="../assets/js/load.js?v=20261111b"></script>
+<script>runPage({FD:"../data/food.json?v=20261111b",WG:"../data/world-map.json?v=20261111b",GLOBE:"../data/globe.json?v=20261111b",FB:"../data/food-balance.json?v=20261111b",A:"../data/farming.json?v=20261111b",FU:"../data/food-uses.json?v=20261111b",TM:"../data/transport-modes.json?v=20261111b",TE:"../data/transport-emissions.json?v=20261111b"},"../assets/js/food.js?v=20261111b")</script>
 </body>
 </html>

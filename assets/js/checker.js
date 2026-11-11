@@ -55,8 +55,14 @@ const kmoney=v=>v>=1e6?"£"+(v/1e6).toFixed(1)+"m":v>=1e3?"£"+Math.round(v/1e3)
 function nflags(f){return ["w","dr","fl","d"].filter(k=>f[k]).length+(f.w5&&!f.w?1:0)}
 function rating(f){const n=nflags(f);return n>=3?2:n>=1?1:0}
 let HL=null,OPEN=new Set(),SORT="risk";
+/* Estimated transport emissions to the UK (kg CO2e per tonne), from HMRC modes and DESNZ 2026 factors */
+function trOrigin(i,o){if(typeof TE==="undefined"||!o||o==="GBR")return null;const p=TE.products[P[i].n];if(p&&p[o])return{rf:p[o].rf,norf:p[o].norf,src:"food"};const g=TE.groups[o]&&TE.groups[o][P[i].g];return g?{rf:g.rf,norf:g.norf,src:"group"}:null}
+function transportFor(i,o){if(typeof TE==="undefined")return null;if(o)return trOrigin(i,o);let w=0,a=0,b=0;for(const k in P[i].c){const t=trOrigin(i,k);if(t){w+=P[i].c[k];a+=P[i].c[k]*t.rf;b+=P[i].c[k]*t.norf}}return w?{rf:a/w,norf:b/w,src:"mix"}:null}
+const trLvl=v=>v<300?0:v<1000?1:2,trKg=v=>(v/1000).toFixed(v<1000?2:1);
+
 function compute(){const yr=document.getElementById("horizon").value,sc=document.getElementById("scen").value,key=yr+sc,lab=yr+"s, "+document.getElementById("scen").selectedOptions[0].text.toLowerCase();
-const items=rows.map(r=>({r,i:pidx(r.p)})).filter(x=>x.i!=null).map((x,j)=>{const risk=x.r.o?oneRisk(x.i,x.r.o,key):mixRisk(x.i,key);const fl=flags(risk);return{id:j,name:SHORT[P[x.i].n]||P[x.i].n,full:P[x.i].n,o:x.r.o,spend:parseFloat(x.r.s)||0,risk,fl,rt:rating(fl),mr:mainRisk(fl)}});
+const items_=rows.map(r=>({r,i:pidx(r.p)})).filter(x=>x.i!=null).map((x,j)=>{const risk=x.r.o?oneRisk(x.i,x.r.o,key):mixRisk(x.i,key);const fl=flags(risk);return{id:j,name:SHORT[P[x.i].n]||P[x.i].n,full:P[x.i].n,o:x.r.o,spend:parseFloat(x.r.s)||0,risk,fl,rt:rating(fl),mr:mainRisk(fl),tr:transportFor(x.i,x.r.o)}});
+const items=items_;
 last={items,key,lab,yr};const S=document.getElementById("rsumm"),R=document.getElementById("res"),A=document.getElementById("asks");
 if(!items.length){S.innerHTML='<p class="empty">Add at least one recognised ingredient, or load the example, to see your results.</p>';const rf=document.getElementById("rfind");if(rf)rf.innerHTML="";R.innerHTML='<tr><td class="empty">Your ingredient table appears here.</td></tr>';A.innerHTML="";drawMap([]);return}
 const useSpend=items.every(x=>x.spend>0),wt=x=>useSpend?x.spend:1,TW=items.reduce((a,x)=>a+wt(x),0),unit=useSpend?"spend":"ingredients";
@@ -66,13 +72,14 @@ const byC={};items.filter(x=>x.o).forEach(x=>byC[x.o]=(byC[x.o]||0)+wt(x));const
 const nd=items.filter(x=>x.fl.d).length,dshare=items.filter(x=>x.fl.d).reduce((a,x)=>a+wt(x),0)/TW*100;
 // overall rating: spend-weighted average of ingredient ratings (Low 0, Medium 1, High 2)
 const avg=items.reduce((a,x)=>a+x.rt*wt(x),0)/TW,overall=avg<.5?0:avg<1.25?1:2,nrisky=items.filter(x=>x.rt>0).length;
-const conc=topC?topC[1]/TW*100:0,ukw=FD.ukt[key];
+const conc=topC?topC[1]/TW*100:0,ukw=FD.ukt[key];const trv=items.filter(x=>x.tr),trAvg=trv.length?trv.reduce((a,x)=>a+x.tr.rf*wt(x),0)/trv.reduce((a,x)=>a+wt(x),0):null,trAirN=items.filter(x=>x.tr&&x.tr.rf>=1500).length,trAir=trAirN?trAirN+" of your ingredients":"";
 const lvl=(v,a,b)=>v>=b?2:v>=a?1:0;
 const gauges=[
 ["Water stress",share("w"),lvl(share("w"),25,50),Math.round(share("w"))+"%","of your "+unit+" comes from origins where farms already face high water stress. "+Math.round(share("w5"))+"% by the "+lab+"."],
 ["Drought",share("dr"),lvl(share("dr"),25,50),Math.round(share("dr"))+"%","comes from origins with medium-high or high drought risk for farming."],
 ["Deforestation",dshare,lvl(dshare,25,50),Math.round(dshare)+"%","of your "+unit+" is linked to deforestation risk ("+nd+" of "+items.length+" ingredients)."],
 ["One country",conc,lvl(conc,30,50),topC?Math.round(conc)+"%":"–",topC?"comes from your biggest origin, "+C[topC[0]].n+".":"Set origins to see how concentrated your sourcing is."],
+["Transport carbon",trAvg!=null?Math.min(100,trAvg/3000*100):0,trAvg==null?0:trLvl(trAvg),trAvg!=null?trKg(trAvg)+" kg":"–","CO\u2082e per kg of ingredient, estimated, to get it to the UK"+(trAir?"; "+trAir+" arrive mostly by air":"")+". Not part of the risk rating."],
 ["Warming",tavg!=null?Math.min(100,tavg/4*100):0,tavg==null?0:lvl(tavg,1.5,2.5),tavg!=null?"+"+tavg.toFixed(1)+"°C":"–","average warming at your origins by the "+lab+(ukw!=null?", against +"+ukw.toFixed(1)+"°C for the UK.":".")]];
 S.innerHTML='<div class="sc-top"><div class="sc-badge l'+overall+'"><span>Overall</span><b>'+LVN[overall]+' risk</b></div><p class="sc-verdict">'+
 (nrisky?'<b>'+nrisky+' of '+items.length+' ingredients</b> carry at least one major risk'+(items.filter(x=>x.rt===2).length?', and <b>'+items.filter(x=>x.rt===2).length+'</b> carry three or more':'')+'.':'None of your ingredients carry a major risk at the chosen origins.')+
@@ -93,10 +100,10 @@ const mixCell=v=>cell(v>.5?2:v>.25?1:0,Math.round(v*100)+"% of mix");
 function heatRow(x,interactive){const r=x.risk;const dcell=!r.f?'<td><span class="hc hn">Not assessed</span></td>':r.mix?cell(r.dh>500?2:r.dh>0?1:0,nf.format(Math.round(r.dh))+" ha (all UK)"):cell(r.dh>=100?2:r.dh>=10?1:0,r.dh>=1?nf.format(Math.round(r.dh))+" ha":"None");
 return'<tr class="'+(interactive?'hr" data-id="'+x.id+'" tabindex="0" aria-expanded="'+OPEN.has(x.id):'hp')+'"><td class="ing"><b>'+esc(x.name)+'</b><small>'+(x.o?(x.o==="GBR"?"United Kingdom (home-grown)":esc(C[x.o].n)):"Origin unknown (UK mix)")+(useSpend?" · "+kmoney(x.spend):"")+'</small></td>'+
 (r.mix?mixCell(r.w):catCell(r.wc,WL))+(r.mix?mixCell(r.w5):catCell(r.w5c,WL))+(r.mix?mixCell(r.dr):catCell(r.drc,DL))+(r.mix?mixCell(r.fl):catCell(r.flc,WL))+
-(r.tw!=null?cell(r.tw>=2.5?2:r.tw>=1.5?1:0,"+"+r.tw.toFixed(1)+"°C"):na)+dcell+'<td><span class="hc ov h'+x.rt+'">'+LVN[x.rt]+'</span></td></tr>'+
-(interactive&&OPEN.has(x.id)?'<tr class="hd"><td colspan="8"><b>Questions for this supplier</b><ul>'+qs(x).map(q=>'<li>'+q+'</li>').join("")+'</ul></td></tr>':'')}
+(r.tw!=null?cell(r.tw>=2.5?2:r.tw>=1.5?1:0,"+"+r.tw.toFixed(1)+"°C"):na)+dcell+(x.tr?cell(trLvl(x.tr.rf),trKg(x.tr.rf)+" kg"):(x.o==="GBR"?'<td><span class="hc hn">UK-grown</span></td>':na))+'<td><span class="hc ov h'+x.rt+'">'+LVN[x.rt]+'</span></td></tr>'+
+(interactive&&OPEN.has(x.id)?'<tr class="hd"><td colspan="9"><b>Questions for this supplier</b><ul>'+qs(x).map(q=>'<li>'+q+'</li>').join("")+'</ul>'+compareOrigins(x)+'</td></tr>':'')}
 const sorted=items.slice().sort(SORT==="spend"?(a,b)=>wt(b)-wt(a):SORT==="name"?(a,b)=>a.name.localeCompare(b.name):(a,b)=>b.rt-a.rt||nflags(b.fl)-nflags(a.fl)||wt(b)-wt(a));
-const head='<thead><tr><th>Ingredient</th><th>Water stress</th><th>Water, '+yr+'s</th><th>Drought</th><th>Flooding</th><th>Warming, '+yr+'s</th><th>Deforestation</th><th>Overall</th></tr></thead>';
+const head='<thead><tr><th>Ingredient</th><th>Water stress</th><th>Water, '+yr+'s</th><th>Drought</th><th>Flooding</th><th>Warming, '+yr+'s</th><th>Deforestation</th><th>Transport to UK</th><th>Overall</th></tr></thead>';
 R.innerHTML=head+'<tbody>'+sorted.map(x=>heatRow(x,true)).join("")+'</tbody>';
 last.heatPrint='<table class="heat">'+head+'<tbody>'+sorted.map(x=>heatRow(x,false)).join("")+'</tbody></table>';
 R.querySelectorAll("tr.hr").forEach(tr=>{const id=+tr.dataset.id;const tog=()=>{OPEN.has(id)?OPEN.delete(id):OPEN.add(id);const x=items[id];setHL(OPEN.has(id)?{t:"i",k:x.full}:null,true);compute()};tr.onclick=tog;tr.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tog()}}});
@@ -111,6 +118,12 @@ if(any("fl").length)asks.push(["River flooding: "+andList(any("fl")),"Have flood
 A.innerHTML=asks.length?asks.map(([t,q])=>'<div class="ask"><b>'+t+'</b><p>'+q+'</p></div>').join(""):'<p class="note">No major flags for these origins. It\'s still worth asking suppliers about traceability and climate resilience.</p>';
 last.useSpend=useSpend;last.TW=TW;last.share=share;last.tavg=tavg;last.topC=topC;last.byC=byC;last.asks=asks;last.nd=nd;last.wt=wt;last.overall=overall;
 drawMap(items,wt);renderFindings();applyHL()}
+
+function compareOrigins(x){const i=P.findIndex(p=>p.n===x.full);if(i<0)return"";const tot=Object.values(P[i].c).reduce((a,b)=>a+b,0);
+let os=Object.entries(P[i].c).sort((a,b)=>b[1]-a[1]).slice(0,6).map(e=>e[0]);if(x.o&&!os.includes(x.o))os=[x.o].concat(os.slice(0,5));
+const key=last.key,cells=os.filter(o=>C[o]).map(o=>{const r=oneRisk(i,o,key),f=flags(r),t=trOrigin(i,o);const c=(l,tx)=>'<td><span class="hc h'+l+'">'+tx+'</span></td>';
+return'<tr'+(o===x.o?' class="cur"':'')+'><td>'+esc(C[o].n)+(o===x.o?' <small>(yours)</small>':'')+'<small>'+Math.round((P[i].c[o]||0)/tot*100)+'% of UK imports</small></td>'+(r.wc!=null?c(r.wc>=3?2:r.wc>=2?1:0,WL[r.wc]):'<td>n/a</td>')+(r.drc!=null?c(r.drc>=3?2:r.drc>=2?1:0,DL[r.drc]):'<td>n/a</td>')+(r.tw!=null?c(r.tw>=2.5?2:r.tw>=1.5?1:0,"+"+r.tw.toFixed(1)+"°C"):'<td>n/a</td>')+(r.f?c(f.d?2:0,f.d?"Linked":"None"):'<td>n/a</td>')+(t?c(trLvl(t.rf),trKg(t.rf)+" kg"):'<td>n/a</td>')+'</tr>'}).join("");
+return'<p class="cmp-t"><b>Compare origins</b> for '+esc(x.name)+': the main countries the UK buys it from.</p><div class="tw"><table class="cmp"><thead><tr><th>Origin</th><th>Water stress</th><th>Drought</th><th>Warming, '+last.yr+'s</th><th>Deforestation</th><th>Transport to UK, per kg</th></tr></thead><tbody>'+cells+'</tbody></table></div>'}
 // ---------- linked highlighting ----------
 function setHL(h,quiet){HL=h&&HL&&h.t===HL.t&&h.k===HL.k&&!quiet?null:h;applyHL()}
 function match(x){if(!HL)return true;if(HL.t==="i")return x.full===HL.k;if(HL.t==="c")return (x.o||"_unk")===HL.k;if(HL.t==="r")return (x.o?(x.mr[0]||"none"):"_m"+(x.mr[0]||"none"))===HL.k;return true}
@@ -176,8 +189,8 @@ L.innerHTML='Thickness shows your '+(useS?"spend":"number of ingredients")+'. Co
 
 document.getElementById("horizon").onchange=compute;document.getElementById("scen").onchange=compute;
 document.getElementById("csv").onclick=()=>{const {items,lab}=last;if(!items||!items.length)return;const esc=v=>{v=v==null?"":String(v);return/[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
-const rows_=[["Ingredient","FAOSTAT product","Origin","Annual spend (£)","Water stress today","Water stress ("+lab+")","Drought risk","River flood risk","Projected warming ("+lab+", °C)","Deforestation linked (ha, UK imports of this crop from this origin)","Flags"]];
-items.forEach(x=>{const r=x.risk,f=x.fl;rows_.push([x.name,x.full,x.o?C[x.o].n:"UK import mix",x.spend||"",r.mix?Math.round(r.w*100)+"% of mix":(r.wc!=null?WL[r.wc]:""),r.mix?Math.round(r.w5*100)+"% of mix":(r.w5c!=null?WL[r.w5c]:""),r.mix?Math.round(r.dr*100)+"% of mix":(r.drc!=null?DL[r.drc]:""),r.mix?Math.round(r.fl*100)+"% of mix":(r.flc!=null?WL[r.flc]:""),r.tw!=null?r.tw.toFixed(2):"",r.dh?Math.round(r.dh):0,["w","dr","fl","d"].filter(k=>f[k]).map(k=>({w:"water stress",dr:"drought",fl:"flooding",d:"deforestation"})[k]).join("; ")])});
+const rows_=[["Ingredient","FAOSTAT product","Origin","Annual spend (£)","Water stress today","Water stress ("+lab+")","Drought risk","River flood risk","Projected warming ("+lab+", °C)","Deforestation linked (ha, UK imports of this crop from this origin)","Estimated transport to UK (kg CO2e per kg, incl. radiative forcing for air)","Flags"]];
+items.forEach(x=>{const r=x.risk,f=x.fl;rows_.push([x.name,x.full,x.o?C[x.o].n:"UK import mix",x.spend||"",r.mix?Math.round(r.w*100)+"% of mix":(r.wc!=null?WL[r.wc]:""),r.mix?Math.round(r.w5*100)+"% of mix":(r.w5c!=null?WL[r.w5c]:""),r.mix?Math.round(r.dr*100)+"% of mix":(r.drc!=null?DL[r.drc]:""),r.mix?Math.round(r.fl*100)+"% of mix":(r.flc!=null?WL[r.flc]:""),r.tw!=null?r.tw.toFixed(2):"",r.dh?Math.round(r.dh):0,x.tr?(x.tr.rf/1000).toFixed(3):"",["w","dr","fl","d"].filter(k=>f[k]).map(k=>({w:"water stress",dr:"drought",fl:"flooding",d:"deforestation"})[k]).join("; ")])});
 rows_.push([]);rows_.push(["Screening results from Greener Edge's supply chain checker. Country averages, not farm-level assessments. Sources: WRI Aqueduct 4.0, World Bank CCKP, Singh et al. 2026, FAOSTAT 2024."]);
 const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+rows_.map(r=>r.map(esc).join(",")).join("\n")],{type:"text/csv;charset=utf-8"}));a.download="supply-chain-check.csv";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
 load();renderRows();compute();

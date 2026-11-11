@@ -6,8 +6,8 @@
 <title>Supply chain checker: screen your ingredients for climate risk | Greener Edge open data</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../shared/ge.css?v=20261102h">
-<link rel="stylesheet" href="../assets/css/checker.css?v=20261102h">
+<link rel="stylesheet" href="../shared/ge.css?v=20261111b">
+<link rel="stylesheet" href="../assets/css/checker.css?v=20261111b">
 <meta name="description" content="Free tool for food and drink businesses: list your ingredients and origins to see water stress, drought, flooding, warming and deforestation risk. Runs in your browser; nothing is uploaded.">
 </head>
 <body>
@@ -50,7 +50,7 @@
 </section>
 <section id="table" aria-labelledby="th">
 <h2 id="th">Ingredient by ingredient</h2>
-<div class="cap"><p><b>What this shows:</b> each ingredient's risks at its chosen origin, as a heatmap: green is low, amber medium, red high. Select a row to see questions for that supplier.</p><p><b>Why it matters:</b> it tells you which ingredients and suppliers to talk to first.</p></div>
+<div class="cap"><p><b>What this shows:</b> each ingredient's risks at its chosen origin, as a heatmap: green is low, amber medium, red high, plus an estimate of the carbon to get it to the UK. Select a row to see questions for that supplier and to compare it with other origins.</p><p><b>Why it matters:</b> it tells you which ingredients and suppliers to talk to first.</p></div>
 <div class="controls"><label>Future view <select id="horizon"><option value="2050">2050s</option><option value="2080">2080s</option></select></label>
 <label>Scenario <select id="scen"><option value="opt">Optimistic</option><option value="bau" selected>Business as usual</option><option value="pes">Pessimistic</option></select></label><label>Sort by <select id="hsort"><option value="risk">Highest risk first</option><option value="spend">Biggest spend first</option><option value="name">A to Z</option></select></label></div>
 <div class="tw"><table class="res heat" id="res"></table></div>
@@ -68,6 +68,7 @@
 <li><b>Projected warming:</b> World Bank Climate Change Knowledge Portal, CMIP6 0.25-degree projections (median of the model ensemble). Open Database License.</li>
 <li><b>Deforestation:</b> Singh, Persson, Croft, Kastner and West (2026), physical trade model, version 2.1, doi.org/10.5281/zenodo.18953516. CC BY.</li>
 <li><b>UK import mix (used where origin is unknown):</b> FAO, FAOSTAT Detailed Trade Matrix, 2024.</li>
+<li><b>Transport to the UK:</b> HMRC Overseas Trade Statistics 2025 (mode of transport at the border) and DESNZ greenhouse gas conversion factors 2026, freighting goods. Open Government Licence v3.0.</li>
 <li><b>Map:</b> Natural Earth (public domain).</li>
 </ul>
 <details class="srcd"><summary>How it works</summary>
@@ -85,8 +86,8 @@
 <div><p class="gfb">Open data tools</p><ul><li><a href="../emissions/">Wales emissions</a></li><li><a href="../commercial-epc/">Commercial EPC</a></li><li><a href="../uk-food-imports/">UK food risk</a></li><li><a href="../supply-chain-checker/">Supply chain checker</a></li><li><a href="../methods/">Methods, sources and licences</a></li></ul></div>
 </div></footer>
 <div id="report" aria-hidden="true"></div>
-<script src="../shared/ge.js?v=20261102h"></script>
-<script src="../assets/js/load.js?v=20261102h"></script>
-<script>runPage({FD:"../data/food.json?v=20261102h",WG:"../data/world-map.json?v=20261102h"},"../assets/js/checker.js?v=20261102h")</script>
+<script src="../shared/ge.js?v=20261111b"></script>
+<script src="../assets/js/load.js?v=20261111b"></script>
+<script>runPage({FD:"../data/food.json?v=20261111b",WG:"../data/world-map.json?v=20261111b",TE:"../data/transport-emissions.json?v=20261111b"},"../assets/js/checker.js?v=20261111b")</script>
 </body>
 </html>

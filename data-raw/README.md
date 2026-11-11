@@ -11,6 +11,8 @@ These files are not committed (they're large, and each source publishes its own)
 | `faostat_uk_imports.csv` | FAO, FAOSTAT Detailed Trade Matrix | fao.org/faostat, Detailed trade matrix: reporter United Kingdom, all partners, elements Import value and Import quantity, all items, latest two years, CSV |
 | `faostat_uk_food_balances.csv` | FAO, FAOSTAT Food Balance Sheets | fao.org/faostat, Food Balances (2010-): United Kingdom, all elements (production, trade, feed, food, processing, seed, losses, other uses, calories, protein, fat), all items, latest three years, CSV |
 | `faostat_uk_sua.csv` | FAO, FAOSTAT Supply Utilization Accounts | fao.org/faostat, Supply Utilization Accounts (2010-): United Kingdom, all elements, all items, latest three years, CSV |
+| `hmrc/BDSimpYYMM.txt` (12 months) and `hmrc/SMKA12YYMM.txt` | HMRC Overseas Trade Statistics bulk imports and control file | uktradeinfo.com, Trade data, Bulk data sets archive: Imports (two half-year ZIPs) and Control files for the year; unzip into data-raw/hmrc/ |
+| `desnz_ghg_factors_2026_flat.xlsx` | DESNZ Greenhouse gas reporting: conversion factors 2026 | gov.uk, flat file version, renamed |
 | `aqueduct-4-0-country-rankings.zip` | WRI Aqueduct 4.0 country rankings | wri.org/data/aqueduct-40-country-rankings |
 | `deduce_physical_trade.csv` | Singh et al. (2026), version 2.1 | doi.org/10.5281/zenodo.18953516, file 2 (physical trade model), renamed |
 | `cckp_tas_anomaly.xlsx` | World Bank Climate Change Knowledge Portal | Download Data: global_countries, cmip6-x0.25, climatology, tas, anomaly, annual, all four periods, median, ssp126 + ssp370 + ssp585; renamed |

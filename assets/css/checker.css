@@ -105,7 +105,8 @@ body:not(.rep) .snav,body:not(.rep) .getop,body:not(.rep) .gefoot,body:not(.rep)
 .sc-badge b{font-family:var(--serif);font-size:1.7rem;font-weight:600;line-height:1.1}
 .sc-badge.l0{background:#3E8C5A}.sc-badge.l1{background:#B9801A}.sc-badge.l2{background:#B23B26}
 .sc-verdict{margin:0;font-size:1.05rem;max-width:62ch;flex:1;min-width:240px}
-.sc-g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px 20px}
+.sc-g{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px 18px}
+@media (max-width:1100px){.sc-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:900px){.sc-g{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:520px){.sc-g{grid-template-columns:minmax(0,1fr)}}
 .g .gh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
@@ -139,7 +140,7 @@ table.heat tr.hd ul{margin:4px 0 0;padding-left:18px}
 #sankey .band:hover{fill-opacity:.85}
 #omap{max-height:420px}
 #report .scp .sc-badge{color:#fff}
-#report .scp .sc-g{grid-template-columns:repeat(5,1fr)}
+#report .scp .sc-g{grid-template-columns:repeat(6,1fr)}
 #report table.heat{min-width:0;font-size:8pt}
 #report .hc{font-size:7.4pt;padding:3px 4px}
 #report table.heat td.ing small{font-size:7.4pt}
@@ -178,3 +179,12 @@ table.heat tr.hp td:not(:first-child):not(:last-child){border-top:1px solid #D5D
 #report .q p{margin:2px 0 6px}
 /* keep colours when printing even if "Background graphics" is switched off */
 #report,#report *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* compare origins */
+.cmp-t{margin:12px 0 4px}
+table.cmp{border-collapse:collapse;width:100%;min-width:620px;font-size:.84rem}
+table.cmp th{text-align:left;color:var(--ink3);font-weight:600;font-size:.76rem;padding:4px 6px}
+table.cmp td{padding:3px 4px;border-top:1px solid var(--rule);vertical-align:middle}
+table.cmp td small{display:block;color:var(--ink3);font-size:.74rem}
+table.cmp tr.cur td{background:#FFF8E6}
+table.cmp .hc{padding:4px 6px}
